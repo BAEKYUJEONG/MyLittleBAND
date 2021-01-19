@@ -74,3 +74,12 @@ DB 설계
 
 > 백유정
 
+- draw.io 화면설계
+
+  - Main page timtable 수정
+  - ManageBand 수정 : 필터 추가 구상 필요
+
+  - Follow 탭 추가
+  - VideoBoard 검색 및 필터 수정
+
+- DB 설계 : 추가 구현 필요
