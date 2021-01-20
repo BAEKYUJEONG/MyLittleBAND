@@ -86,13 +86,10 @@
 > 백유정
 
 - draw.io 화면설계
-
   - Main page timtable 수정
   - ManageBand 수정 : 필터 추가 구상 필요
-
   - Follow 탭 추가
   - VideoBoard 검색 및 필터 수정
-
 - DB 설계 : 추가 구현 필요
 
 
@@ -120,5 +117,18 @@
 
 
 > 백유정
-
+- 화면 설계를 기반으로 한 시나리오 제작
+- Use Case Name, Actor, 화면, Pre-condition, Flow of Events, Alternate Flows 로 구분하여 제작
+- 회의를 통해 수정 및 보안 : 추후 DB 설계 시 명사, 동사 구분하여 data, 속성으로 이용
+- 밴드 멤버 초대, 공연 신청 부분 추가 회의 필요 
+- 제작 목록
+  - 밴드
+  - 밴드 추가
+  - 밴드 수정
+  - 밴드 해체
+  - 팔로우
+  - 팔로우 목록
+  - 밴드 상세
+  - 밴드 비디오
+  - 좋아요
 
