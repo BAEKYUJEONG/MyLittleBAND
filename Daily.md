@@ -117,6 +117,7 @@
 
 
 > 백유정
+
 - 화면 설계를 기반으로 한 시나리오 제작
 - Use Case Name, Actor, 화면, Pre-condition, Flow of Events, Alternate Flows 로 구분하여 제작
 - 회의를 통해 수정 및 보안 : 추후 DB 설계 시 명사, 동사 구분하여 data, 속성으로 이용
