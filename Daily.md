@@ -217,3 +217,10 @@
 
 
 > 백유정
+
+- Key abstraction : 시나리오를 이용한 DB 설계 과정
+  - TABLE, COLUMN 뽑아내기
+- ERD 만들기 : draw.io를 이용 
+  - TABLE끼리의 관계 설정 및 TABLE 수정 및 추가
+  - 공통 코드로 TABLE 정리
+- 추가적으로 캘린더, 파일 저장, 게시판에 대한 구상 및 피드백 필요
