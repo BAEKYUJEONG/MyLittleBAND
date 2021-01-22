@@ -215,7 +215,8 @@
 
 > 신인섭
 
-
+- 팀원들과 DB, Frontend, Backend 항목 구성 회의
+- Frontend Components 스켈레톤 코드 생성
 
 > 박성우
 
