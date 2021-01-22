@@ -224,4 +224,5 @@
 
 > 백유정
 
-
+- Frontend 구성 및 DB, Backend 구성
+- Backend 환경설정 및 DTO, DAO, Service, Controller 구성
