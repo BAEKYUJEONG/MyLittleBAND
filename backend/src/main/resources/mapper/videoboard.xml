@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.blog.dao.VideoBoardDao">
+	<select id="select" parameterType="map" resultType="VideoBoardDto">
+		select id,password = "" as password,name,zip,addr,phone,admin 
+		from member
+		where id = #{id}
+	</select>
+	
+	<select id="selectAll" resultType="VideoBoardDto">
+		select id,password,name,zip,addr,phone,admin
+		from member
+	</select>
+	
+	<insert id="insert" parameterType="VideoBoardDto">
+		insert into videoboard (board_id, board_subject, board_content, board_date, board_videourl, board_thumnail, band_id)
+		values (#{board_id}, #{board_subject}, #{board_content}, #{board_date}, #{board_videourl}, #{board_thumnail}, #{band_id})
+	</insert>
+	
+	<update id="update" parameterType="VideoBoardDto">
+		update videoboard
+		set board_subject = #{board_subject}, board_content = #{board_content}, board_videourl = #{board_videourl}, board_thumbnail = #{board_thumbnail}
+		where boardId = #{boardId}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from videoboard
+		where boardId = #{boardId}
+	</delete>
+</mapper>
