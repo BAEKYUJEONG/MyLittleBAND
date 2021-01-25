@@ -1,23 +1,15 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <Header />
-    <Main />
-    <Footer/>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Footer from './components/footer/Footer.vue'
-import Header from './components/header/Header.vue'
-import Main from './components/main/Main.vue'
 
 export default {
   name: 'App',
   components: {
-    Header,
-    Footer,
-    Main
+    
   }
 }
 </script>
