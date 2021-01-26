@@ -54,12 +54,12 @@
 		from notice
 	</select>
 
-	<insert id="insert" parameterType="MemberDto">
+	<insert id="insert" parameterType="Member">
 		insert into notice (notice_title, notice_content)
 		values (#{notice_title},#{notice_content})
 	</insert>
 
-	<update id="update" parameterType="MemberDto">
+	<update id="update" parameterType="Member">
 		update notice
 		set notice_title = #{notice_title}, notice_content = #{notice_content}
 		where notice_id = #{notice_id}
