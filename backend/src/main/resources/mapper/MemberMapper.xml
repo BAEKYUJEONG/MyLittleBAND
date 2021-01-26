@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.MemberMapper">
+
+	<insert id="signup" parameterType="Member">
+		insert into member values(#{id}, #{email}, #{name}, #{pw}, #{phone}, #{img}, #{profile})
+  	</insert>
+
+	<insert id="test">
+		insert into member values(null,#{id})
+  	</insert>
+
+
+  <!-- <select id="selectAll" resultType="Customer">
+    select * from customer
+  </select>
+-->
+<!--   <select id="login" parameterType="java.lang.String" resultType="Integer">
+    select count(*) from member where userid = #{id} and userpass = #{pass}
+  </select>
+   
+  <insert id="signin" parameterType="Member">
+      insert into member values(null,#{id}, #{pass}, #{name}, #{phone}, #{area}, #{message})
+  </insert>
+  
+ <update id="change" parameterType="java.lang.String">
+      update member set userpass=#{pass}, tel = #{phone}, area = #{area}, comment = #{message} where userid = #{id}
+
+  </update>
+
+ 
+
+ <delete id="delete" parameterType="string">
+      delete from member where userid = #{id}
+  </delete> -->
+
+</mapper>
