@@ -278,6 +278,49 @@
 
 > 엄재웅
 
+<<<<<<< Daily.md
+* AWS docker, mariadb설치 완료
+* Restful API 설계를 위한 문서 작성
+* 팀원들과 AWS mariaDB - workbench간 연결
+* Vuetify header 작업
+
+
+
+> 김영현
+
+
+
+
+
+> 신인섭
+- Frontend MainPage 중 FindId 기능 구현
+- 모달창으로 성공 및 에러 알림 표시
+- 비동기통신
+- 이메일 전송 시스템 구축 필요함
+
+
+
+
+> 박성우
+
+
+
+
+
+> 백유정
+
+
+
+
+
+*****
+
+
+
+###### 2021-01-27
+
+> 엄재웅
+
 
 
 
@@ -290,10 +333,7 @@
 
 > 신인섭
 
-- Frontend MainPage 중 FindId 기능 구현
-  - 모달창으로 성공 및 에러 알림 표시
-  - 비동기통신
-  - 이메일 전송 시스템 구축 필요함
+
 
 
 
