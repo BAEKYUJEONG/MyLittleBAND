@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HelloWorld from '../components/HelloWorld.vue';
 
 Vue.use(VueRouter);
 
@@ -9,12 +8,13 @@ const routes = [
     //name: 
     //component:
     //한 쌍으로 넣어주기.
+    /*
     {
         path : '/',
-        name : 'HelloWorld',
-        component : HelloWorld
+        name : 'main',
+        component : Main
     },
-    
+    */
     // concat을 통해서 routes 추가할 계획.
     // 배열을 추가한다고 생각하면 됨.
 ]
