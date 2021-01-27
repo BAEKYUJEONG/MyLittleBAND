@@ -333,7 +333,10 @@
 
 > 신인섭
 
-
+- FrontEnd 페이지 중 공지사항 페이지 구현
+  - NoticeWrite, NoticeDetail, NoticeCreate, NoticeModify구현
+  - router를 이용한 페이지 이동 가능
+  - backend와의 연동테스트 필요함
 
 
 
