@@ -344,3 +344,8 @@
 
 
 > 백유정
+
+- NoticeController mapping 부분 수정 필요
+- VideoBoard dao, service 작성 및 controller 구상 중
+
+- PostMan 관련 공부
