@@ -1,13 +1,10 @@
 <template>
-  <div> 
   <v-app>
     <!-- Header, Content, Footer로 구성 -->
     <Header />
     <router-view />
     <Footer />
   </v-app>
-  <router-view/>
-  </div>
 </template>
 
 <script>
@@ -29,4 +26,5 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
 </style>
