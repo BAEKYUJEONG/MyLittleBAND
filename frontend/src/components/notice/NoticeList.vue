@@ -1,31 +1,28 @@
 <template>
-  <v-form>
-    <v-app id="inspire">
-      <h1 style="margin: 10px auto">공지사항</h1>
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        :items-per-page="5"
-        dark
-        disable-sort
-        style="text-align: center; margin: 20px"
-        @click:row="detail"
-      >
-      </v-data-table>
-      <v-layout>
-        <v-flex>
-          <v-btn color="blue" @click="write()">글쓰기</v-btn>
-        </v-flex>
-      </v-layout>
-    </v-app>
-  </v-form>
+  <v-app id="inspire">
+    <h1 style="margin: 10px auto">공지사항</h1>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :items-per-page="5"
+      dark
+      disable-sort
+      style="text-align: center; margin: 20px"
+      @click:row="detail"
+    >
+    </v-data-table>
+    <v-layout>
+      <v-flex>
+        <v-btn color="blue" @click="write()">글쓰기</v-btn>
+      </v-flex>
+    </v-layout>
+  </v-app>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
-  created() {
-    //리스트 목록을 items에 저장
+  created(){//리스트 목록을 items에 저장
     //this.showList();
   },
   methods: {
@@ -37,13 +34,12 @@ export default {
       //글쓰기 페이지로 라우터 이동 기능
       this.$router.push("/noticecreate");
     },
-    showList() {
-      //리스트 목록을 items에 저장
+    showList(){//리스트 목록을 items에 저장
       axios
-        .get("/notice")
-        .then((response) => (this.items = response.data)) //items에 공지리스트 저장
-        .catch((exp) => alert("조회에 실패하였습니다." + exp));
-    },
+      .get("/notice")
+      .then((response)=>(this.items = response.data))//items에 공지리스트 저장
+      .catch((exp) => alert("조회에 실패하였습니다." + exp));
+    }
   },
   data() {
     return {

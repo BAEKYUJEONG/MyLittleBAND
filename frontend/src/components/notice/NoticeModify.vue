@@ -59,7 +59,9 @@ export default {
       }
 
       axios
-        .put("/notice", this.notice)
+        .put("/notice", {
+          notice : this.notice
+          })
         .then(() => {
           alert("수정 성공");
           this.detail(); //Detail 페이지로 이동
