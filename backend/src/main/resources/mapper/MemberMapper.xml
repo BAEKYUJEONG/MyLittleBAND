@@ -6,12 +6,20 @@
 <mapper namespace="com.web.blog.mapper.MemberMapper">
 
 	<insert id="signup" parameterType="Member">
+		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, null, null, null)
+  	</insert>
+  	
+  	<select id="getUserByEmail" resultType="Member">
+    select * from member where email=#{email}
+  </select>
+  	
+	<!-- <insert id="signup" parameterType="Member">
 		insert into member values(#{id}, #{email}, #{name}, #{pw}, #{phone}, #{img}, #{profile})
   	</insert>
 
 	<insert id="test">
 		insert into member values(null,#{id})
-  	</insert>
+  	</insert> -->
 
 
   <!-- <select id="selectAll" resultType="Customer">
