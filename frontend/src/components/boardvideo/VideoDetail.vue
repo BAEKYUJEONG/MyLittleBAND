@@ -1,21 +1,19 @@
 <template>
-  <div>
+  <v-main>
     <!-- 테스트 용으로 컴포넌트 붙임 -->
-    <Straming/>
-  </div>
+    <Straming />
+  </v-main>
 </template>
 
 <script>
-import Straming from '../main/Straming.vue';
-
+import Straming from "../main/Straming.vue";
 
 export default {
-components :{
+  components: {
     Straming,
   },
-}
+};
 </script>
 
 <style>
-
 </style>

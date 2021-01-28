@@ -1,5 +1,6 @@
 <template>
   <!-- 동작에 따른 이벤트 처리가 가능한듯..? -->
+  <v-row><v-col class="my-10" align="center">
   <video-player  class="video-player-box"
                  ref="videoPlayer"
                  :options="playerOptions"
@@ -19,6 +20,7 @@
                  @statechanged="playerStateChanged($event)"
                  @ready="playerReadied">
   </video-player>
+  </v-col></v-row>
 </template>
 
 <script>

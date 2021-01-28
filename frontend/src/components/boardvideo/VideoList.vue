@@ -1,63 +1,61 @@
 <template>
-  <div>
-    <v-layout justify-center>
-      <v-flex xs12 sm6>
-        <!-- 카드 뷰 시작 -->
-        <v-card>
-          <v-container fluid grid-list-md>
-            <v-layout row wrap>
-              <v-flex
-                v-for="card in cards"
-                :key="card.title"
-                v-bind="{ [`xs${card.flex}`]: true }"
-              >
-                <v-card>
-                  <v-img :src="card.src" height="200px" @click="onClick"> </v-img>
+<v-main>
+  <v-layout justify-center>
+    <v-flex xs12 sm6>
+      <!-- 카드 뷰 시작 -->
+      
+        <v-container fluid grid-list-md>
+          <v-layout row wrap>
+            <v-flex
+              v-for="card in cards"
+              :key="card.title"
+              v-bind="{ [`xs${card.flex}`]: true }"
+            >
+              <v-card class="mx-10 my-10"> 
+                <v-img
+                  :src="card.src"
+                  height="200px"
+                  @click="onClick"
+                  style="cursor: pointer"
+                >
+                </v-img>
 
-                  <v-card-actions>
-                    <v-list two-line>
-                      <v-list-tile class="grow">
-                        <v-list-item-avatar color="grey darken-3">
-                          <v-img      
-                            src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                          ></v-img>
-                        </v-list-item-avatar>
-
-                        <v-list-tile-content>
-                          <v-list-tile-title
-                            v-text="card.title"
-                          ></v-list-tile-title>
-                          <v-list-tile-sub-title
-                            ><span class="text--primary">
-                              subtitle</span
-                            ></v-list-tile-sub-title
-                          >
-                        </v-list-tile-content>
-                      </v-list-tile>
-                    </v-list>
-                  </v-card-actions>
-                  <!-- 해당 부분은 detail 에서 사용할 예정
                 <v-card-actions>
+                  <v-list>
+                    <v-list-item class="grow">
+                      <v-list-item-avatar color="grey darken-3">
+                        <v-img
+                          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                        ></v-img>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title
+                          v-text="card.title"
+                        ></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
                   <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>favorite</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>share</v-icon>
+                  <v-btn icon @click="card.show = !card.show">
+                    <v-icon>{{
+                      card.show ? "keyboard_arrow_down" : "keyboard_arrow_up"
+                    }}</v-icon>
                   </v-btn>
                 </v-card-actions>
-            -->
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </div>
+
+                <v-slide-y-transition>
+                  <v-card-text v-show="card.show" v-text="card.content">
+                  </v-card-text>
+                </v-slide-y-transition>
+
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+     
+    </v-flex>
+  </v-layout>
+</v-main>
 </template>
 
 <script>
@@ -69,25 +67,38 @@ export default {
           title: "Pre-fab homes",
           src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
           flex: 6,
+          show: false,
+          content: "subtitle1",
         },
         {
           title: "Favorite road trips",
           src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
           flex: 6,
+          show: false,
+          content: "subtitle2",
         },
         {
           title: "Best airlines",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
           flex: 6,
+          show: false,
+          content: "subtitle3",
+        },
+        {
+          title: "Cooking",
+          src: "https://cdn.vuetifyjs.com/images/cards/cooking.png",
+          flex: 6,
+          show: false,
+          content: "subtitle4",
         },
       ],
     };
   },
-  methods:{
-      onClick(){
-          this.$router.push({name : 'Videodetail'});
-      }
-  }
+  methods: {
+    onClick() {
+      this.$router.push({ name: "videodetail" });
+    },
+  },
 };
 </script>
 
