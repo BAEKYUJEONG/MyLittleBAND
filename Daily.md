@@ -374,7 +374,13 @@
 
 > 신인섭
 
-
+- Frontend component중 BoardBand 기능구현
+  - BoardBand List,Create,Modify,Detail 컴포넌트 구성
+- Frontend Notice 컴포넌트 수정
+  - axios 잘못된 함수 수정
+- Frontend Login 컴포넌트 기능구현
+  - 모달창 띄우는 작업완료
+  - Vuex는 아직 작업 중
 
 
 
