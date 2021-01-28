@@ -19,11 +19,11 @@
 	<dependencies>
 
 		<!-- swagger 3.0??? -->
-		<dependency>
+		<!-- <dependency>
   			<groupId>org.springdoc</groupId>
   			<artifactId>springdoc-openapi-ui</artifactId>
   			<version>1.4.1</version>
-		</dependency>
+		</dependency> -->
 		<!-- swagger -->
 		<dependency>
             <groupId>io.springfox</groupId>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.6.1</version>
+            <version>2.9.2</version>
         </dependency>
         <!-- restcontroller -->
 		<dependency>
