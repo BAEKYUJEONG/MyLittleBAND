@@ -1,5 +1,7 @@
 <template>
-  
+  <v-container>
+      Streaming component
+  </v-container>
 </template>
 
 <script>

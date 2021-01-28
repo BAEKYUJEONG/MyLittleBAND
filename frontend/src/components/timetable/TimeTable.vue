@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      Timetable Component
+  </v-main>
 </template>
 
 <script>

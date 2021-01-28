@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      VideoList Component
+  </v-main>
 </template>
 
 <script>

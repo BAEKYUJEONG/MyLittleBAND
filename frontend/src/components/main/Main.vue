@@ -1,7 +1,25 @@
-<template> </template>
+<template> 
+    <v-main>
+        <Streaming />
+        <v-divider></v-divider>
+        <Timeline />
+        <v-divider></v-divider>
+        <Ranking />
+    </v-main>
+</template>
 
 <script>
-export default {};
+import Streaming from "./Straming";
+import Timeline from "./TimeLine";
+import Ranking from "./Ranking";
+
+export default {
+    components: {
+        Streaming,
+        Timeline,
+        Ranking
+    }
+};
 </script>
 
 <style></style>

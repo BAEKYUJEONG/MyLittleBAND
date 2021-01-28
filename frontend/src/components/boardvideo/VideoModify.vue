@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      VideoModify component
+  </v-main>
 </template>
 
 <script>
