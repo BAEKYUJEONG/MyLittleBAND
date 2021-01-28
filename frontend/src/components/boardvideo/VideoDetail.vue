@@ -1,12 +1,18 @@
 <template>
-  <v-main>
-      Videodetail Component
-  </v-main>
+  <div>
+    <!-- 테스트 용으로 컴포넌트 붙임 -->
+    <Straming/>
+  </div>
 </template>
 
 <script>
-export default {
+import Straming from '../main/Straming.vue';
 
+
+export default {
+components :{
+    Straming,
+  },
 }
 </script>
 

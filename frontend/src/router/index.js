@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Videocreate from '../components/boardvideo/VideoCreate.vue';
+import Videolist from '../components/boardvideo/VideoList.vue'
+import Videodetail from '../components/boardvideo/VideoDetail.vue'
 
 import Main from '../components/main/Main';
 import memberRoute from './routers/MemberRouter';
