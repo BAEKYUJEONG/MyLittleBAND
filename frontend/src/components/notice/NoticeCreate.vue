@@ -57,7 +57,9 @@ export default {
       }
 
       axios
-        .post("/notice", this.notice)
+        .post("/notice",{
+          notice :  this.notice
+          })
         .then(() => {
           //성공하면 alert 후 리스트 페이지로
           alert("삭제성공!");
