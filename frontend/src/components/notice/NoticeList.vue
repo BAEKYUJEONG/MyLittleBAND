@@ -1,26 +1,33 @@
 <template>
-  <v-app id="inspire">
-    <h1 style="margin: 10px auto">공지사항</h1>
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      item-key="num"
-      dark
-      disable-sort
-      style="text-align: center; margin: 20px"
-      @click:row="detail"
-    >
-    </v-data-table>
-    <v-layout>
-      <v-flex>
-        <v-btn color="blue" @click="write()">글쓰기</v-btn>
-      </v-flex>
-    </v-layout>
-  </v-app>
+  <v-form>
+    <v-app id="inspire">
+      <h1 style="margin: 10px auto">공지사항</h1>
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :items-per-page="5"
+        dark
+        disable-sort
+        style="text-align: center; margin: 20px"
+        @click:row="detail"
+      >
+      </v-data-table>
+      <v-layout>
+        <v-flex>
+          <v-btn color="blue" @click="write()">글쓰기</v-btn>
+        </v-flex>
+      </v-layout>
+    </v-app>
+  </v-form>
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  created() {
+    //리스트 목록을 items에 저장
+    //this.showList();
+  },
   methods: {
     detail(row) {
       //디테일 페이지로 라우터 이동 기능
@@ -29,6 +36,13 @@ export default {
     write() {
       //글쓰기 페이지로 라우터 이동 기능
       this.$router.push("/noticecreate");
+    },
+    showList() {
+      //리스트 목록을 items에 저장
+      axios
+        .get("/notice")
+        .then((response) => (this.items = response.data)) //items에 공지리스트 저장
+        .catch((exp) => alert("조회에 실패하였습니다." + exp));
     },
   },
   data() {
@@ -42,19 +56,16 @@ export default {
       //데이터가 저장 될 목록
       items: [
         {
-          value: false,
           num: "1",
           subject: "첫번째 제목입니다.",
           date: "2021.01.01",
         },
         {
-          value: false,
           num: "2",
           subject: "두번째 제목입니다.",
           date: "2021.01.03",
         },
         {
-          value: false,
           num: "3",
           subject: "세번째 제목입니다.",
           date: "2021.01.05",
