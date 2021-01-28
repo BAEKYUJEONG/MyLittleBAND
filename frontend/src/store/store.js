@@ -6,6 +6,7 @@ import Vuex from "vuex";
 
     import Example from "./modules/ExampleStore.js"
 */
+import TodayTimelineStore from "./modules/TodayTimelineStore.js";
 
 // import jwt_decode from "jwt-decode";
 
@@ -21,5 +22,6 @@ export default new Vuex.Store({
         ExampleStore1,
         ExampleStore2,
     */
+    TodayTimelineStore,
   }
 });
