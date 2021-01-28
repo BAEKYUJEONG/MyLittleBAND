@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      VideoCreate Component
+  </v-main>
 </template>
 
 <script>

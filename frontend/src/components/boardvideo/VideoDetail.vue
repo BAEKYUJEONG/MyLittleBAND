@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      Videodetail Component
+  </v-main>
 </template>
 
 <script>

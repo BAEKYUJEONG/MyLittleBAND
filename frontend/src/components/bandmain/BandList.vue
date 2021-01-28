@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      BandList Component
+  </v-main>
 </template>
 
 <script>

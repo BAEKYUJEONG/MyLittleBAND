@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-main id="inspire">
     <h1 style="margin: 10px auto">공지사항</h1>
     <v-data-table
       :headers="headers"
@@ -16,7 +16,7 @@
         <v-btn color="blue" @click="write()">글쓰기</v-btn>
       </v-flex>
     </v-layout>
-  </v-app>
+  </v-main>
 </template>
 
 <script>
@@ -24,11 +24,11 @@ export default {
   methods: {
     detail(row) {
       //디테일 페이지로 라우터 이동 기능
-      this.$router.push("/noticedetail/" + row.num);
+      this.$router.push("/notice/" + row.num);
     },
     write() {
       //글쓰기 페이지로 라우터 이동 기능
-      this.$router.push("/noticecreate");
+      this.$router.push("/notice/create");
     },
   },
   data() {

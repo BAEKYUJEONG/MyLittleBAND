@@ -7,8 +7,8 @@
     <v-container class="py-0 fill-height">
       <v-avatar class="mr-10" color="grey darken-1" size="32"></v-avatar>
 
-      <v-btn v-for="link in links" :key="link" text>
-        {{ link }}
+      <v-btn v-for="link in links" :key="link" text router-link :to="link.path">
+        {{ link.text }}
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -25,7 +25,16 @@ import NotLogined from './NotLogined.vue';
 
 export default {
   data: () => ({
-    links: ["공지사항", "영상게시판"],
+    links: [
+      {
+        text: "공지사항",
+        path: "/notice"
+      },
+      {
+        text: "영상게시판",
+        path: "/video"
+      }
+    ],
   }),
   components :{
     Logined,

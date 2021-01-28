@@ -1,5 +1,7 @@
 <template>
-  
+  <v-main>
+      MyPage component
+  </v-main>
 </template>
 
 <script>
