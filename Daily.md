@@ -331,8 +331,10 @@
 
 
 > 신인섭
-
-
+- FrontEnd 페이지 중 공지사항 페이지 구현
+- NoticeWrite, NoticeDetail, NoticeCreate, NoticeModify구현
+- router를 이용한 페이지 이동 가능
+- backend와의 연동테스트 필요함
 
 
 
@@ -344,6 +346,10 @@
 
 > 백유정
 
+- NoticeController mapping 부분 수정 필요
+- VideoBoard dao, service 작성 및 controller 구상 중
+
+- PostMan 관련 공부
 
 
 
@@ -368,10 +374,7 @@
 
 > 신인섭
 
-- FrontEnd 페이지 중 공지사항 페이지 구현
-  - NoticeWrite, NoticeDetail, NoticeCreate, NoticeModify구현
-  - router를 이용한 페이지 이동 가능
-  - backend와의 연동테스트 필요함
+
 
 
 
@@ -382,3 +385,4 @@
 
 
 > 백유정
+
