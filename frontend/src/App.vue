@@ -1,9 +1,10 @@
 <template>
   <div> 
   <v-app>
+    <!-- Header, Content, Footer로 구성 -->
     <Header />
-    <!-- 테스트 용으로 컴포넌트 붙임 -->
-    
+    <router-view />
+    <Footer />
   </v-app>
   <router-view/>
   </div>
@@ -11,12 +12,14 @@
 
 <script>
 import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+
 export default {
   name: 'App',
 
   components: {
     Header,
-    
+    Footer,
   },
 
   data: () => ({

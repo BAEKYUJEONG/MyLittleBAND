@@ -1,7 +1,7 @@
 package com.web.blog.dto;
 
 public class Member {
-	private String id;
+	private String memberId;
 	private String email;
 	private String name;
 	private String pw;
@@ -13,9 +13,16 @@ public class Member {
 	public Member() {
 	}
 
-	public Member(String id, String email, String name, String pw, String phone, String img, String profile,
+	public Member(String email, String name, String pw, String phone) {
+		this.email = email;
+		this.name = name;
+		this.pw = pw;
+		this.phone = phone;
+	}
+
+	public Member(String memberId, String email, String name, String pw, String phone, String img, String profile,
 			String manager) {
-		this.id = id;
+		this.memberId = memberId;
 		this.email = email;
 		this.name = name;
 		this.pw = pw;
@@ -25,12 +32,12 @@ public class Member {
 		this.manager = manager;
 	}
 
-	public String getId() {
-		return id;
+	public String getMemberId() {
+		return memberId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 
 	public String getEmail() {
@@ -88,6 +95,7 @@ public class Member {
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
+	
 	
 	
 	

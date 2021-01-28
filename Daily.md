@@ -278,7 +278,6 @@
 
 > 엄재웅
 
-<<<<<<< Daily.md
 * AWS docker, mariadb설치 완료
 * Restful API 설계를 위한 문서 작성
 * 팀원들과 AWS mariaDB - workbench간 연결
@@ -321,6 +320,48 @@
 
 > 엄재웅
 
+* 팀원들과 Restful API 문서 작성
+
+
+
+> 김영현
+
+
+
+
+
+> 신인섭
+- FrontEnd 페이지 중 공지사항 페이지 구현
+- NoticeWrite, NoticeDetail, NoticeCreate, NoticeModify구현
+- router를 이용한 페이지 이동 가능
+- backend와의 연동테스트 필요함
+
+
+
+> 박성우
+
+
+
+
+
+> 백유정
+
+- NoticeController mapping 부분 수정 필요
+- VideoBoard dao, service 작성 및 controller 구상 중
+
+- PostMan 관련 공부
+
+
+
+
+*****
+
+
+
+###### 2021-01-28
+
+> 엄재웅
+
 
 
 
@@ -344,3 +385,4 @@
 
 
 > 백유정
+

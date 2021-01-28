@@ -1,6 +1,7 @@
+<!-- 밴드 목록 보여 줄 페이지 -->
 <template>
   <v-main>
-      SignUp component
+      BandList Component
   </v-main>
 </template>
 

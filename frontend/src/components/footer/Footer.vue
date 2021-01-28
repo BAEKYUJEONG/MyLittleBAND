@@ -1,5 +1,7 @@
 <template>
-  <div>Footer</div>
+  <v-footer fluid>
+    Footer Component
+  </v-footer>
 </template>
 
 <script>

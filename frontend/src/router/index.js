@@ -4,44 +4,31 @@ import Videocreate from '../components/boardvideo/VideoCreate.vue';
 import Videolist from '../components/boardvideo/VideoList.vue'
 import Videodetail from '../components/boardvideo/VideoDetail.vue'
 
+import Main from '../components/main/Main';
+import memberRoute from './routers/MemberRouter';
+import videoRoute from './routers/VideoRouter';
+import noticeRoute from './routers/NoticeRouter';
+import bandRoute from './routers/BandRouter';
+import timetableRoute from './routers/timetableRouter';
+
 Vue.use(VueRouter);
 
 const routes = [
-    //path: 
-    //name: 
-    //component:
-    //한 쌍으로 넣어주기.
-    /*
     {
         path : '/',
         name : 'main',
         component : Main
     },
-    */
-    // concat을 통해서 routes 추가할 계획.
-    // 배열을 추가한다고 생각하면 됨.
-
-    // 테스트 용으로 라우터에 추가해 둠.
-    {
-        path : '/test',
-        name : 'Videocreate',
-        component : Videocreate
-    },
-    {
-        path : '/test2',
-        name : 'Videolist',
-        component : Videolist
-    },
-    {
-        path : '/test3',
-        name : 'Videodetail',
-        component : Videodetail
-    },
-]
+    // concat을 통한 module화 한 routes 추가
+].concat(memberRoute)
+.concat(videoRoute)
+.concat(noticeRoute)
+.concat(bandRoute)
+.concat(timetableRoute);
 
 const router = new VueRouter({
-    mode:'history',
-    base : process.env.BASE_URL, // /
+    mode: 'history',
+    base : process.env.BASE_URL,
     routes,
 });
 

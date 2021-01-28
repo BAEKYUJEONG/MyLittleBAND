@@ -1,17 +1,24 @@
 <template> 
-  <div>
-    <!-- 테스트 용으로 컴포넌트 붙임 -->
-    <Straming/>
-  </div>
+    <v-main>
+        <Streaming />
+        <v-divider></v-divider>
+        <Timeline />
+        <v-divider></v-divider>
+        <Ranking />
+    </v-main>
 </template>
 
 <script>
-import Straming from './Straming.vue';
+import Streaming from "./Straming";
+import Timeline from "./TimeLine";
+import Ranking from "./Ranking";
 
 export default {
-    components :{
-    Straming,
-  },
+    components: {
+        Streaming,
+        Timeline,
+        Ranking
+    }
 };
 </script>
 
