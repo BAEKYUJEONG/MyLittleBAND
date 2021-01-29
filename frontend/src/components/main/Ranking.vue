@@ -71,7 +71,7 @@ export default {
     },
   },
   created() {
-    this.getVideoList();
+    //this.getVideoList();
     
   },
   methods: {

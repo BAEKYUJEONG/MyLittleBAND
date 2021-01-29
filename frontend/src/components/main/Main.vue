@@ -1,11 +1,13 @@
-<template> 
-    <v-main>
-        <Streaming />
-        <v-divider></v-divider>
-        <Timeline />
-        <v-divider></v-divider>
-        <Ranking />
-    </v-main>
+<template>
+  <v-main>
+    <v-container>
+      <Streaming />
+      <v-divider></v-divider>
+      <Timeline />
+      <v-divider></v-divider>
+      <Ranking />
+    </v-container>
+  </v-main>
 </template>
 
 <script>
@@ -14,11 +16,11 @@ import Timeline from "./TimeLine";
 import Ranking from "./Ranking";
 
 export default {
-    components: {
-        Streaming,
-        Timeline,
-        Ranking
-    }
+  components: {
+    Streaming,
+    Timeline,
+    Ranking,
+  },
 };
 </script>
 
