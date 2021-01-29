@@ -26,7 +26,7 @@ export default {
       Team: [
         {
           name: "김영현",
-          url: "",
+          url: "https://github.com/KimYH-KU",
         },
         {
           name: "박성우",
