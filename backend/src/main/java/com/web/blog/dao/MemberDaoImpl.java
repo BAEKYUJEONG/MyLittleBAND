@@ -1,9 +1,13 @@
 package com.web.blog.dao;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.blog.dto.Member;
+import com.web.blog.dto.loginReq;
+import com.web.blog.dto.signupReq;
 import com.web.blog.mapper.MemberMapper;
 
 @Repository
@@ -12,9 +16,19 @@ public class MemberDaoImpl implements MemberDao {
 	MemberMapper mapper;
 
 	@Override
-	public void signup(Member m) {
+	public void signup(signupReq req) {
 		// TODO Auto-generated method stub
-		mapper.signup(m);
+		mapper.signup(req);
+	}
+
+	@Override
+	public void update(String memberId, Member m) {
+		mapper.update(memberId, m);
+	}
+	
+	@Override
+	public void imgupdate(String memberId, String img) {
+		mapper.imgupdate(memberId, img);
 	}
 
 	@Override
@@ -22,6 +36,24 @@ public class MemberDaoImpl implements MemberDao {
 		return mapper.getUserByEmail(email);
 	
 	}
+
+	@Override
+	public void withdraw(String memberId) {
+		mapper.withdraw(memberId);
+	}
+
+	@Override
+	public String findIdByName(String name, String phone) {
+		return mapper.findIdByName(name, phone);
+		
+	}
+
+	@Override
+	public HashMap<String, String> login(loginReq req) {
+		return mapper.login(req);
+	}
+
+
 	
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {
