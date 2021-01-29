@@ -5,14 +5,30 @@
 
 <mapper namespace="com.web.blog.mapper.MemberMapper">
 
-	<insert id="signup" parameterType="Member">
-		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, null, null, null)
+	<insert id="signup" parameterType="signupReq">
+		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, null, null,0)
   	</insert>
   	
   	<select id="getUserByEmail" resultType="Member">
     select * from member where email=#{email}
   </select>
+  
+   <update id="update">
+      update member set email=#{m.email}, name=#{m.name}, phone=#{m.phone}, profile=#{m.profile} where memberId = #{memberId}
+  </update>
   	
+  	<update id="imgupdate" parameterType="string">
+      update member set img=#{img} where memberId = #{memberId}
+  </update>
+  
+  <delete id="withdraw" parameterType="string">
+      delete from member where memberId = #{memberId}
+  </delete>
+  
+  <select id="login" resultType="java.util.Map">
+    select memberId,manager from member where email=#{email} and pw=#{pw}
+  </select>
+  
 	<!-- <insert id="signup" parameterType="Member">
 		insert into member values(#{id}, #{email}, #{name}, #{pw}, #{phone}, #{img}, #{profile})
   	</insert>
@@ -21,7 +37,10 @@
 		insert into member values(null,#{id})
   	</insert> -->
 
-
+	<select id="findIdByName" resultType="String">
+    select email from member where name=#{name} and phone=#{phone}
+  </select>
+  
   <!-- <select id="selectAll" resultType="Customer">
     select * from customer
   </select>

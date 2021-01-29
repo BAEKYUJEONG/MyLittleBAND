@@ -1,12 +1,17 @@
 package com.web.blog.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,17 +19,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.Member;
+import com.web.blog.dto.loginReq;
+import com.web.blog.dto.signupReq;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.service.MemberService;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
-        @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
-        @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
+//@ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
+//        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
+//        @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
+//        @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
+
 
 @CrossOrigin
 @RestController
@@ -33,11 +43,15 @@ public class MemberController {
 	MemberService service;
 	
 	@PostMapping(value = "/signup")
-	@ApiOperation(value = "회원가입")
-	public Object signup(@RequestBody Member m) {
-		Member check=service.getUserByEmail(m.getEmail());
+	@ApiOperation(value = "회원가입", notes = "성공 시 회원가입 완료")
+	@ApiResponses({
+		@ApiResponse(code= 200, message="회원가입 성공"),
+		@ApiResponse(code= 400, message="잘못된 접근"),
+	})
+	public Object signup(@RequestBody signupReq req) {
+		Member check=service.getUserByEmail(req.getEmail());
 		if(check==null) {
-			service.signup(m);
+			service.signup(req);
 			final BasicResponse result = new BasicResponse();
 	        result.status = true;
 	        result.data = "success";
@@ -45,10 +59,73 @@ public class MemberController {
 	        
 		}
 		else {
-			System.out.println("double");
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@PutMapping(value = "/member/{memberId}")
+	@ApiOperation(value = "회원정보수정")
+	public Object update(@RequestBody Member m, @PathVariable String memberId) {
+		System.out.println(memberId);
 		
+		service.update(memberId, m);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/memberimg/{memberId}")
+	@ApiOperation(value = "이미지수정")
+	public Object imgupdate(@RequestParam(required = true) final String img, @PathVariable String memberId) {
+		service.imgupdate(memberId, img);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/member/{memberId}")
+	@ApiOperation(value = "회원탈퇴")
+	public Object imgupdate(@PathVariable String memberId) {
+		service.withdraw(memberId);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/member")
+	@ApiOperation(value = "아이디찾기")
+	public Object findIdByName(@RequestParam(required = true) final String name,
+            @RequestParam(required = true) final String phone) {
+		String email=service.findIdByName(name,phone);
+//		System.out.println(email);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = email;
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/login")
+	@ApiOperation(value = "로그인", notes = "성공 시 로그인 완료")
+	@ApiResponses({
+		@ApiResponse(code= 200, message="로그인 성공"),
+		@ApiResponse(code= 400, message="잘못된 접근"),
+	})
+	public Object login(@RequestBody loginReq req) {
+		HashMap<String, String> loginRes=service.login(req);
+		if(loginRes!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=loginRes;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	        
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
 	
 //	@RequestMapping(value="/signu", method=RequestMethod.)
