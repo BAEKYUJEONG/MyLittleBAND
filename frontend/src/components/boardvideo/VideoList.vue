@@ -1,10 +1,10 @@
 <template>
 <v-main>
   <v-layout justify-center>
-    <v-flex xs12 sm6>
+    <v-flex xs12 sm9>
       <!-- 카드 뷰 시작 -->
       
-        <v-container fluid grid-list-md>
+        <v-container fluid grid-list-sm>
           <v-layout row wrap>
             <v-flex
               v-for="card in cards"
@@ -66,30 +66,44 @@ export default {
         {
           title: "201215 싸피밴드",
           src: require("@/assets/image/1.jpg"),
-          flex: 6,
+          flex: 4,
           show: false,
           content: "싸피밴드의 공연입니다",
         },
         {
           title: "191113 써니밴드",
           src: require("@/assets/image/2.jpg"),
-          flex: 6,
+          flex: 4,
           show: false,
           content: "써니밴드 공연영상",
         },
         {
           title: "싸피홀 200303",
           src: require("@/assets/image/3.jpg"),
-          flex: 6,
+          flex: 4,
           show: false,
           content: "싸피홀에서의 공연",
         },
         {
           title: "200903 전공밴드",
           src: require("@/assets/image/4.jpg"),
-          flex: 6,
+          flex: 4,
           show: false,
           content: "전공밴드 공연영상입니다.",
+        },
+        {
+          title: "19회 싸피데이 공연",
+          src: require("@/assets/image/5.jpg"),
+          flex: 4,
+          show: false,
+          content: "싸피데이 공연영상입니다.",
+        },
+        {
+          title: "27회 싸피 정기공연",
+          src: require("@/assets/image/6.jpg"),
+          flex: 4,
+          show: false,
+          content: "싸피...",
         },
       ],
     };
