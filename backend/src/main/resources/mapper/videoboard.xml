@@ -2,12 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.web.blog.dao.VideoBoardDao">
-	<select id="select" parameterType="map" resultType="VideoBoard">
-		select id,password = "" as password,name,zip,addr,phone,admin 
-		from member
-		where board_id = #{board_id}
-	</select>
-	
 	<select id="selectAll" resultType="VideoBoard">
 		select board_id, board_subject, board_content, board_date, board_videourl, board_thumnail, band_id
 		from videoboard
