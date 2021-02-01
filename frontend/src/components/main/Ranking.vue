@@ -1,5 +1,43 @@
-
 <template>
+  <v-container>
+    <v-banner single-line class="my-10">
+      <strong>금주 랭킹</strong>
+    </v-banner>
+
+    <v-sheet class="mx-auto" elevation="8" >
+      <v-slide-group v-model="model" class="pa-4" show-arrows>
+        <v-slide-item v-for="n in 15" :key="n" v-slot="{ active, toggle }">
+          <v-card
+            :color="active ? 'primary' : 'grey lighten-1'"
+            class="ma-4"
+            height="200"
+            width="300"
+            @click="toggle"
+          >
+            <v-row class="fill-height" align="center" justify="center">
+              <v-scale-transition>
+                <v-icon
+                  v-if="active"
+                  color="white"
+                  size="60"
+                  v-text="'mdi-close-circle-outline'"
+                ></v-icon>
+              </v-scale-transition>
+            </v-row>
+          </v-card>
+        </v-slide-item>
+      </v-slide-group>
+
+      <v-expand-transition>
+        <v-sheet v-if="model != null" height="200" tile>
+          <v-row class="fill-height" align="center" justify="center">
+            <h3 class="title">Selected {{ model }}</h3>
+          </v-row>
+        </v-sheet>
+      </v-expand-transition>
+    </v-sheet>
+  </v-container>
+  <!--
   <div>
     <link
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400"
@@ -26,7 +64,7 @@
               v-for="video in videolist"
               v-bind:key="video.id"
             >
-            <!-- <img src="https://placehold.it/200x200" /> -->
+            <img src="https://placehold.it/200x200" />
               
               <img :src="video.thumbnail" >
                 <p>{{ video.subject }}</p>
@@ -43,7 +81,7 @@
         :disabled="atEndOfList"
       ></div>
     </div>
-    
+    -->
 </template>
 
 <script>
@@ -56,7 +94,6 @@ export default {
       currentOffset: 0,
       windowSize: 3,
       paginationFactor: 220,
-      
     };
   },
   computed: {
@@ -72,7 +109,6 @@ export default {
   },
   created() {
     //this.getVideoList();
-    
   },
   methods: {
     moveCarousel(direction) {
@@ -84,7 +120,6 @@ export default {
       }
     },
     getVideoList() {
-
       axios
         .get("/rank3")
         .then((response) => (this.videolist = response.data))
