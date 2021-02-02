@@ -3,7 +3,7 @@
     <v-row justify="center" no-gutters>
       <v-btn
         v-for="member in Team"
-        :key="member"
+        :key="member.name"
         color="white"
         text
         rounded

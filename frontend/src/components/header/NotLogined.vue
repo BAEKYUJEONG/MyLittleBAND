@@ -1,10 +1,10 @@
 <template>
-  <v-div>
+  <v-col>
     <Login/>
-    <v-btn text @click="signup()" class="white--text mx-10">
+    <v-btn text @click="signup()" class="white--text">
       회원가입
     </v-btn>
-  </v-div>
+  </v-col>
 </template>
 
 <script>

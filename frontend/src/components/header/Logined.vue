@@ -1,15 +1,15 @@
 <template>
-  <v-div>
+  <v-col>
     <v-btn
       v-for="link in links"
-      :key="link"
+      :key="link.text"
       text
       @click.native="click(link.text)"
-      class="white--text mx-4"
+      class="white--text"
     >
       {{ link.text }}
     </v-btn>
-  </v-div>
+  </v-col>
 </template>
 
 <script>
