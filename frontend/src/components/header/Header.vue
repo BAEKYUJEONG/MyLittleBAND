@@ -11,7 +11,7 @@
       <v-col class="my-auto ml-auto"
         ><v-btn
           v-for="link in links"
-          :key="link"
+          :key="link.text"
           text
           router-link
           :to="link.path"
