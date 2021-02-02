@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.blog.dao.Comment">
+	<insert id="insert" parameterType="Comment">
+		insert into comment (comment_id, comment_content, member_id, board_id)
+		values (#{comment_id}, #{comment_content}, #{member_id}, #{board_id})
+	</insert>
+	
+	<update id="update" parameterType="Comment">
+		update comment
+		set comment_content = #{comment_content}
+		where comment_id = #{comment_id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from comment
+		where comment_id = #{comment_id}
+	</delete>
+</mapper>
