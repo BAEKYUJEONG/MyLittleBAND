@@ -2,7 +2,7 @@
   <!-- 동작에 따른 이벤트 처리가 가능한듯..? -->
   <v-row
     ><v-spacer /><v-col class="my-10" align="center">
-      <video-player
+      <!-- <video-player
         class="video-player-box"
         ref="videoPlayer"
         :options="playerOptions"
@@ -20,20 +20,23 @@
         @statechanged="playerStateChanged($event)"
         @ready="playerReadied"
       >
-      </video-player> </v-col
-    ><v-spacer
-  /></v-row>
+      </video-player> -->
+
+     </v-col
+    ><v-spacer />
+  </v-row>
 </template>
 
 <script>
-import "video.js/dist/video-js.css";
+//import "video.js/dist/video-js.css";
 
-import { videoPlayer } from "vue-video-player";
+//import { videoPlayer } from "vue-video-player";
 
 export default {
   components: {
-    videoPlayer,
+    // videoPlayer,
   },
+  created() {},
   data() {
     return {
       playerOptions: {
@@ -56,10 +59,35 @@ export default {
         // 썸네일
         poster: "../assets/logo.png",
       },
+      localStream: null,
     };
   },
   mounted() {
-    console.log("this is current player instance object", this.player);
+    let gotLocalMediaStream;
+    const mediaStreamConstraints = {
+      video: true,
+    };
+
+    const localVideo = document.querySelector("video");
+    console.log(localVideo);
+
+    // Handles success by adding the MediaStream to the video element.
+    gotLocalMediaStream = (mediaStream) => {
+      this.localStream = mediaStream;
+      localVideo.srcObject = mediaStream;
+    };
+
+    // Handles error by logging a message to the console with the error message.
+    function handleLocalMediaStreamError(error) {
+      console.log("navigator.getUserMedia error: ", error);
+    }
+
+    //((a,b,c) => console.log(a+b+c))(1,3,5)
+    // Initializes media stream.
+    navigator.mediaDevices
+      .getUserMedia(mediaStreamConstraints)
+      .then(gotLocalMediaStream)
+      .catch(handleLocalMediaStreamError);
   },
   computed: {
     player() {
