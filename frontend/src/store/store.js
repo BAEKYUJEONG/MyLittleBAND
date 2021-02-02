@@ -10,7 +10,7 @@ import createPersistedState from 'vuex-persistedstate';//새로고침해도 stor
 
     import Example from "./modules/ExampleStore.js"
 */
-import TodayTimelineStore from "./modules/TodayTimelineStore.js";
+import timelineStore from "./modules/timelineStore";
 
 // import jwt_decode from "jwt-decode";
 
@@ -26,7 +26,8 @@ export default new Vuex.Store({
         ExampleStore1,
         ExampleStore2,
     */
-    TodayTimelineStore,
+
+    timelineStore,
     MemberStore
   },
   plugins: [
