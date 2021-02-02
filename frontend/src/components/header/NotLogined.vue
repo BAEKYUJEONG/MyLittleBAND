@@ -1,25 +1,27 @@
 <template>
   <v-div>
-    <v-btn v-for="link in links" :key="link" text router-link :to="link.path" class="white--text mx-10">
-      {{ link.text }}
+    <Login/>
+    <v-btn text @click="signup()" class="white--text mx-10">
+      회원가입
     </v-btn>
   </v-div>
 </template>
 
 <script>
+import Login from '../login/Login.vue';
+
 export default {
   data: () => ({
-    links: [
-      {
-        text: "로그인",
-        path: ""
-      }, 
-      {
-        text: "회원가입",
-        path: "/signup"
-      }
-    ],
+    
   }),
+  components:{
+    Login//로그인 자체가 버튼이자 컴포넌트가 된다
+  },
+  methods:{
+    signup(){//회원가입 페이지로 이동
+    this.$router.push("/signup");
+    }
+  }
 };
 </script>
 

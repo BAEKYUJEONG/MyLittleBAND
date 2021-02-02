@@ -28,8 +28,8 @@
       ></v-col>
 
       <!-- Login, NotLogin -->
-      <v-col class="my-auto">
-        <Logined v-if="false" />
+      <v-col class="my-auto ml-auto">
+        <Logined v-if="islogin" />
         <NotLogined v-else />
       </v-col>      
 
@@ -41,6 +41,8 @@
 <script>
 import Logined from "./Logined.vue";
 import NotLogined from "./NotLogined.vue";
+import { mapGetters } from 'vuex' //vuex사용
+const MemberStore = 'MemberStore' //MemberStore 모듈 사용
 
 export default {
   data: () => ({
@@ -55,6 +57,12 @@ export default {
       },
     ],
   }),
+  computed:{
+    ...mapGetters(MemberStore,{//MemberStore 모듈 내 getters 사용
+      islogin : 'getIsLogined',//islogin 변수에 getIsLogined 리턴값 저장
+      manager : 'getManager'    //manager 변수에 getManager 리턴값 저장
+    })
+  },
   components: {
     Logined,
     NotLogined,
