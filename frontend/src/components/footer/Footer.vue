@@ -3,7 +3,7 @@
     <v-row justify="center" no-gutters>
       <v-btn
         v-for="member in Team"
-        :key="member"
+        :key="member.name"
         color="white"
         text
         rounded
@@ -38,7 +38,7 @@ export default {
         },
         {
           name: "신인섭",
-          url: "",
+          url: "https://github.com/InSub-Shin",
         },
         {
           name: "엄재웅",
