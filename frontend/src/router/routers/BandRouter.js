@@ -1,12 +1,25 @@
 // Components import
 import BandList from '../../components/bandmain/BandList';
-
+import BandInfo from '../../components/manageband/BandInfo';
+import BandDetail from '../../components/manageband/BandDetail';
 // ExampleRouter 정의 부분
 const bandRoute = [
     {   // 자신의 밴드 목록
         path: '/band/:memberno',
         name: 'bandlist',
         component: BandList,
+        props: true,
+    },
+    {   // 밴드 소개 페이지
+        path: '/band/introduce/:bandno',
+        name: 'bandinfo',
+        component: BandInfo,
+        props: true,
+    },
+    {   // 밴드멤버용 상세 페이지
+        path: '/band/:bandno',
+        name: 'banddetail',
+        component: BandDetail,
         props: true,
     },
     /*
