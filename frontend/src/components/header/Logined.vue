@@ -5,7 +5,7 @@
       :key="link.text"
       text
       @click.native="click(link.text)"
-      class="white--text ma-auto"
+      class="white--text"
     >
       {{ link.text }}
     </v-btn>
