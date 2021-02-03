@@ -45,10 +45,10 @@ export default {
       //클릭이벤트로 페이지 이동
       if (value == "로그아웃") {
         this.Logout(); //로그아웃
-        this.$router.push("/");
+        this.$router.push({name:'main'});
       } else if (value == "마이페이지") {
         //마이페이지로 이동
-        this.$router.push("/mypage/" + this.memberid);
+        this.$router.push("/member/" + this.memberid);
       } else if (value == "밴드") {
         //밴드페이지로 이동
         this.$router.push("/band/" + this.memberid);

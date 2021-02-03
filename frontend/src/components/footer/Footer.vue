@@ -38,7 +38,7 @@ export default {
         },
         {
           name: "신인섭",
-          url: "",
+          url: "https://github.com/InSub-Shin",
         },
         {
           name: "엄재웅",
