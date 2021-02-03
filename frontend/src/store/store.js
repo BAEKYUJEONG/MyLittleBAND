@@ -1,33 +1,23 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import MemberStore from "./modules/MemberStore.js"
+// store module import
+import MemberStore from "./modules/MemberStore"
+import timelineStore from "./modules/timelineStore";
+import RankingStore from "./modules/RankingStore";
+
 //yarn add vuex-persistedstate 필요 
 import createPersistedState from 'vuex-persistedstate';//새로고침해도 store 정보가 사라지지 않게 해줌
-
-/*
-    modules폴더의 module을 import하면 됨
-
-    import Example from "./modules/ExampleStore.js"
-*/
-import timelineStore from "./modules/timelineStore";
 
 // import jwt_decode from "jwt-decode";
 
 // Vuex 사용
 Vue.use(Vuex);
 
-
 export default new Vuex.Store({
-  modules: {
-    /*
-        import했던 모듈을 넣어주면 됨
-
-        ExampleStore1,
-        ExampleStore2,
-    */
-
+  modules: {      // imported modules
     timelineStore,
+    RankingStore,
     MemberStore
   },
   plugins: [
