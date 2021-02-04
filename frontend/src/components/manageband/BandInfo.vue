@@ -1,6 +1,14 @@
 <!-- 팔로우 할 멤버들에게 보여 줄 페이지 -->
 <template>
   <v-main>
+    <v-row  class="px-10">
+      <v-col cols="12">
+        <v-banner class="my-10">
+          <strong>밴드소개</strong>
+        </v-banner>
+      </v-col>
+    </v-row>
+
     <v-row class="ma-auto pa-10" justify="center">
       <!-- 밴드 프로필 이미지-->
       <v-col cols="4" class="ma-auto">
@@ -43,7 +51,11 @@
       </v-col>
       <!-- 좋아요 버튼 -->
       <v-col cols="4" class="ma-auto">
-        <v-btn icon :color="color">
+        <v-tooltip bottom nudge-bottom="20" >
+          <template v-slot:activator="{ on, attrs }">
+        <v-btn icon :color="color"
+         v-bind="attrs"
+            v-on="on">
           <v-icon
             size="100"
             @click="setFollow()"
@@ -51,13 +63,19 @@
             >mdi-heart</v-icon
           >
         </v-btn>
+          </template>
+        <span v-if="!member.follow">밴드 팔로우하기</span>
+        <span v-else>밴드 팔로우취소</span>
+        </v-tooltip>
       </v-col>
     </v-row>
     <v-divider></v-divider>
     <!-- 멤버구성 -->
-    <v-row class="ma-auto">
-      <v-col cols="4">
-        <h1>멤버구성</h1>
+    <v-row  class="px-10">
+      <v-col cols="12">
+        <v-banner class="my-10">
+          <strong>멤버구성</strong>
+        </v-banner>
       </v-col>
     </v-row>
     <v-row class="ma-auto pa-10">
@@ -92,11 +110,41 @@
     <v-divider></v-divider>
 
     <!-- 공연영상 -->
-    <v-row class="ma-auto pa-10">
-      <v-col cols="4">
-        <h1>공연 영상</h1>
+    <v-row class="ma-auto px-10">
+      <v-col>
+        <!-- 제목(배너) -->
+        <v-banner class="my-10">
+          <strong>공연영상</strong>
+        </v-banner>
+
+        <!-- 목록 -->
+        <v-sheet class="mx-auto" elevation="8">
+          <v-slide-group class="pa-4" show-arrows>
+            <v-slide-item
+              v-for="video in videolist"
+              :key="video.videono"
+              v-slot="{ active }"
+            >
+              <v-card
+                :color="active ? 'grey lighten-1' : ''"
+                class="d-flex ma-4 flex-end flex-column"
+                height="300"
+                width="500"
+                @click="[active, videoDetail(video.videono)]"
+              >
+                <v-card-text class="text-end mt-auto">
+                  <p>{{ video.title }}</p>
+                </v-card-text>
+              </v-card>
+            </v-slide-item>
+          </v-slide-group>
+        </v-sheet>
       </v-col>
-      <!-- 랭킹쪽 UI 가져다 쓸 예정 -->
+    </v-row>
+    <v-row class="ma-auto">
+      <v-col cols="12" class="ma-auto">
+        <v-btn color="primary" class="mx-6" @click="list()">돌아가기</v-btn>
+      </v-col>
     </v-row>
   </v-main>
 </template>
@@ -104,11 +152,12 @@
 <script>
 import { mapGetters } from "vuex"; //vuex사용
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
-import axios from "axios";
+import axios from "../../axios/axios-common";
 
 export default {
   data: () => {
     return {
+      color : '',
       member: {
         follow: false,//true이면 icon이 빨간색, false면 회색
       },
@@ -177,14 +226,20 @@ export default {
       //밴드 정보 불러옴
       axios
         .get("/band/" + this.$route.params.bandno)
-        .then((response) => (this.band = response.data))
+        .then((response) => {
+          this.band = response.data.object
+          //console.log(response.data.object.name)
+          })
         .catch((exp) => alert(exp + "밴드정보 조회에 실패하였습니다."));
     },
     getMemberinfo() {
       //밴드 소속 멤버 정보를 불러옴
       axios
         .get("/band/member/" + this.$route.params.bandno)
-        .then((response) => (this.members = response.data))
+        .then((response) => {
+          this.members = response.data.object
+          //console.log(response.data.object)
+          })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
     getVideolist() {
@@ -197,8 +252,8 @@ export default {
     getFollow() {
       //밴드 팔로우 여부 불러옴
       axios
-        .get("/member/" + this.memberid)
-        .then((response) => (this.member = response.data))
+        .get("/followlist/" + this.memberid)
+        .then((response) => {this.member.follow = response.data.object})
         .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
     },
     setFollow() {
@@ -225,6 +280,9 @@ export default {
         }
       })
       .catch((exp)=>alert(exp+"수정에 실패하였습니다."));
+    },
+    list(){
+      this.$router.push("/band/"+this.$route.params.bandno)
     }
   },
 };
