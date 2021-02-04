@@ -80,7 +80,7 @@ public class MemberController {
 	    System.out.println(email);
 	    String subject = "나작밴 회원가입 승인 메일 링크";
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("링크를 클릭하시면 이메일 인증이 완료됩니다.\n\n").append("http://localhost:3000/validated?email=").append(email)
+	    sb.append("링크를 클릭하시면 이메일 인증이 완료됩니다.\n\n").append("http://i4a408.p.ssafy.io:3000/validated?email=").append(email)
 	            .append("&authkey=").append(authkey);
 	    Member target = service.getUserByEmail(email);
 	    target.setAuthkey(authkey);
