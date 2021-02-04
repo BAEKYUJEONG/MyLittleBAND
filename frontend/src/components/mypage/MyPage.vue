@@ -77,50 +77,26 @@
     </v-row>
     <hr />
     <!-- 소속밴드 -->
-    <v-row class="ma-auto">
-      <v-col cols="12">
-        <h1>소속 밴드</h1>
-      </v-col>
-    </v-row>
+
     <v-row class="ma-auto" justify="center">
-      <v-col cols="4" class="card-carousel-wrapper">
-        <v-container
-          class="card-carousel--nav__left"
-          @click="moveCarousel(-1)"
-          :disabled="atHeadOfList"
-        ></v-container>
+      <v-col cols="6" class="card-carousel-wrapper">
+        <v-banner class="my-10">
+        <strong>소속밴드</strong>
+      </v-banner>
 
-        <v-container class="card-carousel">
-          <v-container class="card-carousel--overflow-container">
-            <v-container
-              class="card-carousel-cards"
-              :style="{
-                transform: 'translateX' + '(' + currentOffset + 'px' + ')',
-              }"
-            >
-              <v-card
-              elevation="0"
-                v-for="band in bandlist"
-                :key="band.id"
-                class="card-carousel-card ml-2 mr-2"
-                style="width:200px"
-              >
-                <v-btn @click.native="toBand(band.id)"
+        <v-sheet class="mx-auto" elevation="8">
+          <v-slide-group class="pa-4" show-arrows>
+            <v-slide-item v-for="band in bandlist" :key="band.id">
+              <v-btn
+                @click.native="toBand(band.id)"
                 class="ma-auto"
-                style="width:180px"
-                  >{{ band.name }}
-                  <v-icon v-if="band.isChief" color="#FFD600">mdi-crown</v-icon>
-                </v-btn>
-              </v-card>
-            </v-container>
-          </v-container>
-        </v-container>
-
-        <v-container
-          class="card-carousel--nav__right"
-          @click="moveCarousel(1)"
-          :disabled="atEndOfList"
-        ></v-container>
+                style="width: 180px"
+                >{{ band.name }}
+                <v-icon v-if="band.isChief" color="#FFD600">mdi-crown</v-icon>
+              </v-btn>
+            </v-slide-item>
+          </v-slide-group>
+        </v-sheet>
       </v-col>
     </v-row>
 
@@ -130,14 +106,19 @@
         <v-btn color="primary" class="mx-6" @click="modify()"
           >회원정보수정</v-btn
         >
-          <!-- 회원탈퇴 모달창 -->
+        <!-- 회원탈퇴 모달창 -->
         <v-dialog v-model="dialog" persistent max-width="290">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="error" v-bind="attrs" v-on="on" class="white--text mx-10">
+            <v-btn
+              color="error"
+              v-bind="attrs"
+              v-on="on"
+              class="white--text mx-10"
+            >
               회원탈퇴
             </v-btn>
           </template>
-          <v-card style="opacity: 1.0;">
+          <v-card style="opacity: 1">
             <v-card-title class="headline"> 회원탈퇴 </v-card-title>
             <v-card-text>정말 탈퇴하시겠습니까?</v-card-text>
             <v-card-actions>
@@ -190,7 +171,8 @@ export default {
       axios
         .delete("/member/" + this.$route.params.memberno)
         .then((response) => {
-          if (response.data == true) {//성공하면 alert 후 메인페이지로
+          if (response.data == true) {
+            //성공하면 alert 후 메인페이지로
             alert("삭제성공");
             this.$router.push("/main");
           }
@@ -240,7 +222,7 @@ export default {
         .catch((exp) => alert(exp + "수정에 실패하였습니다."));
     },
     toBand(bandid) {
-      this.$router.push("/band/" + bandid);
+      this.$router.push("/band/detail/" + bandid);
     },
   },
   computed: {
