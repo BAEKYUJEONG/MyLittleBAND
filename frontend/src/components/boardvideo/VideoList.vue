@@ -1,17 +1,90 @@
 <template>
-<v-main>
-  <v-layout justify-center>
-    <v-flex xs12 sm9>
-      <!-- 카드 뷰 시작 -->
-      
-        <v-container fluid grid-list-sm>
+  <v-main>
+    <v-container grid-list-xs>
+      <v-layout column align-center>
+        <v-flex>
+          <!-- 필터 영역 -->
+          <v-col >
+            <v-autocomplete
+              v-model="friends"
+              :disabled="isUpdating"
+              :items="people"
+              filled
+              chips
+              color="blue lighten-2"
+              label="필터"
+              item-text="name"
+              item-value="name"
+              multiple
+            >
+              <template v-slot:append-outer>
+                <v-slide-x-reverse-transition mode="out-in">
+                  <v-icon
+                    :key="`icon-${isEditing}`"
+                    :color="isEditing ? 'success' : 'info'"
+                    @click="isEditing = !isEditing"
+                    v-text="
+                      isEditing ? 'mdi-check-outline' : 'mdi-filter-variant'
+                    "
+                  ></v-icon>
+                </v-slide-x-reverse-transition>
+              </template>
+              <template v-slot:selection="data">
+                <v-chip
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                  @click="data.select"
+                  @click:close="remove(data.item)"
+                >
+                  {{ data.item.name }}
+                </v-chip>
+              </template>
+              <template v-slot:item="data">
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-item-content v-text="data.item"></v-list-item-content>
+                </template>
+                <template v-else>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-html="data.item.name"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle
+                      v-html="data.item.group"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </template>
+            </v-autocomplete>
+          </v-col>
+        </v-flex>
+        <v-flex>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="msg"
+                label="검색어"
+                placeholder="원하는 검색어를 입력하세요."
+                append-outer-icon = "mdi-magnify"
+                @click:append-outer="onSearch"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-flex>
+      </v-layout>
+    </v-container>
+
+    <v-container grid-list-sm>
+      <v-layout justify-center column wrap>
+        <v-flex xs12 sm9>
+          <!-- 카드 뷰 시작 -->
           <v-layout row wrap>
             <v-flex
               v-for="card in cards"
               :key="card.title"
               v-bind="{ [`xs${card.flex}`]: true }"
             >
-              <v-card class="mx-10 my-10"> 
+              <v-card class="mx-10 my-10">
                 <v-img
                   :src="card.src"
                   height="200px"
@@ -47,21 +120,36 @@
                   <v-card-text v-show="card.show" v-text="card.content">
                   </v-card-text>
                 </v-slide-y-transition>
-
               </v-card>
             </v-flex>
           </v-layout>
-        </v-container>
-     
-    </v-flex>
-  </v-layout>
-</v-main>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      friends:[],
+      msg:'',
+      isEditing: false,
+      isUpdating: false,
+      name: "밴드 속성",
+      people: [
+        { header: "컬러" },
+        { name: "빨강", group: "색깔" },
+        { name: "보라", group: "색깔" },
+        { name: "노랑", group: "색깔" },
+        { divider: true },
+        { header: "장르" },
+        { name: "락", group: "장르" },
+        { name: "팝", group: "장르" },
+        { name: "재즈", group: "장르" },
+      ],
+
       cards: [
         {
           title: "201215 싸피밴드",
@@ -109,8 +197,18 @@ export default {
     };
   },
   methods: {
+    onSearch(){
+      // 사용자가 원하는 검색어를 눌렀을 때, 검색이 되도록 처리.
+      //
+      this.msg = ''
+    },
     onClick() {
+      // 비디오를 클릭했을 때, 비디오가 선택되도록 처리.
       this.$router.push({ name: "videodetail" });
+    },
+    remove(item) {
+      const index = this.friends.indexOf(item.name);
+      if (index >= 0) this.friends.splice(index, 1);
     },
   },
 };

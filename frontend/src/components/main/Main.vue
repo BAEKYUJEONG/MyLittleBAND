@@ -1,7 +1,9 @@
 <template>
   <v-main>
     <v-container>
-      <Streaming />
+      <!-- <Streaming />
+      <v-divider></v-divider> -->
+      <StreamingCustom/>
       <v-divider></v-divider>
       <Timeline />
       <v-divider></v-divider>
@@ -11,17 +13,17 @@
 </template>
 
 <script>
-import Streaming from "./Straming";
+//import Streaming from "./Straming";
 import Timeline from "./TimeLine";
 import Ranking from "./Ranking";
+import StreamingCustom from "./StreamingCustom";
 
 export default {
   components: {
-    Streaming,
+    //Streaming,
     Timeline,
     Ranking,
+    StreamingCustom,
   },
 };
 </script>
-
-<style></style>
