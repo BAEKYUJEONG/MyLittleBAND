@@ -17,7 +17,7 @@ const bandRoute = [
         props: true,
     },
     {   // 밴드멤버용 상세 페이지
-        path: '/band/:bandno',
+        path: '/band/detail/:bandno',
         name: 'banddetail',
         component: BandDetail,
         props: true,
