@@ -1,4 +1,5 @@
-package com.web.blog.dao;
+package com.web.blog.mapper;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +8,7 @@ import com.web.blog.dto.Band;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
 
-public interface BandDao {
+public interface BandMapper {
 	public Band getBandByName(String name);
 	public void opened(BandOpened req);
 	public void addcrew(String memberId, String bandId);

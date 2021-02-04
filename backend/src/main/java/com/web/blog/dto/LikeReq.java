@@ -1,27 +1,19 @@
 package com.web.blog.dto;
 
-public class Comment {
-	private String commentId;
+import io.swagger.annotations.ApiModelProperty;
+
+public class LikeReq {
+	@ApiModelProperty(example = "1")
 	private String memberId;
+	@ApiModelProperty(example = "5")
 	private String boardId;
 	
-	public Comment() {
-		
+	public LikeReq() {
 	}
 
-	public Comment(String commentId, String memberId, String boardId) {
-		super();
-		this.commentId = commentId;
+	public LikeReq(String memberId, String boardId) {
 		this.memberId = memberId;
 		this.boardId = boardId;
-	}
-
-	public String getCommentId() {
-		return commentId;
-	}
-
-	public void setCommentId(String commentId) {
-		this.commentId = commentId;
 	}
 
 	public String getMemberId() {
@@ -39,5 +31,6 @@ public class Comment {
 	public void setBoardId(String boardId) {
 		this.boardId = boardId;
 	}
+
 	
 }

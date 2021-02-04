@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.FollowMapper">
+
+	<insert id="addfollow" parameterType="FollowReq">
+		insert into follow values(null, #{memberId}, #{bandId})
+	</insert>
+	
+	<delete id="unfollow" parameterType="String">
+		delete from follow where followId=#{followId}
+	</delete>
+	
+	<select id="getFollowById" parameterType="FollowReq" resultType="Follow">
+		select * from follow where memberId=#{memberId} and bandId=#{bandId}
+	</select>
+	
+	<select id="followlist" parameterType="String" resultType="java.util.Map">
+		select bandId,img,name from band where bandId in(select bandId from follow where memberId=#{memberId})
+	</select>
+	
+</mapper>

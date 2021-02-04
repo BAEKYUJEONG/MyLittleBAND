@@ -46,8 +46,13 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public HashMap<String, String> login(loginReq req) {
+	public Member login(loginReq req) {
 		return dao.login(req);
+	}
+
+	@Override
+	public Member getUserById(String memberId) {
+		return dao.getUserById(memberId);
 	}
 
 

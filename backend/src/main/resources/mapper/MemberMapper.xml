@@ -13,6 +13,10 @@
     select * from member where email=#{email}
   </select>
   
+  <select id="getUserById" resultType="Member">
+    select * from member where memberId=#{memberId}
+  </select>
+  
    <update id="update">
       update member set email=#{m.email}, name=#{m.name}, phone=#{m.phone}, profile=#{m.profile} where memberId = #{memberId}
   </update>
@@ -25,8 +29,8 @@
       delete from member where memberId = #{memberId}
   </delete>
   
-  <select id="login" resultType="java.util.Map">
-    select memberId,manager from member where email=#{email} and pw=#{pw}
+  <select id="login" resultType="Member">
+    select * from member where email=#{email} and pw=#{pw}
   </select>
   
 	<!-- <insert id="signup" parameterType="Member">

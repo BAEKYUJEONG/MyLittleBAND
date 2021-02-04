@@ -1,29 +1,29 @@
 package com.web.blog.dto;
 
 public class Crew {
-	private String id;
+	private String crewId;
 	private String memberid;
 	private String bandid;
-	private String ischief;
+	private boolean ischief;
 	private String codesession;
 	
 	public Crew() {
 	}
 
-	public Crew(String id, String memberid, String bandid, String ischief, String codesession) {
-		this.id = id;
+	public Crew(String crewId, String memberid, String bandid, boolean ischief, String codesession) {
+		this.crewId = crewId;
 		this.memberid = memberid;
 		this.bandid = bandid;
 		this.ischief = ischief;
 		this.codesession = codesession;
 	}
 
-	public String getId() {
-		return id;
+	public String getCrewId() {
+		return crewId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCrewId(String crewId) {
+		this.crewId = crewId;
 	}
 
 	public String getMemberid() {
@@ -42,11 +42,11 @@ public class Crew {
 		this.bandid = bandid;
 	}
 
-	public String getIschief() {
+	public boolean isIschief() {
 		return ischief;
 	}
 
-	public void setIschief(String ischief) {
+	public void setIschief(boolean ischief) {
 		this.ischief = ischief;
 	}
 
@@ -57,6 +57,8 @@ public class Crew {
 	public void setCodesession(String codesession) {
 		this.codesession = codesession;
 	}
+	
+	
 	
 	
 	
