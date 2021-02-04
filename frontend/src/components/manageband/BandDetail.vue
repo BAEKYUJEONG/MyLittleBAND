@@ -25,7 +25,7 @@
               max-width="100%"
               style="border-radius: 50%"
               contain
-              :src="band.imgurl"
+              :src="band.img"
             >
             </v-img>
           </v-layout>
@@ -42,7 +42,7 @@
         ></v-text-field>
 
         <v-textarea
-          v-model="band.profile"
+          v-model="band.intro"
           label="소개"
           outlined
           readonly
@@ -127,9 +127,11 @@
             ></v-select>
           </v-col>
         </v-row>
+        <!-- 
         <div class="text-center mb-3">
           <h2 class="mx-5 d-inline-block">{{start | moment('YYYY MMMM')}}</h2>
         </div>   
+        -->
         <v-sheet height="500">
           
           <v-calendar ref="calendar" 
@@ -225,7 +227,7 @@
 <script>
 import { mapGetters } from "vuex"; //vuex사용
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
-import axios from "axios";
+import axios from "../../axios/axios-common";
 
 export default {
   data: () => {
@@ -233,7 +235,7 @@ export default {
       dialog: false,
       member: {
         //로그인 한 아이디의 정보
-        isChief: false,
+        isChief: true,
       },
       chief: [
         //밴드장일 때 나오는 버튼들
@@ -245,6 +247,9 @@ export default {
         },
         {
           text: "공연신청",
+        },
+        {
+          text: "돌아가기",
         },
       ],
       //캘린더 관련 데이터
@@ -260,8 +265,8 @@ export default {
       band: {
         //밴드정보
         name: "잘하는밴드",
-        profile: "홍대에 터를 두고 활동하는 잘하는밴드입니다.",
-        imgurl: require("@/assets/image/pepe.jpg"),
+        intro: "홍대에 터를 두고 활동하는 잘하는밴드입니다.",
+        img: require("@/assets/image/pepe.jpg"),
       },
       members: [
         //소속멤버정보
@@ -320,21 +325,27 @@ export default {
       this.getVideolist();//밴드의 비디오리스트 가져오기
       this.getMember(); //로그인 멤버 정보 가져오기
       */
-     this.start = this.$moment().format('YYYY-MM-DD');
+     //this.start = this.$moment().format('YYYY-MM-DD');
   },
   methods: {
     getBandinfo() {
       //밴드 정보 불러옴
       axios
         .get("/band/" + this.$route.params.bandno)
-        .then((response) => (this.band = response.data))
+        .then((response) => {
+          this.band = response.data.object
+          //console.log(response.data.object.name)
+          })
         .catch((exp) => alert(exp + "밴드정보 조회에 실패하였습니다."));
     },
     getMemberinfo() {
       //밴드 소속 멤버 정보를 불러옴
       axios
         .get("/band/member/" + this.$route.params.bandno)
-        .then((response) => (this.members = response.data))
+        .then((response) => {
+          this.members = response.data.object
+          //console.log(response.data.object)
+          })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
     getVideolist() {
@@ -363,11 +374,13 @@ export default {
     onClick(value) {
       console.log(value);
       if (value == "밴드정보수정") {
-        //this.$router.push("/band/modify/" + this.$route.params.bandno);
+        this.$router.push("/band/modify/" + this.$route.params.bandno);
       } else if (value == "영상업로드") {
         this.upload();
       } else if (value == "공연신청") {
         //this.$router.push("/reserve/stage/" + this.$route.params.bandno);
+      } else if(value == "돌아가기"){
+        this.$router.push("/band/"+this.$route.params.bandno);
       }
     },
     remove() {

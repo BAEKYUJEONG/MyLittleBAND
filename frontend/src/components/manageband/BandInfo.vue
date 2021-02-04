@@ -141,13 +141,18 @@
         </v-sheet>
       </v-col>
     </v-row>
+    <v-row class="ma-auto">
+      <v-col cols="12" class="ma-auto">
+        <v-btn color="primary" class="mx-6" @click="list()">돌아가기</v-btn>
+      </v-col>
+    </v-row>
   </v-main>
 </template>
 
 <script>
 import { mapGetters } from "vuex"; //vuex사용
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
-import axios from "axios";
+import axios from "../../axios/axios-common";
 
 export default {
   data: () => {
@@ -221,14 +226,20 @@ export default {
       //밴드 정보 불러옴
       axios
         .get("/band/" + this.$route.params.bandno)
-        .then((response) => (this.band = response.data))
+        .then((response) => {
+          this.band = response.data.object
+          //console.log(response.data.object.name)
+          })
         .catch((exp) => alert(exp + "밴드정보 조회에 실패하였습니다."));
     },
     getMemberinfo() {
       //밴드 소속 멤버 정보를 불러옴
       axios
         .get("/band/member/" + this.$route.params.bandno)
-        .then((response) => (this.members = response.data))
+        .then((response) => {
+          this.members = response.data.object
+          //console.log(response.data.object)
+          })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
     getVideolist() {
@@ -241,8 +252,8 @@ export default {
     getFollow() {
       //밴드 팔로우 여부 불러옴
       axios
-        .get("/member/" + this.memberid)
-        .then((response) => (this.member = response.data))
+        .get("/followlist/" + this.memberid)
+        .then((response) => {this.member.follow = response.data.object})
         .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
     },
     setFollow() {
@@ -269,6 +280,9 @@ export default {
         }
       })
       .catch((exp)=>alert(exp+"수정에 실패하였습니다."));
+    },
+    list(){
+      this.$router.push("/band/"+this.$route.params.bandno)
     }
   },
 };
