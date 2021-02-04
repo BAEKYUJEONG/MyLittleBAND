@@ -392,3 +392,24 @@
 
 > 백유정
 
+
+
+
+*****
+
+
+
+###### 2021-01-28
+
+> 백유정
+- boardId 등 id 부분 string 문제로 인해 
+    comment 기능들에 관한 모든 코드 약간 수정
+
+- db 연동 및 스웨거 연동 중
+
+- videoboard db 설정 및 foreign key 문제로 dto 재설정
+
+- 파일 업로드 부분 공부 및 작업 중
+  - MultipartFile or MultipartResolver 이용 or  commons-fileupload 를 이용하기 위해서는 dependencies를 반드시 추가해야함 
+  +bean파일도 필요
+  - 파일 업로드 참고링크.hwp 참고 : 본 사이트 중 그나마 괜찮은 것들 몇개 뽑아둠
