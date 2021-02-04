@@ -19,7 +19,6 @@ const MemberStore = {
     getManager(state) {//멤버 관리자여부 받아옴
       return state.manager;
     }
-
   },
   mutations: {
     setIsLogined(state, isLogin) {//로그인상태 설정
@@ -43,7 +42,7 @@ const MemberStore = {
 
 
   actions: {
-    // Login
+    // 로그인
     Login(context, member) {
       return axios
         .post("/login", {//유저정보를 보냄
@@ -51,7 +50,6 @@ const MemberStore = {
           pw: member.pw
         })
         .then((response) => {//성공 시 변수 재설정
-          console.log(response.data);
           if (response.data.data === "success") {
             console.log("성공");
 
@@ -70,13 +68,58 @@ const MemberStore = {
           console.log(error);
         });
     },
-
-    //로그아웃
+    // 로그아웃
     Logout(context) {
       context.commit("logout");
       localStorage.removeItem("access-token");
+    },
+    // 회원가입
+    reqSignup(context, info){
+      return axios
+      .post("/signup", {
+        email: info.email,
+        name: info.name,
+        phone: info.phone,
+        pw: info.pw,
+      })
+      .then((response) => {
+        if(response.data.data === 'success'){
+          return 'success';
+        } else {
+          return 'fail';
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+    // 이메일 인증 요청
+    reqSignupValidation(context, email) {
+      return axios
+      .post("/signup/validation", email)
+      .then((response) => {
+        if(response.status)   return true;
+        return false;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+    // 최종 회원 가입 완성(이메일 링크 누를 때)
+    reqClickEmailLink(context, info) {
+      return axios
+      .post("/signup/validated", { 
+        email: info.email,
+        authkey: info.authkey
+      })
+      .then((response) => {
+        if(response.status) return true;
+        return false;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     }
-
   }
 
 }

@@ -63,7 +63,6 @@ const RankingStore = {
   actions: {
     // 랭킹 정보 요청
     reqRanking(context) {
-      context.commit("setRanking", []);
       return axios
         .get("/rank")
         .then((response) => {

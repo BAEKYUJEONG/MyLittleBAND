@@ -6,8 +6,18 @@
 <mapper namespace="com.web.blog.mapper.MemberMapper">
 
 	<insert id="signup" parameterType="signupReq">
-		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, null, null,0)
+		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, null, null, 0, 0, null)
   	</insert>
+  	
+  	<!-- 이메일 인증키 -->
+  	<update id="emailLink" parameterType="Member">
+  		update member set authkey=#{authkey} where memberId=#{memberId}
+  	</update> 
+  	
+  	<!-- 이메일 인증 업데이트 -->
+  	<update id="updateAuth" parameterType="string">
+  		update member set emailcheck=1 where memberId=#{memberId}
+  	</update> 
   	
   	<select id="getUserByEmail" resultType="Member">
     select * from member where email=#{email}

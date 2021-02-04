@@ -1,6 +1,7 @@
 package com.web.blog.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.blog.dto.Member;
 import com.web.blog.dto.loginReq;
 import com.web.blog.dto.signupReq;
+import com.web.blog.service.MailService;
+import com.web.blog.util.TempKey;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.service.MemberService;
 
@@ -42,6 +45,9 @@ public class MemberController {
 	@Autowired
 	MemberService service;
 	
+	@Autowired
+	MailService mailService;
+	
 	@PostMapping(value = "/signup")
 	@ApiOperation(value = "회원가입", notes = "성공 시 회원가입 완료")
 	@ApiResponses({
@@ -56,11 +62,53 @@ public class MemberController {
 	        result.status = true;
 	        result.data = "success";
 	        return new ResponseEntity<>(result, HttpStatus.OK);
-	        
 		}
 		else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	/**
+	 * 이메일 인증 요청
+	 * @param email
+	 * @return ResponseEntity<>(null, HttpStatus)
+	 */
+	@PostMapping(value = "/signup/validation")
+	public Object signupValidate(@RequestBody String email){
+		// 임의의 authkey 생성
+	    String authkey = new TempKey().getKey(50, false);
+	    System.out.println(email);
+	    String subject = "나작밴 회원가입 승인 메일 링크";
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("링크를 클릭하시면 이메일 인증이 완료됩니다.\n\n").append("http://localhost:3000/validated?email=").append(email)
+	            .append("&authkey=").append(authkey);
+	    Member target = service.getUserByEmail(email);
+	    target.setAuthkey(authkey);
+	    service.emailLink(target);
+	    mailService.send(subject, sb.toString(), "anonymous@najakban.com", email);
+	    
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	/**
+	 * 이메일 링크 클릭 후 회원 가입 완료
+	 * @param authkey
+	 * @return ResponseEntity<>(null, HttpStatus)
+	 */
+	@PostMapping(value = "/signup/validated")
+	public Object signupValidated(@RequestBody Map<String, String> info) {
+		Member target = service.getUserByEmail(info.get("email"));
+		BasicResponse response = new BasicResponse();
+		
+		// Authkey가 일치
+		if(target.getAuthkey().equals(info.get("authkey"))) {
+			service.updateAuth(target.getMemberId());
+			response.status = true;
+		} else {
+			response.status = false;
+		}
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);	
 	}
 	
 	@PutMapping(value = "/member/{memberId}")

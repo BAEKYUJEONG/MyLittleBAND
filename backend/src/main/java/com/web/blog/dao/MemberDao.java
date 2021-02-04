@@ -13,8 +13,9 @@ public interface MemberDao {
 	public Member getUserByEmail(String email);
 	public void withdraw(String memberId);
 	public String findIdByName(String name, String phone);
-	public HashMap<String, String> login(loginReq req);
-	
+	public HashMap<String, String> login(loginReq m);
+	public void emailLink(Member m);
+	public void updateAuth(String memberId);
 	
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile);
 //	public void test(String id);

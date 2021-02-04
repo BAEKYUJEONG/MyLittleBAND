@@ -16,5 +16,6 @@ public interface MemberService {
 	public HashMap<String, String> login(loginReq req);
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile);
 //	public void test(String id);
-	
+	public void emailLink(Member m);		// 이메일 인증 키 삽입
+	public void updateAuth(String memberId);
 }

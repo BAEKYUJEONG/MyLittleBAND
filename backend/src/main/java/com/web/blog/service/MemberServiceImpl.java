@@ -50,6 +50,16 @@ public class MemberServiceImpl implements MemberService{
 		return dao.login(req);
 	}
 
+	@Override
+	public void emailLink(Member m) {
+		dao.emailLink(m);
+	}
+
+	@Override
+	public void updateAuth(String memberId) {
+		dao.updateAuth(memberId);
+	}
+
 
 	
 //	@Override
