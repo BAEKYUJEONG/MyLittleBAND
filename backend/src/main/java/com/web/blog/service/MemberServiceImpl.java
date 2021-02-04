@@ -54,9 +54,18 @@ public class MemberServiceImpl implements MemberService{
 	public Member getUserById(String memberId) {
 		return dao.getUserById(memberId);
 	}
-
-
 	
+	@Override
+	public void emailLink(Member m) {
+		dao.emailLink(m);
+	}
+
+	@Override
+	public void updateAuth(String memberId) {
+		dao.updateAuth(memberId);
+	}
+
+
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {
 //		// TODO Auto-generated method stub

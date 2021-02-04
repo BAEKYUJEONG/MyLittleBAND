@@ -9,6 +9,8 @@ public class Member {
 	private String img;
 	private String profile;
 	private String manager;
+	private String emailcheck;
+	private String authkey;
 	
 	public Member() {
 	}
@@ -21,7 +23,7 @@ public class Member {
 	}
 
 	public Member(String memberId, String email, String name, String pw, String phone, String img, String profile,
-			String manager) {
+			String manager, String emailcheck, String authkey) {
 		this.memberId = memberId;
 		this.email = email;
 		this.name = name;
@@ -30,6 +32,24 @@ public class Member {
 		this.img = img;
 		this.profile = profile;
 		this.manager = manager;
+		this.emailcheck = emailcheck;
+		this.authkey = authkey;
+	}
+
+	public String getEmailcheck() {
+		return emailcheck;
+	}
+
+	public void setEmailcheck(String emailcheck) {
+		this.emailcheck = emailcheck;
+	}
+
+	public String getAuthkey() {
+		return authkey;
+	}
+
+	public void setAuthkey(String authkey) {
+		this.authkey = authkey;
 	}
 
 	public String getMemberId() {

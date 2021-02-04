@@ -16,5 +16,11 @@ public interface MemberMapper {
 	public void withdraw(String memberId);
 	public String findIdByName(String name, String phone);
 	public Member login(loginReq req);
-	
+	public void emailLink(Member m);
+	public void updateAuth(String memberId);
+//	public void signup(String id, String email, String name, String pw, String phone, String img, String profile);
+//	public void test(String id);
+	//	public void update(String id, String email, String name, String pw, String phone, String img, String profile);
+//	public void delete(String id);
+//	public int login(String id, String pw);
 }
