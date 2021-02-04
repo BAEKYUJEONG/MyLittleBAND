@@ -1,4 +1,4 @@
-//import axios from "axios";
+import axios from "../../axios/axios-common";
 
 const MemberStore = {
   namespaced: true, // 모듈 개발사용 가능
@@ -43,27 +43,16 @@ const MemberStore = {
 
 
   actions: {
-
+    // Login
     Login(context, member) {
-      console.log("로그인시작");
-      /* 백엔드 연동 후 return까지 내용 삭제 후 하단 주석 해제*/
-      
-      localStorage.setItem("access-token", "token");
-
-      context.commit("setIsLogined", true);
-      context.commit("setMemberId", "ssafy01");
-      context.commit("setManager", false);
-
-      return console.log(member.password + " " + member.email);
-      
-      //백엔드 연동 후 아래 주석 해제
-      /* 
       return axios
         .post("/login", {//유저정보를 보냄
-          member: member
+          email: member.email,
+          pw: member.pw
         })
         .then((response) => {//성공 시 변수 재설정
-          if (response.data.message === "success") {
+          console.log(response.data);
+          if (response.data.data === "success") {
             console.log("성공");
 
             //토큰생성 및 저장
@@ -71,15 +60,19 @@ const MemberStore = {
             localStorage.setItem("access-token", token);//로컬스토리지에 토큰저장
 
             context.commit("setIsLogined", true); //로그인 상태 true로 변환
-            context.commit("setMemberId", response.data.id);//memberid 저장
-            context.commit("setManager", response.data.manager);//관리자 여부저장
+            context.commit("setMemberId", response.data.object.memberId);//memberid 저장
+            context.commit("setManager", response.data.object.manager);//관리자 여부저장
           } else {
             console.log("실패");
           }
-        });*/
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
-    Logout(context) {//로그아웃
+    //로그아웃
+    Logout(context) {
       context.commit("logout");
       localStorage.removeItem("access-token");
     }

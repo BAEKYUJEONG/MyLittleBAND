@@ -61,11 +61,11 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters(MemberStore, [{
+    ...mapGetters(MemberStore, {
       //MemberStore 모듈 내 getters 사용
       islogin: "getIsLogined", //islogin 변수에 getIsLogined 리턴값 저장
       manager: "getManager", //manager 변수에 getManager 리턴값 저장
-    }]),
+    }),
   },
   components: {
     Logined,

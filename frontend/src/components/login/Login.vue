@@ -31,7 +31,7 @@
               <v-text-field
                 label="Password*"
                 type="password"
-                v-model="member.password"
+                v-model="member.pw"
                 required
                 @keypress.enter="onSubmit"
               ></v-text-field>
@@ -64,7 +64,7 @@ export default {
       dialog: false, //false면 모달창 종료, true:켜기
       member: {
         email: "",
-        password: "",
+        pw: "",
       },
     };
   },
@@ -81,7 +81,7 @@ export default {
 
     onSubmit: function() {
       //공백이면
-      if (this.member.email == "" || this.member.password == "") {
+      if (this.member.email == "" || this.member.pw == "") {
         alert("공백이 존재합니다!");
         return;
       }
