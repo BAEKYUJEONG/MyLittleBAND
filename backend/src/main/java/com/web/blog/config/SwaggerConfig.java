@@ -19,7 +19,7 @@ public class SwaggerConfig {
 				"WebBlog RestApi", 
 				null, 
 				null, 
-				null, 
+				"http://localhost:8080/v2/api-docs", 
 				null, 
 				null, 
 				null);

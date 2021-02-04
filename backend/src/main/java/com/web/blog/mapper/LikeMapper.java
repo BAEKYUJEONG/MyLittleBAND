@@ -1,4 +1,4 @@
-package com.web.blog.dao;
+package com.web.blog.mapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.web.blog.dto.Like;
 import com.web.blog.dto.LikeReq;
 
-public interface LikeDao {
+public interface LikeMapper {
 	public void addlike(LikeReq req);
 	public void unlike(String likeId);
 	public Like getlikeById(LikeReq req);

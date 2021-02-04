@@ -1,7 +1,7 @@
 package com.web.blog.dto;
 
 public class Band {
-	private String id;
+	private String bandId;
 	private String rolecode;
 	private String colorid;
 	private String img;
@@ -15,9 +15,9 @@ public class Band {
 	public Band() {
 	}
 
-	public Band(String id, String rolecode, String colorid, String img, String name, String intro, String local,
+	public Band(String bandId, String rolecode, String colorid, String img, String name, String intro, String local,
 			String debut, String genre, String sns) {
-		this.id = id;
+		this.bandId = bandId;
 		this.rolecode = rolecode;
 		this.colorid = colorid;
 		this.img = img;
@@ -29,12 +29,14 @@ public class Band {
 		this.sns = sns;
 	}
 
-	public String getId() {
-		return id;
+	
+
+	public String getBandId() {
+		return bandId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setBandId(String bandId) {
+		this.bandId = bandId;
 	}
 
 	public String getRolecode() {

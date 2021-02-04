@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.BandMapper">
+
+	<select id="getBandByName" resultType="Band">
+		select * from band where name=#{name}
+	</select>
+	
+	<insert id="opened" parameterType="Band">
+		insert into band values(null, null, null, #{img}, #{name}, #{intro}, null, null, null, null)
+	</insert>
+	
+	<insert id="addcrew" parameterType="String">
+		insert into crew values(null, #{memberId}, #{bandId}, 1, null)
+	</insert>
+	
+	<select id="bandinfo" resultType="java.util.Map">
+		select img, name, intro from band where bandId=#{bandId}
+	</select>
+	
+	<select id="bandmember" resultType="java.util.Map">
+		select member.name, crew.codeSession from member, crew where crew.memberId=member.memberId and bandId=#{bandId}
+	</select>
+	
+	<select id="getCrewById" resultType="Crew">
+		select * from crew where crewId=#{crewId}
+	</select>
+	
+	<select id="getCrewBymemberId" resultType="Crew">
+		select * from crew where memberId=#{memberId}
+	</select>
+	
+	<update id="mandatechief">
+		update crew set isChief=false where crewId=#{crewId}
+	</update>
+	
+	<update id="receivechief">
+		update crew set isChief=true where crewId=#{crewId}
+	</update>
+	
+	<delete id="withdrawband">
+		delete from crew where crewId=#{crewId} 
+	</delete>
+	
+	<update id="changesession">
+		update crew set codeSession=#{session} where crewId=#{crewId}
+	</update>
+	
+</mapper>

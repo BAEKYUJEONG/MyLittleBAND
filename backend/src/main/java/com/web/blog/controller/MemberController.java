@@ -2,6 +2,10 @@ package com.web.blog.controller;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,7 @@ import com.web.blog.dto.Member;
 import com.web.blog.dto.loginReq;
 import com.web.blog.dto.signupReq;
 import com.web.blog.model.BasicResponse;
+import com.web.blog.service.JwtService;
 import com.web.blog.service.MemberService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,6 +46,10 @@ import io.swagger.annotations.ApiResponses;
 public class MemberController {
 	@Autowired
 	MemberService service;
+	@Autowired
+	private JwtService jwtservice;
+	
+	public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
 	@PostMapping(value = "/signup")
 	@ApiOperation(value = "회원가입", notes = "성공 시 회원가입 완료")
@@ -87,7 +96,7 @@ public class MemberController {
 	
 	@DeleteMapping(value = "/member/{memberId}")
 	@ApiOperation(value = "회원탈퇴")
-	public Object imgupdate(@PathVariable String memberId) {
+	public Object withdraw(@PathVariable String memberId) {
 		service.withdraw(memberId);
 		final BasicResponse result = new BasicResponse();
         result.status = true;
@@ -113,13 +122,18 @@ public class MemberController {
 		@ApiResponse(code= 200, message="로그인 성공"),
 		@ApiResponse(code= 400, message="잘못된 접근"),
 	})
-	public Object login(@RequestBody loginReq req) {
-		HashMap<String, String> loginRes=service.login(req);
-		if(loginRes!=null) {
+	public Object login(@RequestBody loginReq req, HttpServletResponse response) {
+		Member member=service.login(req);
+		if(member!=null) {
+			System.out.println("login");
+			
+			String token = jwtservice.create(member);
+			logger.trace("로그인 토큰정보 : {}", token);
 			final BasicResponse result = new BasicResponse();
-	        result.status = true;
+	        response.setHeader("auth-token", token);
+			result.status = true;
 	        result.data = "success";
-	        result.object=loginRes;
+	        result.object=member;
 	        return new ResponseEntity<>(result, HttpStatus.OK);
 	        
 		}

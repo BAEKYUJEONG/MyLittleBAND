@@ -1,25 +1,19 @@
 package com.web.blog.dto;
 
-public class Follow {
-	private String followId;
+import io.swagger.annotations.ApiModelProperty;
+
+public class FollowReq {
+	@ApiModelProperty(example = "1")
 	private String memberId;
+	@ApiModelProperty(example = "5")
 	private String bandId;
 	
-	public Follow() {
+	public FollowReq() {
 	}
 
-	public Follow(String followId, String memberId, String bandId) {
-		this.followId = followId;
+	public FollowReq(String memberId, String bandId) {
 		this.memberId = memberId;
 		this.bandId = bandId;
-	}
-
-	public String getFollowId() {
-		return followId;
-	}
-
-	public void setFollowId(String followId) {
-		this.followId = followId;
 	}
 
 	public String getMemberId() {

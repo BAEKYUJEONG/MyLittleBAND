@@ -1,9 +1,10 @@
 package com.web.blog.dto;
 
 public class Calendar {
+	private String calendarId;
 	private String date;
 	private String content;
-	private String bandid;
+	private String bandId;
 	private String photo;
 	private String time;
 	private String title;
@@ -11,13 +12,23 @@ public class Calendar {
 	public Calendar() {
 	}
 
-	public Calendar(String date, String content, String bandid, String photo, String time, String title) {
+	public Calendar(String calendarId, String date, String content, String bandId, String photo, String time,
+			String title) {
+		this.calendarId = calendarId;
 		this.date = date;
 		this.content = content;
-		this.bandid = bandid;
+		this.bandId = bandId;
 		this.photo = photo;
 		this.time = time;
 		this.title = title;
+	}
+
+	public String getCalendarId() {
+		return calendarId;
+	}
+
+	public void setCalendarId(String calendarId) {
+		this.calendarId = calendarId;
 	}
 
 	public String getDate() {
@@ -36,12 +47,12 @@ public class Calendar {
 		this.content = content;
 	}
 
-	public String getBandid() {
-		return bandid;
+	public String getBandId() {
+		return bandId;
 	}
 
-	public void setBandid(String bandid) {
-		this.bandid = bandid;
+	public void setBandId(String bandId) {
+		this.bandId = bandId;
 	}
 
 	public String getPhoto() {
@@ -67,8 +78,6 @@ public class Calendar {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-	
-	
+
 	
 }
