@@ -35,7 +35,7 @@ const memberRoute = [
         path: '/validated',
         name: 'validated',
         component: AfterEmail,
-        props: false,
+        props: true,
     },
 ];
 
