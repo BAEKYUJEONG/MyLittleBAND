@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Main from '../components/main/Main';
+import NotFound from '../components/error/NotFound';
 import memberRoute from './routers/MemberRouter';
 import videoRoute from './routers/VideoRouter';
 import noticeRoute from './routers/NoticeRouter';
@@ -16,6 +17,10 @@ const routes = [
         name : 'main',
         component : Main
     },
+    {
+        path: '*',
+        component : NotFound
+    }
     // concat을 통한 module화 한 routes 추가
 ].concat(memberRoute)
 .concat(videoRoute)
