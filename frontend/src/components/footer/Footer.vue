@@ -25,24 +25,24 @@ export default {
     return {
       Team: [
         {
-          name: "김영현",
-          url: "https://github.com/KimYH-KU",
+          name: '김영현',
+          url: 'https://github.com/KimYH-KU',
         },
         {
-          name: "박성우",
-          url: "",
+          name: '박성우',
+          url: 'https://github.com/uaio88',
         },
         {
-          name: "백유정",
-          url: "",
+          name: '백유정',
+          url: 'https://github.com/BAEKYUJEONG',
         },
         {
-          name: "신인섭",
-          url: "https://github.com/InSub-Shin",
+          name: '신인섭',
+          url: 'https://github.com/InSub-Shin',
         },
         {
-          name: "엄재웅",
-          url: "https://github.com/eomjaewoong",
+          name: '엄재웅',
+          url: 'https://github.com/eomjaewoong',
         },
       ],
     };
