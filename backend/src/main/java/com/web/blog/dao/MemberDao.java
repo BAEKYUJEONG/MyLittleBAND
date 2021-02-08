@@ -17,6 +17,7 @@ public interface MemberDao {
 	public Member login(loginReq req);
 	public void emailLink(Member m);
 	public void updateAuth(String memberId);
+	public String getUserByNameAndPhone(String name, String phone);
 
 	
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile);
