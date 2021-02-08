@@ -20,4 +20,5 @@ public interface MemberService {
 	public void emailLink(Member m);		// 이메일 인증 키 삽입
 	public void updateAuth(String memberId);
 	public String getUserByNameAndPhone(String name, String phone);
+	public int updatePassword(Member target);
 }
