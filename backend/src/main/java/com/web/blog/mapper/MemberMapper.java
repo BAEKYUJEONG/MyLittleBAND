@@ -24,4 +24,5 @@ public interface MemberMapper {
 //	public void delete(String id);
 //	public int login(String id, String pw);
 	public String getUserByNameAndPhone(String name, String phone);
+	public int updatePassword(Member target);
 }

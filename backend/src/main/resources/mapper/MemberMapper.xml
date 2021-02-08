@@ -24,6 +24,11 @@
     	select email from member where name=#{name} and phone=#{phone}
     </select>
   
+	<!-- 비밀번호 업데이트 -->
+    <update id="updatePassword" parameterType="Member">
+  		update member set pw=#{pw} where memberId=#{memberId}
+  	</update>
+  	
   	<select id="getUserByEmail" resultType="Member">
     select * from member where email=#{email}
   </select>

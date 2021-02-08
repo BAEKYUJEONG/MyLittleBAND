@@ -70,6 +70,11 @@ public class MemberServiceImpl implements MemberService{
 		return dao.getUserByNameAndPhone(name, phone);
 	}
 
+	@Override
+	public int updatePassword(Member target) {
+		return dao.updatePassword(target);
+	}
+
 
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {
