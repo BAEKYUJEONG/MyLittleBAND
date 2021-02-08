@@ -8,6 +8,8 @@
         <v-btn class="mx-3" id="startButton">Start</v-btn>
         <v-btn class="mx-3" id="callButton">Call</v-btn>
         <v-btn class="mx-3" id="hangupButton">Hang Up</v-btn>
+
+        <v-btn class="mx-3" id="testButton">broadcast</v-btn>
       </div> </v-col
     ><v-spacer />
   </v-row>
@@ -29,11 +31,15 @@ export default {
     const startButton = document.getElementById("startButton");
     const callButton = document.getElementById("callButton");
     const hangupButton = document.getElementById("hangupButton");
+
+    const testButton = document.getElementById("testButton");
+
     callButton.disabled = true;
     hangupButton.disabled = true;
     startButton.addEventListener("click", start);
     callButton.addEventListener("click", call);
     hangupButton.addEventListener("click", hangup);
+    testButton.addEventListener("click", test);
 
     let startTime;
     const localVideo = document.getElementById("localVideo");
@@ -97,6 +103,166 @@ export default {
       }
     }
 
+    async function test() {
+      console.log("Requesting local stream");
+      startButton.disabled = true;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+        console.log("Received local stream");
+        localVideo.srcObject = stream;
+        localStream = stream;
+        callButton.disabled = false;
+      } catch (e) {
+        alert(`getUserMedia() error: ${e.name}`);
+      }
+
+      // 여기까지 정보 얻어오기.
+
+      startTime = window.performance.now();
+      const videoTracks = localStream.getVideoTracks();
+      const audioTracks = localStream.getAudioTracks();
+      if (videoTracks.length > 0) {
+        console.log(`Using video device: ${videoTracks[0].label}`);
+      }
+      if (audioTracks.length > 0) {
+        console.log(`Using audio device: ${audioTracks[0].label}`);
+      }
+
+      var conn = new WebSocket("ws://localhost:8080/socket");
+
+      conn.onopen = function () {
+        console.log("Connected to the signaling server");
+        initialize();
+      };
+
+      conn.onmessage = function (msg) {
+        console.log("Got message", msg.data);
+        var content = JSON.parse(msg.data);
+        var data = content.data;
+        switch (content.event) {
+          // when somebody wants to call us
+          case "offer":
+            handleOffer(data);
+            break;
+          case "answer":
+            handleAnswer(data);
+            break;
+          // when a remote peer sends an ice candidate to us
+          case "candidate":
+            handleCandidate(data);
+            break;
+          default:
+            break;
+        }
+      };
+
+      function send(message) {
+        conn.send(JSON.stringify(message));
+      }
+
+      var dataChannel;
+      var input = document.getElementById("messageInput");
+
+      function initialize() {
+        var configuration = {
+          iceServers: [
+            {
+              url: "stun:stun2.1.google.com:19302",
+            },
+          ],
+        };
+
+        pc1 = new RTCPeerConnection(configuration);
+
+        // Setup ice handling
+        pc1.onicecandidate = function (event) {
+          if (event.candidate) {
+            send({
+              event: "candidate",
+              data: event.candidate,
+            });
+          }
+        };
+
+        // creating data channel
+        dataChannel = pc1.createDataChannel("dataChannel", {
+          reliable: true,
+        });
+
+        dataChannel.onerror = function (error) {
+          console.log("Error occured on datachannel:", error);
+        };
+
+        // when we receive a message from the other peer, printing it on the console
+        dataChannel.onmessage = function (event) {
+          console.log("message:", event.data);
+        };
+
+        dataChannel.onclose = function () {
+          console.log("data channel is closed");
+        };
+
+        pc1.ondatachannel = function (event) {
+          dataChannel = event.channel;
+        };
+        createOffer();
+        sendMessage();
+      }
+
+      function createOffer() {
+        pc1.createOffer(
+          function (offer) {
+            send({
+              event: "offer",
+              data: offer,
+            });
+            pc1.setLocalDescription(offer);
+          },
+          function (error) {
+            alert("Error creating an offer");
+            console.log(error);
+          }
+        );
+      }
+
+      function handleOffer(offer) {
+        pc1.setRemoteDescription(new RTCSessionDescription(offer));
+
+        // create and send an answer to an offer
+        pc1.createAnswer(
+          function (answer) {
+            pc1.setLocalDescription(answer);
+            send({
+              event: "answer",
+              data: answer,
+            });
+          },
+          function (error) {
+            alert("Error creating an answer");
+            console.log(error);
+
+          }
+        );
+      }
+
+      function handleCandidate(candidate) {
+        pc1.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+
+      function handleAnswer(answer) {
+        pc1.setRemoteDescription(new RTCSessionDescription(answer));
+        console.log("connection established successfully!!");
+      }
+
+      function sendMessage() {
+        dataChannel.send(input.value);
+        input.value = "";
+      }
+    }
+
     async function call() {
       callButton.disabled = true;
       hangupButton.disabled = false;
@@ -110,9 +276,15 @@ export default {
       if (audioTracks.length > 0) {
         console.log(`Using audio device: ${audioTracks[0].label}`);
       }
-      const configuration = {};
+      const configuration = {
+        iceServers: [
+          {
+            url: "stun:stun2.1.google.com:19302",
+          },
+        ],
+      };
       console.log("RTCPeerConnection configuration:", configuration);
-      pc1 = new RTCPeerConnection(configuration);
+      pc1 = new RTCPeerConnection(configuration); // 여기에서 서버 정보를 줘야 함.
       console.log("Created local peer connection object pc1");
       pc1.addEventListener("icecandidate", (e) => onIceCandidate(pc1, e));
       pc2 = new RTCPeerConnection(configuration);
