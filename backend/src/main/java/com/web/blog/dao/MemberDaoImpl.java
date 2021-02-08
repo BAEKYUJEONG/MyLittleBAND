@@ -71,6 +71,11 @@ public class MemberDaoImpl implements MemberDao {
 	public String getUserByNameAndPhone(String name, String phone) {
 		return mapper.getUserByNameAndPhone(name, phone);
 	}
+
+	@Override
+	public int updatePassword(Member target) {
+		return mapper.updatePassword(target);
+	}
 	
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {
