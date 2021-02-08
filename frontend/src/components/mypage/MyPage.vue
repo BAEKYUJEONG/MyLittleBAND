@@ -146,7 +146,13 @@ export default {
     getmember() {
       axios
         .get("/member/" + this.$route.params.memberno)
-        .then((response) => (this.member = response.data))
+        .then((response) => 
+        {this.member = response.data;
+        if(this.member.imgurl==""){
+          this.member.imgurl=require("@/assets/image/pepe.jpg");
+        }
+        
+        })
         .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
     getbandlist() {
@@ -187,26 +193,41 @@ export default {
     },
     onClickImageUpload() {
       //이미지 업로드 버튼 클릭시
-      this.$refs.imageInput.click();
+      this.$refs.imageInput.click();//imageInput이름을 가진 refs를 찾아서 click
     },
-    onChangeImages(e) {
+    async onChangeImages(e) {
       //변화가 감지되었을 경우
-      const file = e.target.files[0];
-      console.log(e.target.files[0]);
-      this.member.imgurl = URL.createObjectURL(file); //이미지 url을 새로운 url로 생성하여 변경
-      alert("프로필사진이 변경되었습니다!");
+      const file = e.target.files[0]; //해당 event가 호출된 파일
+      this.member.imgdata = file;//이미지데이터에 file 기입
+      //console.log(e.target.files[0]);
+      await this.encodeImage(file);//base64url로 인코딩
       //DB에 저장
-      //백엔드 연동 후 아래 주석 해제
-      //this.imgmodify();
+      await this.imgmodify();//이미지 DB에 수정
+    },
+    encodeImage(input) {//이미지 인코딩
+      if (input) {
+        const reader = new FileReader(); //reader를 이용해서 읽어줘야함
+        reader.onload = (e) => {
+          this.image = e.target.result; //결과값을 url에 저장
+          //console.log(this.base64Img);
+        };
+        reader.readAsDataURL(input);
+      }
     },
     imgmodify() {
+      let formData = new FormData(); //정보 전달을 위해 formdata 생성
+      formData.append("image", this.member.imgdata);//이미지 정보전달
+      formData.append("baseurl", this.member.imgurl);//이미지 base64url이 전송될 부분
+      console.log(formData.get("image"));
+
       axios
-        .put("/member/" + this.$route.params.memberno, { member: this.member })
+        .put("/member/" + this.$route.params.memberno, formData, { headers: { 'Content-Type': 'multipart/form-data' }})
         .then((response) => {
           if (response.data == "success") {
             //성공하면 알림 후 새로고침
             alert("수정성공!");
             this.$router.push("/member/" + this.$route.params.memberno);
+            this.member.imgurl = this.image;
           } else {
             //실패하면 알림 후 수정페이지 다시 불러옴
             alert("수정실패!");
@@ -243,6 +264,7 @@ export default {
         profile:
           "제 소개로 말할 것 같으면 \n99년 LA에 있었을 당시였습니다. \n당시 저는 메이저리그에서",
         imgurl: require("@/assets/image/pepe.jpg"),
+        imgdata: null
       },
       currentOffset: 0, //현재 밴드 위치
       windowSize: 3, //한번에 나오는 밴드 개수

@@ -12,12 +12,21 @@
         <v-text-field v-model="band.name" label="밴드명" outlined clearable>
         </v-text-field>
 
+          
         <v-file-input
-          accept="image/*"
-          label="밴드프로필 이미지(추후 추가예정)"
-          @change="onChangeImage"
-        ></v-file-input>
-
+          class="mb-10"
+          @change="onChangeImage()"
+          v-model="band.imgdata"
+          type="file"
+          id="file"
+          label="밴드 이미지 변경"
+        />
+        <v-btn 
+        class="mb-10"
+        v-if="dialog.imgbtn"
+        @click="submit()"
+        >변경된 이미지 저장</v-btn>
+        
         <v-textarea
           v-model="band.intro"
           label="밴드소개"
@@ -150,7 +159,9 @@
             <v-card-text>정말 해체하시겠습니까?</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="removeCrew()"> 예 </v-btn>
+              <v-btn color="green darken-1" text @click="removeCrew()">
+                예
+              </v-btn>
               <v-btn color="green darken-1" text @click="dialog.Crew = false">
                 아니오
               </v-btn>
@@ -175,12 +186,14 @@ export default {
         Member: false, //멤버탈퇴
         Chief: false, //밴드장위임
         Crew: false, //밴드해체
+        imgbtn : false, //이미지 변경시 버튼
       },
       isChief: false,
       band: {
         name: "",
         intro: "",
-        img: "",
+        imgdata: null,//null로 설정해줘야함
+        imgurl: "",
       },
       sessions: ["보컬", "키보드", "드럼", "일렉기타", "베이스"],
       members: [
@@ -223,7 +236,36 @@ export default {
   methods: {
     onChangeImage() {
       //밴드 이미지 수정
+      this.encodeImage(this.band.imgdata); //DB 저장 위해 base64 형태로 encoding
+      this.dialog.imgbtn = true; //이미지 저장버튼 생성
     },
+    encodeImage(input) {//이미지 인코딩
+      if (input) {
+        const reader = new FileReader(); //reader를 이용해서 읽어줘야함
+        reader.onload = (e) => {
+          this.band.imgurl = e.target.result; //결과값을 url에 저장
+          //console.log(this.base64Img);
+        };
+        reader.readAsDataURL(input);
+      }
+    },
+    async submit() {
+      let formData = new FormData(); //정보 전달을 위해 formdata 생성
+      await formData.append("image", this.band.imgdata);//이미지 정보전달
+      await formData.append("baseurl", this.band.imgurl);//이미지 base64url이 전송될 부분
+      console.log(formData.get("image"));
+      //this.formData = formData;
+
+      axios
+        .post("/image",formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+        .then((rec) => {
+          console.log("suc");
+          console.log(rec);
+          alert("프로필 이미지가 변경되었습니다!");
+        })
+        .catch((e) => console.log(e));
+    },
+
     getBandinfo() {
       //밴드 정보 불러옴
       axios
@@ -239,9 +281,9 @@ export default {
       axios
         .get("/band/member/" + this.$route.params.bandno)
         .then((response) => {
-          this.members = response.data.object
+          this.members = response.data.object;
           //console.log(response.data.object)
-          })
+        })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
     getMember() {
@@ -252,7 +294,20 @@ export default {
         .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
     },
     modify() {
+      if (this.band.name == "" || this.band.intro == "") {
+        alert("빈칸이 존재합니다!");
+        return;
+      }
       //밴드 정보 수정
+      axios
+        .put("/band/" + this.$route.params.bandno, { band: this.band })
+        .then((response) => {
+          if (response.data.data == "success") {
+            alert("수정성공!");
+            this.$router.push("/band/detail/" + this.$route.params.bandno);
+          }
+        })
+        .catch((exp) => alert(exp + "밴드 정보 수정에 실패하였습니다."));
     },
     banddetail() {
       //밴드상세 페이지로 이동
