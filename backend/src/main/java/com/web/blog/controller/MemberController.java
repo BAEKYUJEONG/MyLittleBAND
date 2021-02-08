@@ -120,6 +120,48 @@ public class MemberController {
 		return new ResponseEntity<>(response, HttpStatus.OK);	
 	}
 	
+	/**
+	 * 회원 이메일 찾기
+	 * @param info
+	 * @return ResponseEntity<>(BasicResponse, HttpStatus)
+	 */
+	@PostMapping(value = "/member/id")
+	@ApiOperation(value = "이메일 찾기", notes = "사용자 이름, 전화번호를 기반으로 이메일을 찾는다")
+	public Object findEmail(@RequestBody Map<String, String> info) {
+		String target = service.getUserByNameAndPhone(info.get("name"), info.get("phone"));
+		BasicResponse response = new BasicResponse();
+		
+		if(target != null) {
+			response.status = true;
+			response.data = target;
+		} else {
+			response.status = false;
+		}
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	/**
+	 * 회원 비밀번호 찾기
+	 * @param info
+	 * @return ResponseEntity<>(BasicResponse, HttpStatus)
+	 */
+	@PostMapping(value = "/member/pw")
+	@ApiOperation(value = "임시 비밀번호 발급", notes = "사용자  이메일, 이름, 전화번호를 기반으로 임시 패스워드를 이메일로 발급받음")
+	public Object findPassword(@RequestBody Map<String, String> info) {
+		Member target = service.getUserByEmail(info.get("email"));
+		BasicResponse response = new BasicResponse();
+		
+		if(target != null && target.getName().equals(info.get("name")) && target.getPhone().equals(info.get("phone"))) {
+			response.status = true;
+			response.data = "이것이 임시비밀번호다";
+		} else {
+			response.status = false;
+		}
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@PutMapping(value = "/member/{memberId}")
 	@ApiOperation(value = "회원정보수정")
 	public Object update(@RequestBody Member m, @PathVariable String memberId) {
@@ -189,19 +231,4 @@ public class MemberController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-//	@RequestMapping(value="/signu", method=RequestMethod.)
-//	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {
-//		service.signup(id, email, name, pw, phone, img, profile);
-//	}
-	
-	
-	
-//	
-//	@PostMapping(value="/test")
-//	public void test(String id) {
-//		service.test(id);
-////		System.out.println("con");
-//	}
-	
 }
