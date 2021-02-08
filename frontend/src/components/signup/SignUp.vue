@@ -10,10 +10,8 @@
             :counter="50"
             :rules="[
               (v) => !!v || '이메일을 입력하세요',
-              (v) =>
-                /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i.test(
-                  v
-                ) || '이메일 형식이 아닙니다',
+              (v) => /.+@.+\..+/.test(v) || '이메일 형식이 아닙니다',
+              (v) => v.length <= 50 || '이메일이 너무 깁니다',
             ]"
             label="이메일"
             required
@@ -46,7 +44,12 @@
           <v-text-field
             v-model="name"
             :counter="10"
-            :rules="[(v) => !!v || '이름을 입력해 주세요']"
+            :rules="[
+              (v) => !!v || '이름을 입력해 주세요',
+              (v) =>
+                (v && v.length > 1 && v.length <= 10) ||
+                '이름은 2자리 이상 10자리 이하로 입력해야 합니다',
+            ]"
             label="이름"
             required
           ></v-text-field>
@@ -106,9 +109,8 @@ export default {
     ...mapActions(MemberStore, ["reqSignup", "reqSignupValidation"]),
     async onSignup() {
       // form 검증
-      if(this.$refs.form.validate()===false)
-        return;
-      
+      if (this.$refs.form.validate() === false) return;
+
       let result = await this.reqSignup({
         email: this.email,
         pw: this.pw,
@@ -120,7 +122,7 @@ export default {
         // TODO: 이메일 인증 요청
         result = this.reqSignupValidation(this.email);
 
-        if(result)  this.$router.push({ name: "validate" });
+        if (result) this.$router.push({ name: "validate" });
         else {
           alert("회원가입 오류?? 으아니");
 

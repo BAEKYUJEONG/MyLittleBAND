@@ -1,134 +1,196 @@
 <template>
-  <div>
-    <v-container>
-      <v-row>
-        <v-col>
-          <h1>아이디찾기</h1>
-        </v-col>
-        <v-col>
-          <v-text-field
-            label="이름"
-            placeholder="홍길동"
-            solo
-            v-model="id.name"
-          ></v-text-field>
-          <v-text-field
-            label="전화번호"
-            placeholder="010-0000-0000"
-            solo
-            v-model="id.phone"
-          ></v-text-field>
-        </v-col>
-        <v-col>
-          <v-btn
-            text-color="accent"
-            color="#BBDEFB"
-            elevation-2
-            x-large
-            @click="findID()"
-            >아이디 찾기</v-btn
-          >
-        </v-col>
-      </v-row>
+  <v-main>
+    <v-container fill-height>
+      <v-layout column>
+        <v-flex>
+          <!-- id find layout -->
+          <v-layout row fill-height align-center class="ma-5">
+            <v-flex col>
+              <v-sheet>아이디 찾기</v-sheet>
+            </v-flex>
+            <v-flex col>
+              <v-form ref="id_form" v-model="idvalid" lazy-validation>
+                <v-text-field
+                  label="이름"
+                  placeholder="이름"
+                  :counter="10"
+                  :rules="[
+                    (v) => !!v || '이름을 입력해 주세요',
+                    (v) =>
+                      (v && v.length > 1 && v.length <= 10) ||
+                      '이름은 2자리 이상 10자리 이하로 입력해야 합니다',
+                  ]"
+                  solo
+                  v-model="id.name"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  label="전화번호"
+                  placeholder="xxx-xxxx-xxxx"
+                  :counter="13"
+                  :rules="[
+                    (v) => !!v || '번호를 입력하세요',
+                    (v) =>
+                      /^\d{3}-\d{3,4}-\d{4}$/.test(v) || '번호 형식이 아닙니다',
+                  ]"
+                  solo
+                  v-model="id.phone"
+                  required
+                ></v-text-field>
+              </v-form>
+            </v-flex>
+            <v-flex col align-self-center>
+              <!-- ID Modal -->
+              <v-dialog v-model="idModal" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    primary
+                    depressed
+                    large
+                    color="primary"
+                    :disabled="!idvalid"
+                    :attr="attrs"
+                    v-on="on"
+                    @click="onFindID()"
+                    >아이디 찾기</v-btn
+                  >
+                </template>
+                <!-- Modal content -->
+                <v-card>
+                  <v-alert
+                    border="top"
+                    colored-border
+                    :type="result ? 'success' : 'warning'"
+                  >
+                    아이디 찾기
+                  </v-alert>
+                  <v-card-text>
+                    {{ msg }}
+                  </v-card-text>
 
-      <!-- 아이디 확인 모달창 -->
-      <div v-show="is_show_id_result">
-        <!-- 현재 컬러css 적용안됨 -->
-        <v-alert type="success" color="green lighten-5">
-          가입하신 아이디는 {{ result }} 입니다.
-          <v-btn
-            style="margin-left: 10px"
-            color="#039BE5"
-            @click="handle_toggle_id_result()"
-          >
-            닫기</v-btn
-          >
-        </v-alert>
-      </div>
+                  <v-divider></v-divider>
 
-      <!-- 아이디 에러 모달창 -->
-      <div v-show="is_show_id_error">
-        <v-alert type="error" color="red">
-          입력하신 내용과 일치하는 회원이 없습니다.
-          <v-btn
-            style="margin-left: 10px"
-            color="#039BE5"
-            @click="handle_toggle_id_error()"
-          >
-            닫기</v-btn
-          >
-        </v-alert>
-      </div>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      :color="result ? 'success' : 'warning'"
+                      text
+                      @click="idModal = false"
+                    >
+                      확인
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex
+          ><v-layout fill-height align-center><v-divider /></v-layout
+        ></v-flex>
+        <v-flex>
+          <!-- password find layout -->
+          <v-layout row fill-height align-center class="ma-1">
+            <v-flex col>
+              <v-sheet>비밀번호 찾기</v-sheet>
+            </v-flex>
+            <v-flex col>
+              <v-form ref="pw_form" v-model="pwvalid" lazy-validation>
+                <v-text-field
+                  label="이메일"
+                  placeholder="이메일"
+                  :counter="50"
+                  :rules="[
+                    (v) => !!v || '이메일을 입력하세요',
+                    (v) => /.+@.+\..+/.test(v) || '이메일 형식이 아닙니다',
+                    (v) => v.length <= 50 || '이메일이 너무 깁니다',
+                  ]"
+                  solo
+                  v-model="pw.email"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  label="이름"
+                  placeholder="이름"
+                  :counter="10"
+                  :rules="[
+                    (v) => !!v || '이름을 입력해 주세요',
+                    (v) =>
+                      (v && v.length > 1 && v.length <= 10) ||
+                      '이름은 2자리 이상 10자리 이하로 입력해야 합니다',
+                  ]"
+                  solo
+                  v-model="pw.name"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  label="전화번호"
+                  placeholder="전화번호"
+                  :rules="[
+                    (v) => !!v || '번호를 입력하세요',
+                    (v) =>
+                      /^\d{3}-\d{3,4}-\d{4}$/.test(v) || '번호 형식이 아닙니다',
+                  ]"
+                  solo
+                  v-model="pw.phone"
+                  required
+                ></v-text-field>
+              </v-form>
+            </v-flex>
+            <v-flex col>
+              <!-- PW Modal -->
+              <v-dialog v-model="pwModal" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn primary
+                    depressed
+                    large
+                    color="primary"
+                    :disabled="!pwvalid"
+                    :attr="attrs"
+                    v-on="on"
+                    @click="onFindPW()"
+                    >비밀번호 찾기</v-btn
+                  >
+                </template>
+                <!-- Modal content -->
+                <v-card>
+                  <v-alert
+                    border="top"
+                    colored-border
+                    :type="result ? 'success' : 'warning'"
+                  >
+                    비밀번호 찾기
+                  </v-alert>
+                  <v-card-text>
+                    {{ msg }}
+                  </v-card-text>
 
-      <v-row>
-        <v-col>
-          <h1>비밀번호찾기</h1>
-        </v-col>
-        <v-col>
-          <v-text-field
-            label="이메일"
-            placeholder="mylittle@band.com"
-            solo
-            v-model="pw.email"
-          ></v-text-field>
-          <v-text-field
-            label="이름"
-            placeholder="홍길동"
-            solo
-            v-model="pw.name"
-          ></v-text-field>
-          <v-text-field
-            label="전화번호"
-            placeholder="010-0000-0000"
-            solo
-            v-model="pw.phone"
-          ></v-text-field>
-        </v-col>
-        <v-col>
-          <v-btn
-            text-color="accent"
-            color="#BBDEFB"
-            elevation-2
-            x-large
-            @click="sendEmail()"
-            >이메일 전송</v-btn
-          >
-        </v-col>
-      </v-row>
-      <!-- 비밀번호 확인 모달창 -->
-      <div v-show="is_show_pw_result">
-        <v-alert type="success" color="green lighten-5">
-          이메일이 전송되었습니다.
-          <v-btn
-            style="margin-left: 10px"
-            color="#039BE5"
-            @click="handle_toggle_pw_result()"
-          >
-            닫기</v-btn
-          >
-        </v-alert>
-      </div>
+                  <v-divider></v-divider>
 
-      <!-- 비밀번호 에러 모달창 -->
-      <div v-show="is_show_pw_error">
-
-        <v-alert type="error" color="red">
-          입력하신 내용과 일치하는 회원이 없습니다.
-          <v-btn
-            style="margin-left: 10px"
-            color="#039BE5"
-            @click="handle_toggle_pw_error()"
-          >
-            닫기</v-btn
-          >
-        </v-alert>
-      </div>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      :color="result ? 'success' : 'warning'"
+                      text
+                      @click="pwModal = false"
+                    >
+                      확인
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
     </v-container>
-  </div>
+  </v-main>
 </template>
 
 <script>
-import axios from "../../axios/axios-common.js";
+import { mapActions } from "vuex";
+
+const MemberStore = "MemberStore";
 
 export default {
   data() {
@@ -138,85 +200,54 @@ export default {
         name: "",
         phone: "",
       },
-      result: "",
-      //모달창 false면 안보임
-      is_show_id_result: false,
-      is_show_id_error: false,
-      is_show_pw_result: false,
-      is_show_pw_error: false,
       //비밀번호 찾기
       pw: {
         email: "",
-        name2: "",
-        phone2: "",
+        name: "",
+        phone: "",
       },
+      result: "",
+      msg: "",
+      // 유효값 검증에 의한 toggle
+      idvalid: true,
+      pwvalid: true,
+      // Modal 활성화
+      idModal: false,
+      pwModal: false,
     };
   },
   methods: {
-    handle_toggle_id_result: function () {
-      //아이디 확인 모달창 키고끄기
-      this.is_show_id_result = !this.is_show_id_result;
-    },
-    handle_toggle_id_error: function () {
-      //아이디 에러 모달창 키고끄기
-      this.is_show_id_error = !this.is_show_id_error;
-    },
-    handle_toggle_pw_result: function () {
-      //비밀번호 확인 모달창 키고끄기
-      this.is_show_pw_result = !this.is_show_pw_result;
-    },
-    handle_toggle_pw_error: function () {
-      //비밀번호 에러 모달창 키고끄기
-      this.is_show_pw_error = !this.is_show_pw_error;
-    },
-    findID() {
-      //아이디찾기
-      //열려있는 모달창들을 닫아줌
-      this.is_show_id_result = false;
-      this.is_show_id_error = false;
-      this.is_show_pw_result = false;
-      this.is_show_pw_error = false;
+    ...mapActions(MemberStore, ["reqFindId", "reqFindPw"]),
+    // ID찾기
+    onFindID() {
+      // 입력값 조건 충족이 안될 때
+      if (this.$refs.id_form.validate() === false) return;
 
-      //공백이 존재하면 경고
-      if (this.id.name == "" || this.id.phone == "") {
-        alert("공백이 존재합니다.");
-        return;
-      }
-
-      //아이디 찾기 통신
-      axios
-        .post("/findid", this.id)
+      this.reqFindId(this.id)
         .then((response) => {
-          this.result = response.data;
-          //결과값이 없으면 error 모달창 띄워줌
-          if (this.result == "") {
-            this.is_show_id_error = true;
-            this.id.name = "";
-            this.id.phone = "";
-          } else {
-            //결과값이 존재하면 id확인 모달창 띄워줌
-            this.is_show_id_result = true;
-            console.log("확인한 이메일은" + this.result + "입니다.");
-          }
+          this.result = response.result;
+          this.msg = response.msg;
         })
-        .catch((exp) => alert("해당하는 회원이 존재하지 않습니다." + exp));
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    sendEmail() {
-      //이메일 발송
-      //열려있는 모달창 닫아줌
-      this.is_show_id_result = false;
-      this.is_show_id_error = false;
-      this.is_show_pw_result = false;
-      this.is_show_pw_error = false;
-      //공백이 존재하면 경고
-      if (this.pw.name == "" || this.pw.phone == "") {
-        alert("공백이 존재합니다.");
-        return;
-      }
+    // PW찾기
+    onFindPW() {
+      // 입력값 조건 충족이 안될 때
+      if (this.$refs.pw_form.validate() === false) return;
+
+      this.reqFindPw(this.pw)
+        .then((response) => {
+          this.result = response.result;
+          this.msg = response.msg;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
