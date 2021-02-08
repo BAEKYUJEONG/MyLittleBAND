@@ -18,7 +18,12 @@
   	<update id="updateAuth" parameterType="string">
   		update member set emailcheck=1 where memberId=#{memberId}
   	</update> 
-  	
+  
+  	<!-- 이름과 전화번호로 ID 찾기 -->
+    <select id="getUserByNameAndPhone" resultType="String">
+    	select email from member where name=#{name} and phone=#{phone}
+    </select>
+  
   	<select id="getUserByEmail" resultType="Member">
     select * from member where email=#{email}
   </select>
@@ -50,10 +55,6 @@
 	<insert id="test">
 		insert into member values(null,#{id})
   	</insert> -->
-
-	<select id="findIdByName" resultType="String">
-    select email from member where name=#{name} and phone=#{phone}
-  </select>
   
   <!-- <select id="selectAll" resultType="Customer">
     select * from customer

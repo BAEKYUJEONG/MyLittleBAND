@@ -104,7 +104,7 @@ export default {
       //모달창 끄기
       this.dialog = false;
       //아이디 비밀번호 찾기로 이동
-      this.$router.push("/findidpw");
+      this.$router.push("/find");
     },
   },
 };

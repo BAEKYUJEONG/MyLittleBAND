@@ -4,6 +4,7 @@ import Mypage from '../../components/mypage/MyPage';
 import MemberModify from '../../components/mypage/MemberModify';
 import AfterSignUp from '../../components/signup/AfterSignUp';
 import AfterEmail from '../../components/signup/AfterEmail';
+import FindIdPw from '../../components/findidpw/FindIdPw';
 
 // MemberRouter
 const memberRoute = [
@@ -36,6 +37,12 @@ const memberRoute = [
         name: 'validated',
         component: AfterEmail,
         props: true,
+    },
+    {   // ID, Password 찾기 route
+        path: '/find',
+        name: 'find',
+        component: FindIdPw,
+        props: false,
     },
 ];
 
