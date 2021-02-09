@@ -137,7 +137,7 @@ export default {
         .catch((exp)=>(alert(exp+"밴드를 생성할 수 없습니다.")));
     },
     bandlist(){//밴드리스트 페이지로 이동
-        this.$router.push("/band/"+this.memberid);
+        this.$router.push("/band/list/"+this.memberid);
     }
   },
 };

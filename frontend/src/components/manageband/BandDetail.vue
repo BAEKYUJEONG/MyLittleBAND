@@ -273,22 +273,26 @@ export default {
         {
           name: "이보드",
           session: "키보드",
-          no: "1",
+          crewid : 1,
+          memberid : 2,
         },
         {
           name: "최베스",
           session: "베이스",
-          no: "2",
+          crewid : 2,
+          memberid : 3,
         },
         {
           name: "김일렉",
           session: "일렉기타",
-          no: "3",
+          crewid : 3,
+          memberid : 4,
         },
         {
           name: "최드럼",
           session: "드럼",
-          no: "4",
+          crewid : 4,
+          memberid : 5,
         },
       ],
       videolist: [
@@ -351,7 +355,7 @@ export default {
     getVideolist() {
       //밴드의 비디오 리스트를 조회합니다.
       axios
-        .post("/videosearchbyfilter", { bandid: this.$route.params.bandno })
+        .post("/band/video", { bandid: this.$route.params.bandno })
         .then((response) => (this.videolist = response.data))
         .catch((exp) => alert(exp + "비디오리스트 조회에 실패하였습니다."));
     },
@@ -380,17 +384,24 @@ export default {
       } else if (value == "공연신청") {
         this.$router.push("/band/reserve/" + this.$route.params.bandno);
       } else if(value == "돌아가기"){
-        this.$router.push("/band/"+this.$route.params.bandno);
+        this.$router.push("/band/list/"+this.$route.params.bandno);
       }
     },
     remove() {
       //밴드탈퇴
+      //내 크루아이디 찾기
+      let crewid = '';
+      for(let i=0; i<this.member.length;i++){
+        if(this.member[i].memberid == this.memberid)
+        {
+          crewid = this.member[i].crewid;
+          break;
+        }
+      }
       axios
-        .delete("/band/member/" + this.$route.params.bandno, {
-          memberid: this.member.id,
-        })
+        .delete("/band/member/"+crewid)
         .then((response) => {
-          if (response.data == "success") {
+          if (response.data.data == "success") {
             alert("탈퇴에 성공하였습니다.");
             this.dialog = false;
             this.$router.push({ name: "main" });

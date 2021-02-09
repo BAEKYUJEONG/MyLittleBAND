@@ -46,7 +46,7 @@
     </v-row>
     <v-row
       v-for="member in members"
-      :key="member.no"
+      :key="member.memberid"
       justify="center"
       class="px-10"
     >
@@ -58,13 +58,13 @@
           outlined
           :items="sessions"
           v-model="member.session"
-          :disabled="member.no == memberid || isChief ? false : true"
+          :disabled="member.memberid != memberid && isChief == '0'"
         ></v-select>
       </v-col>
       <v-col cols="1">
         <!-- 밴드탈퇴 모달창 -->
         <v-dialog
-          v-if="member.no == memberid || isChief"
+          v-if="member.memberid == memberid || isChief == '1'"
           v-model="dialog.Member"
           persistent
           max-width="290"
@@ -84,7 +84,7 @@
             <v-card-text>정말 탈퇴하시겠습니까?</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="removeMember()">
+              <v-btn color="green darken-1" text @click="removeMember(member.crewid)">
                 예
               </v-btn>
               <v-btn color="green darken-1" text @click="dialog.Member = false">
@@ -98,7 +98,7 @@
       <v-col cols="1">
         <!-- 밴드장위임 모달창 -->
         <v-dialog
-          v-if="isChief && member.no != memberid"
+          v-if="isChief == '1' && member.memberid != memberid"
           v-model="dialog.Chief"
           persistent
           max-width="290"
@@ -139,7 +139,7 @@
 
         <!-- 밴드해체 모달창 -->
         <v-dialog
-          v-if="isChief"
+          v-if="isChief == '1'"
           v-model="dialog.Crew"
           persistent
           max-width="290"
@@ -176,11 +176,13 @@
 <script>
 import axios from "../../axios/axios-common";
 import { mapGetters } from "vuex"; //vuex사용
+import axiosCommon from '../../axios/axios-common';
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
 
 export default {
   data: () => {
     return {
+      tempcrewid : '',//강퇴 or 밴드장 위임 할 크루원id
       dialog: {
         //모달창 관리
         Member: false, //멤버탈퇴
@@ -188,7 +190,7 @@ export default {
         Crew: false, //밴드해체
         imgbtn : false, //이미지 변경시 버튼
       },
-      isChief: false,
+        isChief: '1',
       band: {
         name: "",
         intro: "",
@@ -201,22 +203,26 @@ export default {
         {
           name: "이보드",
           session: "키보드",
-          no: "12",
+          crewid : 1,
+          memberid : 12,
         },
         {
           name: "최베스",
           session: "베이스",
-          no: "1",
+          crewid : 2,
+          memberid : 3,
         },
         {
           name: "김일렉",
           session: "일렉기타",
-          no: "3",
+          crewid : 3,
+          memberid : 4,
         },
         {
           name: "최드럼",
           session: "드럼",
-          no: "4",
+          crewid : 4,
+          memberid : 5,
         },
       ],
     };
@@ -229,7 +235,7 @@ export default {
   },
   created() {
     //밴드정보가져오기
-    this.getBandinfo();
+    //this.getBandinfo();
     //this.getMemberinfo();//밴드소속 멤버정보 가져오기
     //this.getMember(); //로그인 멤버 정보 가져오기
   },
@@ -281,17 +287,20 @@ export default {
       axios
         .get("/band/member/" + this.$route.params.bandno)
         .then((response) => {
-          this.members = response.data.object;
+          this.crew = response.data.object;
           //console.log(response.data.object)
         })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
-    getMember() {
-      //밴드장 여부 확인을 위해 불러옴
+    getmember() {
+      //밴드장 여부 확인을 위해
       axios
-        .get("/member/" + this.memberid)
-        .then((response) => (this.isChief = response.data.object.isChief))
-        .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
+        .get("/member/" + this.$route.params.memberno)
+        .then((response) => 
+        {this.isChief = response.data.object.isChief;
+        
+        })
+        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
     modify() {
       if (this.band.name == "" || this.band.intro == "") {
@@ -300,7 +309,10 @@ export default {
       }
       //밴드 정보 수정
       axios
-        .put("/band/" + this.$route.params.bandno, { band: this.band })
+        .put("/band/" + this.$route.params.bandno, { 
+          name: this.band.name, 
+          profile : this.band.intro 
+          })
         .then((response) => {
           if (response.data.data == "success") {
             alert("수정성공!");
@@ -314,11 +326,42 @@ export default {
       this.$router.push("/band/detail/" + this.$route.params.bandno);
     },
 
-    removeMember() {
+    removeMember(val) {
       //밴드 멤버 탈퇴
+      axiosCommon
+      .delete("/band/member/"+val)
+      .then((response)=>{
+         if (response.data.data == "success") {
+            alert("삭제성공!");
+            this.getMemberinfo();//멤버정보 재호출
+          }
+      })
+      .catch((exp) => alert(exp + "밴드삭제에 실패하였습니다."));
+
     },
-    changechief() {
+    changechief(val) {
+      //내 crewid찾기
+      let crewid = '';
+      for(let i=0; i<this.member.length;i++){
+        if(this.member[i].memberid == this.memberid)
+        {
+          crewid = this.member[i].crewid;
+          break;
+        }
+      }
+
       //밴드장 위임
+      axiosCommon
+      .put("/band/member/chief/"+crewid,{
+        mandatecrewid : val
+      })
+      .then((response)=>{
+         if (response.data.data == "success") {
+            alert("삭제성공!");
+            this.getMemberinfo();//멤버정보 재호출
+          }
+      })
+      .catch((exp) => alert(exp + "밴드삭제에 실패하였습니다."));
     },
     removeCrew() {
       //밴드해체

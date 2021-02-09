@@ -1,5 +1,5 @@
 // Components import
-import BandList from '../../components/bandmain/BandList';
+import BandMain from '../../components/bandmain/BandMain';
 import BandInfo from '../../components/manageband/BandInfo';
 import BandDetail from '../../components/manageband/BandDetail';
 import BandCreate from '../../components/manageband/BandCreate';
@@ -9,8 +9,8 @@ import ReserveStage from '../../components/manageband/ReserveStage';
 const bandRoute = [
     {   // 자신의 밴드 목록
         path: '/band/list/:memberno',
-        name: 'bandlist',
-        component: BandList,
+        name: 'bandmain',
+        component: BandMain,
         props: true,
     },
     {   // 밴드 소개 페이지

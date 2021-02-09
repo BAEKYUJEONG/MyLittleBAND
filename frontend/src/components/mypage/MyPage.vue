@@ -92,7 +92,7 @@
                 class="ma-auto"
                 style="width: 180px"
                 >{{ band.name }}
-                <v-icon v-if="band.isChief" color="#FFD600">mdi-crown</v-icon>
+                <v-icon v-if="band.isChief == 1" color="#FFD600">mdi-crown</v-icon>
               </v-btn>
             </v-slide-item>
           </v-slide-group>
@@ -131,7 +131,8 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
+import axios from "../../axios/axios-common"
 export default {
   created: () => {
     //회원정보를 받아옴
@@ -147,10 +148,7 @@ export default {
       axios
         .get("/member/" + this.$route.params.memberno)
         .then((response) => 
-        {this.member = response.data;
-        if(this.member.imgurl==""){
-          this.member.imgurl=require("@/assets/image/pepe.jpg");
-        }
+        {this.member = response.data.object;
         
         })
         .catch((exp) => alert(exp + "조회에 실패하였습니다."));
@@ -159,7 +157,7 @@ export default {
       //소속된 밴드리스트 조회
       axios
         .get("/band-list/" + this.$route.params.memberno)
-        .then((response) => (this.bandlist = response.data))
+        .then((response) => (this.bandlist = response.data.object))
         .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
 
@@ -216,12 +214,12 @@ export default {
     },
     imgmodify() {
       let formData = new FormData(); //정보 전달을 위해 formdata 생성
-      formData.append("image", this.member.imgdata);//이미지 정보전달
-      formData.append("baseurl", this.member.imgurl);//이미지 base64url이 전송될 부분
+      formData.append("file", this.member.imgdata);//이미지 정보전달
+      //formData.append("baseurl", this.member.imgurl);//이미지 base64url이 전송될 부분
       console.log(formData.get("image"));
 
       axios
-        .put("/member/" + this.$route.params.memberno, formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+        .post("/upload" , formData, { headers: { 'Content-Type': 'multipart/form-data' }})
         .then((response) => {
           if (response.data == "success") {
             //성공하면 알림 후 새로고침
@@ -273,22 +271,22 @@ export default {
         {
           id: "01",
           name: "잘한다밴드",
-          isChief: false,
+          isChief: 0,
         },
         {
           id: "02",
           name: "더잘한다밴드",
-          isChief: true,
+          isChief: 1,
         },
         {
           id: "03",
           name: "못한다밴드",
-          isChief: false,
+          isChief: 0,
         },
         {
           id: "04",
           name: "조금못한다밴드",
-          isChief: true,
+          isChief: 1,
         },
       ],
     };
