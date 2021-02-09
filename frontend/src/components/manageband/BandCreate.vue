@@ -1,13 +1,147 @@
 <template>
-  
+  <v-main>
+    <v-row class="px-10" justify="center">
+      <v-col cols="6">
+        <v-banner class="my-10">
+          <strong>밴드개설</strong>
+        </v-banner>
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="6">
+        <v-text-field v-model="band.name" label="밴드명" outlined clearable>
+        </v-text-field>
+
+        <v-file-input
+          type="file"
+          label="밴드프로필 이미지(추후 추가예정)"
+          @change="onChangeImages"
+          ref="files"
+          multiple
+          disabled
+        ></v-file-input>
+
+
+
+        <v-textarea
+          v-model="band.intro"
+          label="밴드소개"
+          outlined
+          clearable
+        ></v-textarea>
+      </v-col>
+    </v-row>
+
+    <v-row class="ma-auto">
+      <v-col cols="12" class="ma-auto">
+        <v-btn color="primary" class="mx-6" @click="create()">밴드개설</v-btn>
+
+        <v-btn color="error" class="mx-6" @click="bandlist()">돌아가기</v-btn>
+      </v-col>
+    </v-row>
+<!-- 
+  <v-row class="ma-auto">
+      <v-col cols="12" class="ma-auto">
+        <v-btn @click="show()">asdf</v-btn>
+      </v-col>
+    </v-row>
+-->
+  </v-main>
 </template>
 
 <script>
-export default {
+import { mapGetters } from "vuex"; //vuex사용
+import axiosCommon from '../../axios/axios-common';
+const MemberStore = "MemberStore"; //MemberStore 모듈 사용
 
-}
+export default {
+  data: () => {
+    return {
+        img : null,
+      band: {
+        name: "",
+        img: "",
+        intro: "",
+      },
+      images: {
+        type: 'profile',
+        file: [],
+      },
+      ////
+      files: [], //업로드용 파일
+      filesPreview: [],
+      uploadImageIndex: 0, // 이미지 업로드를 위한 변수
+    };
+  },
+  computed: {
+    ...mapGetters(MemberStore, { 
+      //MemberStore 모듈 내 getters 사용
+      memberid : "getMemberId", //memberid 변수에 getMemberId 리턴값 저장
+    }),
+  },
+  methods: {
+    /*
+    onChangeImages(e) {//프로필 이미지 변경 시 
+      if(e == null){//이미지를 삭제하였을 시
+          this.band.img = "";
+          return;
+      }
+      console.log(e);
+      const file = e; //변화한 파일 거져옴
+      this.band.img = URL.createObjectURL(file); // FileURL 생성 후 저장
+      this.img = this.band.img;
+      console.log(this.band.img);
+    },*/
+    /*
+    onChangeImages(){
+      var file = document.querySelector('input[type=file]').files[0];
+      var reader = new FileReader();
+
+      reader.onload = function(e){
+        this.img = e.target.result;
+        console.log(this.band.img); 
+      };
+
+      reader.onerror=function(error){
+        alert(error);
+      };
+      reader.readAsDataURL(file);
+      console.log(file);
+    },*/
+  
+    show(){
+      console.log(this.img);
+    },
+    create(){
+        //공백이 존재하면 경고
+        if(this.band.name == ""  || this.band.intro == ""){
+            alert("공백이 존재합니다!");
+            return;
+        }
+
+        axiosCommon
+        .post("/band/"+this.memberid,{
+            img : this.band.img,
+            intro : this.band.intro,
+            name : this.band.name
+        })
+        .then((response)=>{
+            if(response.data.data==="success"){//성공 시 알려주고 push
+                alert("밴드 개설이 완료되었습니다!");
+                this.$router.push("/band/"+this.memberid);
+            }else{
+                alert("이미 존재하는 밴드명입니다!")
+                console.log(response.data)
+            }
+        })
+        .catch((exp)=>(alert(exp+"밴드를 생성할 수 없습니다.")));
+    },
+    bandlist(){//밴드리스트 페이지로 이동
+        this.$router.push("/band/"+this.memberid);
+    }
+  },
+};
 </script>
 
 <style>
-
 </style>

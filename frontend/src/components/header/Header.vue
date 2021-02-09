@@ -23,9 +23,9 @@
 
       <!-- Logo -->
       <v-col
-        ><v-avatar tile width="350px" height="75px">
+        ><router-link to="/"><v-avatar tile width="350px" height="75px">
           <v-img src="@/assets/image/logo.png" /> </v-avatar
-      ></v-col>
+      ></router-link></v-col>
 
       <!-- Login, NotLogin -->
       <v-col class="my-auto ml-auto">

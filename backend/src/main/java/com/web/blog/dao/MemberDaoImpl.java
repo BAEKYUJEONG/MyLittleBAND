@@ -58,7 +58,24 @@ public class MemberDaoImpl implements MemberDao {
 		return mapper.getUserById(memberId);
 	}
 
+	public void emailLink(Member m) {
+		mapper.emailLink(m);
+	}
 
+	@Override
+	public void updateAuth(String memberId) {
+		mapper.updateAuth(memberId);
+	}
+
+	@Override
+	public String getUserByNameAndPhone(String name, String phone) {
+		return mapper.getUserByNameAndPhone(name, phone);
+	}
+
+	@Override
+	public int updatePassword(Member target) {
+		return mapper.updatePassword(target);
+	}
 	
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {

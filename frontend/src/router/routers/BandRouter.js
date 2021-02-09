@@ -2,10 +2,13 @@
 import BandList from '../../components/bandmain/BandList';
 import BandInfo from '../../components/manageband/BandInfo';
 import BandDetail from '../../components/manageband/BandDetail';
+import BandCreate from '../../components/manageband/BandCreate';
+import BandModify from '../../components/manageband/BandModify';
+import ReserveStage from '../../components/manageband/ReserveStage';
 // ExampleRouter 정의 부분
 const bandRoute = [
     {   // 자신의 밴드 목록
-        path: '/band/:memberno',
+        path: '/band/list/:memberno',
         name: 'bandlist',
         component: BandList,
         props: true,
@@ -17,9 +20,27 @@ const bandRoute = [
         props: true,
     },
     {   // 밴드멤버용 상세 페이지
-        path: '/band/:bandno',
+        path: '/band/detail/:bandno',
         name: 'banddetail',
         component: BandDetail,
+        props: true,
+    },
+    {   // 밴드개설 페이지
+        path: '/bandcreate',
+        name: 'bandcreate',
+        component: BandCreate,
+        props: true,
+    },
+    {   // 밴드정보수정 페이지
+        path: '/band/modify/:bandno',
+        name: 'bandmodify',
+        component: BandModify,
+        props: true,
+    },
+    {   // 밴드정보수정 페이지
+        path: '/band/reserve/:bandno',
+        name: 'reservestage',
+        component: ReserveStage,
         props: true,
     },
     /*

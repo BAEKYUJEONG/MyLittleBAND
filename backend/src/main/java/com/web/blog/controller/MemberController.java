@@ -1,6 +1,8 @@
 package com.web.blog.controller;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.blog.dto.Member;
 import com.web.blog.dto.loginReq;
 import com.web.blog.dto.signupReq;
+import com.web.blog.service.MailService;
+import com.web.blog.util.TempKey;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.service.JwtService;
 import com.web.blog.service.MemberService;
@@ -51,6 +55,9 @@ public class MemberController {
 	
 	public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 	
+	@Autowired
+	MailService mailService;
+	
 	@PostMapping(value = "/signup")
 	@ApiOperation(value = "회원가입", notes = "성공 시 회원가입 완료")
 	@ApiResponses({
@@ -65,11 +72,113 @@ public class MemberController {
 	        result.status = true;
 	        result.data = "success";
 	        return new ResponseEntity<>(result, HttpStatus.OK);
-	        
 		}
 		else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	/**
+	 * 이메일 인증 요청
+	 * @param email
+	 * @return ResponseEntity<>(null, HttpStatus)
+	 */
+	@PostMapping(value = "/signup/validation")
+	public Object signupValidate(@RequestBody String email){
+		// 임의의 authkey 생성
+	    String authkey = new TempKey().getKey(50, false);
+	    System.out.println(email);
+	    String subject = "나작밴 회원가입 승인 메일 링크";
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("링크를 클릭하시면 이메일 인증이 완료됩니다.\n\n").append("http://i4a408.p.ssafy.io/validated?email=").append(email)
+	            .append("&authkey=").append(authkey);
+	    Member target = service.getUserByEmail(email);
+	    target.setAuthkey(authkey);
+	    service.emailLink(target);
+	    mailService.send(subject, sb.toString(), "anonymous@najakban.com", email);
+	    
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	/**
+	 * 이메일 링크 클릭 후 회원 가입 완료
+	 * @param authkey
+	 * @return ResponseEntity<>(null, HttpStatus)
+	 */
+	@PostMapping(value = "/signup/validated")
+	public Object signupValidated(@RequestBody Map<String, String> info) {
+		Member target = service.getUserByEmail(info.get("email"));
+		BasicResponse response = new BasicResponse();
+		
+		// Authkey가 일치
+		if(target.getAuthkey().equals(info.get("authkey"))) {
+			service.updateAuth(target.getMemberId());
+			response.status = true;
+		} else {
+			response.status = false;
+		}
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);	
+	}
+	
+	/**
+	 * 회원 이메일 찾기
+	 * @param info
+	 * @return ResponseEntity<>(BasicResponse, HttpStatus)
+	 */
+	@PostMapping(value = "/member/id")
+	@ApiOperation(value = "이메일 찾기", notes = "사용자 이름, 전화번호를 기반으로 이메일을 찾는다")
+	public Object findEmail(@RequestBody Map<String, String> info) {
+		String target = service.getUserByNameAndPhone(info.get("name"), info.get("phone"));
+		BasicResponse response = new BasicResponse();
+		
+		if(target != null) {
+			response.status = true;
+			response.data = target;
+		} else {
+			response.status = false;
+		}
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	/**
+	 * 회원 비밀번호 찾기
+	 * @param info
+	 * @return ResponseEntity<>(BasicResponse, HttpStatus)
+	 */
+	@PostMapping(value = "/member/pw")
+	@ApiOperation(value = "임시 비밀번호 발급", notes = "사용자  이메일, 이름, 전화번호를 기반으로 임시 패스워드를 이메일로 발급받음")
+	public Object findPassword(@RequestBody Map<String, String> info) {
+		Member target = service.getUserByEmail(info.get("email"));
+		BasicResponse response = new BasicResponse();
+		
+		if(target != null && target.getName().equals(info.get("name")) && target.getPhone().equals(info.get("phone"))) {
+			// 임시 비밀번호 생성
+			StringBuffer buffer = new StringBuffer();
+			Random random = new Random();		
+			String chars[] = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,5,6,7,8,9".split(",");
+
+			for (int i = 0; i < 10; i++) {
+				buffer.append(chars[random.nextInt(chars.length)]);
+			}
+
+			target.setPw(buffer.toString());
+			if(service.updatePassword(target) > 0) {
+				// 메일 발송
+				String subject = "나작밴 임시 비밀번호 발급";
+			    StringBuilder sb = new StringBuilder();
+			    sb.append("임시 비밀번호 발급입니다\n\n").append("임시 비밀번호 : ").append(target.getPw());
+			    
+			    mailService.send(subject, sb.toString(), "anonymous@najakban.com", target.getEmail());
+			    
+			    response.status = true;
+			}
+		} else {
+			response.status = false;
+		}
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PutMapping(value = "/member/{memberId}")
@@ -141,19 +250,4 @@ public class MemberController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-//	@RequestMapping(value="/signu", method=RequestMethod.)
-//	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {
-//		service.signup(id, email, name, pw, phone, img, profile);
-//	}
-	
-	
-	
-//	
-//	@PostMapping(value="/test")
-//	public void test(String id) {
-//		service.test(id);
-////		System.out.println("con");
-//	}
-	
 }
