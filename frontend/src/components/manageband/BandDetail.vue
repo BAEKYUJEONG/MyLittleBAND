@@ -378,7 +378,7 @@ export default {
       } else if (value == "영상업로드") {
         this.upload();
       } else if (value == "공연신청") {
-        //this.$router.push("/reserve/stage/" + this.$route.params.bandno);
+        this.$router.push("/band/reserve/" + this.$route.params.bandno);
       } else if(value == "돌아가기"){
         this.$router.push("/band/"+this.$route.params.bandno);
       }
