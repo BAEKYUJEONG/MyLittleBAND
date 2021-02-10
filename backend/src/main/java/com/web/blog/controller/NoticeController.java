@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -123,9 +124,9 @@ public class NoticeController {
 	    return entity;
 	}
 
-	@PostMapping(value = "/create")
+	@PostMapping(value = "/{noticeId}")
 	@ApiOperation(value = "공지사항 업로드")
-	private ResponseEntity create(@RequestBody Notice dto) {
+	private ResponseEntity create(@RequestBody Notice dto, @PathVariable int noticeId) {
 		ResponseEntity entity = null;
 		System.out.println(dto.isManager());
 		System.out.println(dto.getNoticeTitle());
@@ -149,9 +150,9 @@ public class NoticeController {
 		return entity;
 	}
 	
-	@PutMapping(value = "/update")
+	@PutMapping(value = "/{noticeId}")
 	@ApiOperation(value = "공지사항 수정")
-	private ResponseEntity update(@RequestBody Notice dto) {
+	private ResponseEntity update(@RequestBody Notice dto, @PathVariable int noticeId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
 		try {
@@ -173,9 +174,9 @@ public class NoticeController {
 		return entity;
 	}
 	
-	@DeleteMapping(value = "/delete")
+	@DeleteMapping(value = "/{noticeId}")
 	@ApiOperation(value = "공지사항 삭제")
-	private ResponseEntity delete(@RequestHeader int noticeId) {
+	private ResponseEntity delete(@RequestHeader int noticeId, @PathVariable int NoticeId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
 		try {
