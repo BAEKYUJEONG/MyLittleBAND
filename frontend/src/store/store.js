@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import MemberStore from "./modules/MemberStore"
 import timelineStore from "./modules/timelineStore";
 import RankingStore from "./modules/RankingStore";
+import CalenderStore from "./modules/CalenderStore";
 import NoticeStore from "./modules/NoticeStore";
 
 //yarn add vuex-persistedstate 필요 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     timelineStore,
     RankingStore,
     MemberStore,
+    CalenderStore,
     NoticeStore,
   },
   plugins: [
