@@ -51,7 +51,7 @@ export default {
         this.$router.push("/member/" + this.memberid);
       } else if (value == "밴드") {
         //밴드페이지로 이동
-        this.$router.push("/band/" + this.memberid);
+        this.$router.push("/band/list/" + this.memberid);
       }
     },
   },
