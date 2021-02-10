@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../axios/axios-common";
 
 const RankingStore = {
   namespaced: true,

@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import MemberStore from "./modules/MemberStore"
 import timelineStore from "./modules/timelineStore";
 import RankingStore from "./modules/RankingStore";
+import NoticeStore from "./modules/NoticeStore";
 
 //yarn add vuex-persistedstate 필요 
 import createPersistedState from 'vuex-persistedstate';//새로고침해도 store 정보가 사라지지 않게 해줌
@@ -18,7 +19,8 @@ export default new Vuex.Store({
   modules: {      // imported modules
     timelineStore,
     RankingStore,
-    MemberStore
+    MemberStore,
+    NoticeStore,
   },
   plugins: [
     createPersistedState({//store 내부 정보가 날아가지 않도록 해줌
