@@ -43,25 +43,33 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "../../axios/axios-common";
 export default {
-  created:()=>{
+  created(){
     //회원정보를 받아옴
     //백엔드 연동 후 아래 주석 해제
-    //this.getmember();
+    this.getmember();
   },
   methods: {
-   getmember(){//회원정보 조회
+   getmember() {//회원정보 조회
       axios
-      .get('/member/'+this.$route.params.memberno)
-      .then((response)=>(this.member = response.data))
-      .catch((exp)=>alert(exp+"조회에 실패하였습니다."));
+        .get("/member/" + this.$route.params.memberno)
+        .then((response) => 
+        { if(response.data.status)
+          this.member = response.data.object;
+          
+        })
+        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
     modify(){//회원정보 수정
       axios
-      .put('/member/'+this.$route.params.memberno,{member : this.member})
+      .put('/member/'+this.$route.params.memberno,{
+        member : this.member.name,
+        phone : this.member.phone,
+        profile : this.member.profile
+        })
       .then((response)=>{
-        if(response.data == "success"){//성공하면 알림 후 마이페이지로 이동
+        if(response.data.status){//성공하면 알림 후 마이페이지로 이동
           alert("수정성공!");
           this.$router.push("/member/" + this.$route.params.memberno);
         }else{//실패하면 알림 후 수정페이지 다시 불러옴
