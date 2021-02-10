@@ -71,71 +71,7 @@
     <v-divider></v-divider>
 
     <!-- 달력 -->
-    <v-row class="ma-auto px-10">
-      <v-col cols="12">
-        <!-- 제목(배너) -->
-        <v-banner class="my-10">
-          <strong>밴드일정</strong>
-        </v-banner>
-        <v-row>
-          <v-col cols="6">
-            <v-menu
-              ref="dateOpen"
-              v-model="dateOpen"
-              :close-on-content-click="false"
-              :return-value.sync="start"
-              offset-y
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="start"
-                  label="Start Date"
-                  prepend-icon="mdi-calendar"
-                  dense
-                  readonly
-                  outlined
-                  hide-details
-                  v-on="on"
-                ></v-text-field>
-              </template>
-
-              <v-date-picker dark v-model="start" no-title>
-                <v-spacer />
-                <v-btn text dark color="primary" @click="dateOpen = false"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  text
-                  dark
-                  color="primary"
-                  @click="$refs.dateOpen.save(start)"
-                  >OK</v-btn
-                >
-              </v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-col cols="6">
-            <v-select
-              v-model="type"
-              :items="typeOptions"
-              label="Type"
-              class="my-auto"
-              hide-details
-              outlined
-              dense
-            ></v-select>
-          </v-col>
-        </v-row>
-        <!-- 
-        <div class="text-center mb-3">
-          <h2 class="mx-5 d-inline-block">{{start | moment('YYYY MMMM')}}</h2>
-        </div>   
-        -->
-        <v-sheet height="500">
-          <v-calendar ref="calendar" :type="type"></v-calendar>
-        </v-sheet>
-      </v-col>
-    </v-row>
+    <BandCalender />
 
     <v-divider></v-divider>
 
@@ -225,6 +161,7 @@
 import { mapGetters } from "vuex"; //vuex사용
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
 import axios from "../../axios/axios-common";
+import BandCalender from "../manageband/BandCalender";
 
 export default {
   data: () => {
@@ -409,6 +346,9 @@ export default {
       //this.$router.push("/video/create/" + this.$route.params.bandno);
     },
   },
+  components: {
+    BandCalender,
+  }
 };
 </script>
 
