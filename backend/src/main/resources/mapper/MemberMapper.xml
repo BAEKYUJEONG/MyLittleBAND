@@ -53,6 +53,10 @@
     select * from member where email=#{email} and pw=#{pw}
   </select>
   
+  <select id="findMemberById" resultType="java.util.Map">
+		select name, profile, phone, email from member where memberId=#{memebrId}
+	</select>
+  
 	<!-- <insert id="signup" parameterType="Member">
 		insert into member values(#{id}, #{email}, #{name}, #{pw}, #{phone}, #{img}, #{profile})
   	</insert>

@@ -71,6 +71,36 @@ public class BandDaoImpl implements BandDao {
 		mapper.changesession(crewId, session);
 	}
 
+	@Override
+	public List<HashMap<String, String>> memberofband(String memberId) {
+		return mapper.memberofband(memberId);
+	}
+
+	@Override
+	public void changeinfo(String bandId, String name, String intro) {
+		mapper.changeinfo(bandId, name, intro);
+	}
+
+	@Override
+	public void delband(String bandId) {
+		mapper.delband(bandId);
+	}
+
+	@Override
+	public void delcrew(String bandId) {
+		mapper.delcrew(bandId);
+	}
+
+	@Override
+	public void delfollow(String bandId) {
+		mapper.delfollow(bandId);
+	}
+
+	@Override
+	public void delcalendar(String bandId) {
+		mapper.delcalendar(bandId);
+	}
+
 	
 	
 	

@@ -21,4 +21,5 @@ public interface MemberService {
 	public void updateAuth(String memberId);
 	public String getUserByNameAndPhone(String name, String phone);
 	public int updatePassword(Member target);
+	public HashMap<String,String> findMemberById(String memberId);
 }

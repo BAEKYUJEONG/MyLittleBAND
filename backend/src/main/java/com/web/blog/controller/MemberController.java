@@ -1,6 +1,7 @@
 package com.web.blog.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -250,4 +251,24 @@ public class MemberController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping(value = "/member/{memberId}")
+	@ApiOperation(value = "멤버정보 가져오기")
+	public Object findMemberById(@PathVariable String memberId) {
+		HashMap<String, String> map= service.findMemberById(memberId);
+		if(map!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	
 }

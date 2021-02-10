@@ -19,14 +19,7 @@
 		<java.version>1.8</java.version>
 	</properties>
 	
-	<!-- s3 -->
-	<repositories>
-        <repository>
-            <id>spring-milestone</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/libs-milestone</url>
-        </repository>
-    </repositories>
+	
 	
 	
 	<dependencies>
@@ -154,7 +147,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Mail dependency start -->
+		<!-- Mail dependency start --> 
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
@@ -189,7 +182,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 			<version>2.4.0</version>
-		</dependency>
+		</dependency> 
 
 		<!-- s3 -->
 		<dependency>

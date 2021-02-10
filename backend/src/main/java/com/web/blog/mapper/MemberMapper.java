@@ -25,4 +25,5 @@ public interface MemberMapper {
 //	public int login(String id, String pw);
 	public String getUserByNameAndPhone(String name, String phone);
 	public int updatePassword(Member target);
+	public HashMap<String,String> findMemberById(String memberId);
 }

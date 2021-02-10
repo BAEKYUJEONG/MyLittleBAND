@@ -76,6 +76,11 @@ public class MemberDaoImpl implements MemberDao {
 	public int updatePassword(Member target) {
 		return mapper.updatePassword(target);
 	}
+
+	@Override
+	public HashMap<String, String> findMemberById(String memberId) {
+		return mapper.findMemberById(memberId);
+	}
 	
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {

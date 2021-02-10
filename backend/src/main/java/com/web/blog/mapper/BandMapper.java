@@ -20,4 +20,10 @@ public interface BandMapper {
 	public void receivechief(String crewId);
 	public void withdrawband(String crewId);
 	public void changesession(String crewId, String session);
+	public List<HashMap<String, String>> memberofband(String memberId);
+	public void changeinfo(String bandId, String name, String intro);
+	public void delband(String bandId);
+	public void delcrew(String bandId);
+	public void delfollow(String bandId);
+	public void delcalendar(String bandId);
 }
