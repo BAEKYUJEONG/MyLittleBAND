@@ -1,21 +1,31 @@
 package com.web.blog.dto;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Calendar {
 	private String calendarId;
-	private String date;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate start;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate end;
 	private String content;
 	private String bandId;
 	private String photo;
-	private String time;
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime time;
 	private String title;
 	
 	public Calendar() {
 	}
 
-	public Calendar(String calendarId, String date, String content, String bandId, String photo, String time,
-			String title) {
+	public Calendar(String calendarId, LocalDate start, LocalDate end, String content, String bandId, String photo,
+			LocalTime time, String title) {
 		this.calendarId = calendarId;
-		this.date = date;
+		this.start = start;
+		this.end = end;
 		this.content = content;
 		this.bandId = bandId;
 		this.photo = photo;
@@ -31,12 +41,20 @@ public class Calendar {
 		this.calendarId = calendarId;
 	}
 
-	public String getDate() {
-		return date;
+	public LocalDate getStart() {
+		return start;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setStart(LocalDate start) {
+		this.start = start;
+	}
+
+	public LocalDate getEnd() {
+		return end;
+	}
+
+	public void setEnd(LocalDate end) {
+		this.end = end;
 	}
 
 	public String getContent() {
@@ -63,11 +81,11 @@ public class Calendar {
 		this.photo = photo;
 	}
 
-	public String getTime() {
+	public LocalTime getTime() {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(LocalTime time) {
 		this.time = time;
 	}
 

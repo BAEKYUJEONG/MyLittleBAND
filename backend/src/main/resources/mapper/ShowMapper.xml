@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.ShowMapper">
+	<select id="getShowByTime" resultType="BandShow">
+		select * from bandshow where date=#{date} and time=#{time};
+	</select>
+	
+	<insert id="addshow" parameterType="BandShow">
+		insert into bandshow values(null,#{date}, #{title},#{time},#{showContent},#{img},#{bandId});
+	</insert>
+	
+	<delete id="delshow">
+		delete from bandshow where showId=#{showId};
+	</delete>
+	
+	<select id="showlist" resultType="ShowListRes">
+		select showId,date,title,date_format(time,'%H:%i')as time,showContent from bandshow where bandId=#{bandId};
+	</select>
+	
+	<select id="dateshowlist" resultType="BandShow">
+		select * from bandshow where date=#{date};
+	</select>
+	
+	<!-- <select id="getShowByTime1" resultType="BandShow">
+		select * from bandshow where time=#{time};
+	</select> -->
+	
+</mapper>

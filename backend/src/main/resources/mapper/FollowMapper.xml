@@ -21,4 +21,8 @@
 		select bandId,img,name from band where bandId in(select bandId from follow where memberId=#{memberId})
 	</select>
 	
+	<select id="followcheck" parameterType="String" resultType="java.util.Map">
+		select followId from follow where bandId=#{bandId} and memberId=#{memberId}
+	</select>
+	
 </mapper>

@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.web.blog.service.FilesStorageService;
 
 @Controller
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin
 public class FilesController {
 
   @Autowired

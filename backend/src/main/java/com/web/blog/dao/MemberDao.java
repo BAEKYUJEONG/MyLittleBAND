@@ -19,6 +19,7 @@ public interface MemberDao {
 	public void updateAuth(String memberId);
 	public String getUserByNameAndPhone(String name, String phone);
 	public int updatePassword(Member target);
+	public HashMap<String,String> findMemberById(String memberId);
 
 	
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile);

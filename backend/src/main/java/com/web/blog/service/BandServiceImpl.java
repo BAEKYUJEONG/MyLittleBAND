@@ -71,4 +71,34 @@ public class BandServiceImpl implements BandService{
 		dao.changesession(crewId, session);
 	}
 
+	@Override
+	public List<HashMap<String, String>> memberofband(String memberId) {
+		return dao.memberofband(memberId);
+	}
+
+	@Override
+	public void changeinfo(String bandId, String name, String intro) {
+		dao.changeinfo(bandId, name, intro);		
+	}
+
+	@Override
+	public void delband(String bandId) {
+		dao.delband(bandId);
+	}
+
+	@Override
+	public void delcrew(String bandId) {
+		dao.delcrew(bandId);
+	}
+
+	@Override
+	public void delfollow(String bandId) {
+		dao.delfollow(bandId);
+	}
+
+	@Override
+	public void delcalendar(String bandId) {
+		dao.delcalendar(bandId);
+	}
+
 }
