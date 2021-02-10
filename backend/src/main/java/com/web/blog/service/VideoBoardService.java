@@ -1,12 +1,10 @@
-package com.web.blog.dao;
+package com.web.blog.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.web.blog.dto.VideoBoard;
 
-public interface VideoBoardDao {
+public interface VideoBoardService {
 	
 	public int insert(VideoBoard vboard) throws Exception;
 	public int update(VideoBoard vboard) throws Exception;
