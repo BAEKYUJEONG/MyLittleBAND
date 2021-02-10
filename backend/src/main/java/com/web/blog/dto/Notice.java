@@ -1,17 +1,17 @@
 package com.web.blog.dto;
 
 public class Notice {
-	private String noticeId;
+	private int noticeId;
 	private String noticeTitle;
 	private String noticeContent;
 	private int date;
-	private String manager;
+	private boolean manager;
 	
 	public Notice() {
-
+		
 	}
 
-	public Notice(String noticeId, String noticeTitle, String noticeContent, int date, String manager) {
+	public Notice(int noticeId, String noticeTitle, String noticeContent, int date, boolean manager) {
 		super();
 		this.noticeId = noticeId;
 		this.noticeTitle = noticeTitle;
@@ -20,11 +20,11 @@ public class Notice {
 		this.manager = manager;
 	}
 
-	public String getNoticeId() {
+	public int getNoticeId() {
 		return noticeId;
 	}
 
-	public void setNoticeId(String noticeId) {
+	public void setNoticeId(int noticeId) {
 		this.noticeId = noticeId;
 	}
 
@@ -52,11 +52,11 @@ public class Notice {
 		this.date = date;
 	}
 
-	public String getManager() {
+	public boolean isManager() {
 		return manager;
 	}
 
-	public void setManager(String manager) {
+	public void setManager(boolean manager) {
 		this.manager = manager;
 	}
 	
