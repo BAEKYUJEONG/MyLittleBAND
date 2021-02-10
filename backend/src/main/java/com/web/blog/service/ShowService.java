@@ -15,6 +15,7 @@ public interface ShowService {
 	public void delshow(String showId);
 	public List<ShowListRes> showlist(String bandId);
 	public List<BandShow> dateshowlist(LocalDate date);
+	public void updateshow(String showId, String title, String showContent);
 	
 	
 //	public BandShow getShowByTime1(LocalTime time);

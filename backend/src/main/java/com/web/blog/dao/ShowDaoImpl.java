@@ -44,6 +44,11 @@ public class ShowDaoImpl implements ShowDao {
 		return mapper.dateshowlist(date);
 	}
 
+	@Override
+	public void updateshow(String showId, String title, String showContent) {
+		mapper.updateshow(showId, title, showContent);
+	}
+
 //	@Override
 //	public BandShow getShowByTime1(LocalTime time) {
 //		// TODO Auto-generated method stub

@@ -24,8 +24,14 @@
 		select * from bandshow where date=#{date};
 	</select>
 	
+	<update id="updateshow">
+		update bandshow set title=#{title},showContent=#{showContent} where showId=#{showId}
+	</update>
+	
+	
 	<!-- <select id="getShowByTime1" resultType="BandShow">
 		select * from bandshow where time=#{time};
 	</select> -->
+	
 	
 </mapper>

@@ -43,6 +43,11 @@ public class ShowServiceImpl implements ShowService{
 		return dao.dateshowlist(date);
 	}
 
+	@Override
+	public void updateshow(String showId, String title, String showContent) {
+		dao.updateshow(showId, title, showContent);
+	}
+
 //	@Override
 //	public BandShow getShowByTime1(LocalTime time) {
 //		// TODO Auto-generated method stub
