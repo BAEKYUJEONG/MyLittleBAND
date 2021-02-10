@@ -86,13 +86,13 @@
 
         <v-sheet class="mx-auto" elevation="8">
           <v-slide-group class="pa-4" show-arrows>
-            <v-slide-item v-for="band in bandlist" :key="band.id">
+            <v-slide-item v-for="band in bandlist" :key="band.bandId">
               <v-btn
-                @click.native="toBand(band.id)"
+                @click.native="toBand(band.bandId)"
                 class="ma-auto"
                 style="width: 180px"
                 >{{ band.name }}
-                <v-icon v-if="band.isChief" color="#FFD600">mdi-crown</v-icon>
+                <v-icon v-if="band.isChief == 1" color="#FFD600">mdi-crown</v-icon>
               </v-btn>
             </v-slide-item>
           </v-slide-group>
@@ -131,27 +131,31 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../../axios/axios-common"
+import { mapActions } from "vuex"; //vuex사용
+const MemberStore = "MemberStore"; //MemberStore 모듈 사용
+
 export default {
-  created: () => {
+  created () {
     //회원정보를 받아옴
     //백엔드 연동 후 아래 주석 해제
-    //this.getmember();
+    this.getmember();
     //밴드리스트 받아옴
     //백엔드 연동 후 아래 주석 해제
-    //this.getbandlist();
+    this.getbandlist();
   },
   methods: {
-    onClick() {},
+    ...mapActions(MemberStore, [
+      //MemberStore 모듈 내 actions 사용
+      "Logout",
+    ]),
     getmember() {
       axios
         .get("/member/" + this.$route.params.memberno)
         .then((response) => 
-        {this.member = response.data;
-        if(this.member.imgurl==""){
-          this.member.imgurl=require("@/assets/image/pepe.jpg");
-        }
-        
+        { if(response.data.data == "success")
+          this.member = response.data.object;
+          
         })
         .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
@@ -159,7 +163,7 @@ export default {
       //소속된 밴드리스트 조회
       axios
         .get("/band-list/" + this.$route.params.memberno)
-        .then((response) => (this.bandlist = response.data))
+        .then((response) => (this.bandlist = response.data.object))
         .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
 
@@ -172,9 +176,10 @@ export default {
       axios
         .delete("/member/" + this.$route.params.memberno)
         .then((response) => {
-          if (response.data == true) {//성공하면 alert 후 메인페이지로
-            alert("삭제성공");
-            this.$router.push("/main");
+          if (response.data.status) {//성공하면 alert 후 메인페이지로
+            alert("탈퇴성공");
+            this.Logout();
+            this.$router.push({name:'main'});
           }
         })
         .catch((exp) => alert(exp + "삭제에 실패하였습니다."));
@@ -216,28 +221,21 @@ export default {
     },
     imgmodify() {
       let formData = new FormData(); //정보 전달을 위해 formdata 생성
-      formData.append("image", this.member.imgdata);//이미지 정보전달
-      formData.append("baseurl", this.member.imgurl);//이미지 base64url이 전송될 부분
-      console.log(formData.get("image"));
+      formData.append("file", this.member.imgdata);//이미지 정보전달
+      //formData.append("baseurl", this.member.imgurl);//이미지 base64url이 전송될 부분
+      //console.log(formData.get("image"));
 
       axios
-        .put("/member/" + this.$route.params.memberno, formData, { headers: { 'Content-Type': 'multipart/form-data' }})
-        .then((response) => {
-          if (response.data == "success") {
-            //성공하면 알림 후 새로고침
+        .post("/upload" , formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+        .then(() => {
             alert("수정성공!");
             this.$router.push("/member/" + this.$route.params.memberno);
             this.member.imgurl = this.image;
-          } else {
-            //실패하면 알림 후 수정페이지 다시 불러옴
-            alert("수정실패!");
-            this.getmember();
-          }
         })
         .catch((exp) => alert(exp + "수정에 실패하였습니다."));
     },
     toBand(bandid) {
-      this.$router.push("/band/" + bandid);
+      this.$router.push("/band/detail/" + bandid);
     },
   },
   computed: {
@@ -271,24 +269,24 @@ export default {
       paginationFactor: 210, //좌우로 움직이는 정도
       bandlist: [
         {
-          id: "01",
+          bandId: "01",
           name: "잘한다밴드",
-          isChief: false,
+          isChief: 0,
         },
         {
-          id: "02",
+          bandId: "02",
           name: "더잘한다밴드",
-          isChief: true,
+          isChief: 1,
         },
         {
-          id: "03",
+          bandId: "03",
           name: "못한다밴드",
-          isChief: false,
+          isChief: 0,
         },
         {
-          id: "04",
+          bandId: "04",
           name: "조금못한다밴드",
-          isChief: true,
+          isChief: 1,
         },
       ],
     };

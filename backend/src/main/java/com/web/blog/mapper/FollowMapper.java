@@ -11,4 +11,5 @@ public interface FollowMapper {
 	public void unfollow(String followId);
 	public Follow getFollowById(FollowReq req);
 	public List<HashMap<String, String>> followlist(String memberId);
+	public HashMap<String, String> followcheck(String memberId, String bandId);
 }

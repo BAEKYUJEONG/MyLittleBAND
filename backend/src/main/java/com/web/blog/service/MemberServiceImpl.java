@@ -75,6 +75,11 @@ public class MemberServiceImpl implements MemberService{
 		return dao.updatePassword(target);
 	}
 
+	@Override
+	public HashMap<String, String> findMemberById(String memberId) {
+		return dao.findMemberById(memberId);
+	}
+
 
 //	@Override
 //	public void signup(String id, String email, String name, String pw, String phone, String img, String profile) {

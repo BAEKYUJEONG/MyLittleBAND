@@ -1,7 +1,7 @@
 <!-- 팔로우 할 멤버들에게 보여 줄 페이지 -->
 <template>
   <v-main>
-    <v-row  class="px-10">
+    <v-row class="px-10">
       <v-col cols="12">
         <v-banner class="my-10">
           <strong>밴드소개</strong>
@@ -51,27 +51,25 @@
       </v-col>
       <!-- 좋아요 버튼 -->
       <v-col cols="4" class="ma-auto">
-        <v-tooltip bottom nudge-bottom="20" >
+        <v-tooltip bottom nudge-bottom="20">
           <template v-slot:activator="{ on, attrs }">
-        <v-btn icon :color="color"
-         v-bind="attrs"
-            v-on="on">
-          <v-icon
-            size="100"
-            @click="setFollow()"
-            :color="member.follow ? 'red' : 'grey'"
-            >mdi-heart</v-icon
-          >
-        </v-btn>
+            <v-btn icon :color="color" v-bind="attrs" v-on="on">
+              <v-icon
+                size="100"
+                @click="setFollow()"
+                :color="member.follow ? 'red' : 'grey'"
+                >mdi-heart</v-icon
+              >
+            </v-btn>
           </template>
-        <span v-if="!member.follow">밴드 팔로우하기</span>
-        <span v-else>밴드 팔로우취소</span>
+          <span v-if="!member.follow">밴드 팔로우하기</span>
+          <span v-else>밴드 팔로우취소</span>
         </v-tooltip>
       </v-col>
     </v-row>
     <v-divider></v-divider>
     <!-- 멤버구성 -->
-    <v-row  class="px-10">
+    <v-row class="px-10">
       <v-col cols="12">
         <v-banner class="my-10">
           <strong>멤버구성</strong>
@@ -157,9 +155,9 @@ import axios from "../../axios/axios-common";
 export default {
   data: () => {
     return {
-      color : '',
+      color: "",
       member: {
-        follow: false,//true이면 icon이 빨간색, false면 회색
+        follow: false, //true이면 icon이 빨간색, false면 회색
       },
       band: {
         //밴드정보
@@ -172,18 +170,26 @@ export default {
         {
           name: "이보드",
           session: "키보드",
+          crewid : 1,
+          memberid : 2,
         },
         {
           name: "최베스",
           session: "베이스",
+          crewid : 2,
+          memberid : 3,
         },
         {
           name: "김일렉",
           session: "일렉기타",
+          crewid : 3,
+          memberid : 4,
         },
         {
           name: "최드럼",
           session: "드럼",
+          crewid : 4,
+          memberid : 5,
         },
       ],
       videolist: [
@@ -214,12 +220,12 @@ export default {
   },
   created() {
     //백엔드와 연동 후 아래 주석 해제
-    /*
+    
       this.getBandinfo();//밴드정보가져오기
       this.getMemberinfo();//밴드소속 멤버정보 가져오기
       this.getVideolist();//밴드의 비디오리스트 가져오기
       this.getFollow(); //멤버의 팔로우 여부 가져오기
-      */
+      
   },
   methods: {
     getBandinfo() {
@@ -227,9 +233,9 @@ export default {
       axios
         .get("/band/" + this.$route.params.bandno)
         .then((response) => {
-          this.band = response.data.object
+          this.band = response.data.object;
           //console.log(response.data.object.name)
-          })
+        })
         .catch((exp) => alert(exp + "밴드정보 조회에 실패하였습니다."));
     },
     getMemberinfo() {
@@ -237,53 +243,61 @@ export default {
       axios
         .get("/band/member/" + this.$route.params.bandno)
         .then((response) => {
-          this.members = response.data.object
+          this.members = response.data.object;
           //console.log(response.data.object)
-          })
+        })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
     getVideolist() {
       //밴드의 비디오 리스트를 조회합니다.
       axios
-        .post("/videosearchbyfilter", { bandid: this.$route.params.bandno })
-        .then((response) => (this.videolist = response.data))
+        .post("/band/video", { bandid: this.$route.params.bandno })
+        .then((response) => (this.videolist = response.data.object))
         .catch((exp) => alert(exp + "비디오리스트 조회에 실패하였습니다."));
     },
     getFollow() {
       //밴드 팔로우 여부 불러옴
       axios
-        .get("/followlist/" + this.memberid)
-        .then((response) => {this.member.follow = response.data.object})
+        .post("/followcheck", {
+          memberId: this.memberid,
+          bandId: this.$route.params.bandno,
+        })
+        .then((response) => {
+          if(response.data.object != null)
+          this.member.follow = true;
+        })
         .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
     },
     setFollow() {
-      if (this.member.follow) {
-        //팔로우 상태일 때
-        this.member.follow = false;
-        //DB 팔로우 상태 변화
-        //this.memberModify()
-        console.log("팔로우상태 : 팔로우취소");
-      } else {
-        //팔로우 중이 아닐 때
-        this.member.follow = true;
-        //DB 팔로우 상태 변화
-        //this.memberModify()
-        console.log("팔로우상태 : 팔로우");
-      }
-    },
-    memberModify(){//회원 팔로우 상태 변경
+        //팔로우상태변화 (true => false 바꿔줌)
         axios
-      .put('/member/'+this.memberid,{member : this.member})
-      .then((response)=>{
-        if(response.data == "success"){
-          console.log("팔로우 상태변화 성공")
-        }
-      })
-      .catch((exp)=>alert(exp+"수정에 실패하였습니다."));
+        .put("/follow",{
+          memberId: this.memberid,
+          bandId: this.$route.params.bandno,
+        })
+        .then((response) => {
+          if(response.data.status){
+            this.member.follow = !this.member.follow;
+          }
+        })
+        .catch((exp) => alert(exp + "팔로우 상태 변화에 실패하였습니다."));
+        console.log("팔로우상태 : 팔로우취소");
+      
     },
-    list(){
-      this.$router.push("/band/"+this.$route.params.bandno)
-    }
+    memberModify() {
+      //회원 팔로우 상태 변경
+      axios
+        .put("/member/" + this.memberid, { member: this.member })
+        .then((response) => {
+          if (response.data == "success") {
+            console.log("팔로우 상태변화 성공");
+          }
+        })
+        .catch((exp) => alert(exp + "수정에 실패하였습니다."));
+    },
+    list() {
+      this.$router.push("/band/list/" + this.$route.params.bandno);
+    },
   },
 };
 </script>

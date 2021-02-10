@@ -172,4 +172,48 @@ public class BandController {
 	      
 	}
 	
+	@GetMapping(value = "/band-list/{memberId}")
+	@ApiOperation(value = "멤버의 밴드정보", notes = "멤버의 밴드정보를 보여준다.")
+	
+	public Object memberofband(@PathVariable String memberId) {
+		List<HashMap<String, String>> map= service.memberofband(memberId);
+		System.out.println(map);
+		if(map!=null) {
+			System.out.println("bandmember");
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping(value = "/band/{bandId}")
+	@ApiOperation(value = "밴드정보 수정", notes = "밴드정보 수정요청을 보낸다.")
+	public Object changeinfo(@PathVariable String bandId, String name, String profile) {
+		service.changeinfo(bandId, name, profile);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+	}
+	
+	@DeleteMapping(value = "/band/{bandId}")
+	@ApiOperation(value = "밴드 해체", notes = "밴드 해체를 요청한다.")
+	public Object delband(@PathVariable String bandId) {
+		service.delcrew(bandId);
+		service.delfollow(bandId);
+		service.delcalendar(bandId);
+		service.delband(bandId);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 }
