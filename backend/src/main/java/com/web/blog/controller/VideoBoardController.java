@@ -23,7 +23,7 @@ import com.web.blog.service.VideoBoardService;
 @RestController
 //@RequestMapping("/video")
 public class VideoBoardController {
-	/*
+	
 	@Autowired
 	private VideoBoardService videoboard;
 	
@@ -99,5 +99,5 @@ public class VideoBoardController {
         }
         return entity;
     }
-    */
+    
 }
