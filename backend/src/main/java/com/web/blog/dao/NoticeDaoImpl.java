@@ -1,59 +1,57 @@
-package com.web.blog.service;
+package com.web.blog.dao;
 
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-import com.web.blog.dao.NoticeDao;
 import com.web.blog.dto.Notice;
+import com.web.blog.mapper.NoticeMapper;
 
-
-@Service
-public class NoticeServiceImpl implements NoticeService {
-
+@Repository
+public class NoticeDaoImpl implements NoticeDao{
 	@Autowired
-	NoticeDao dao;
-	
+	NoticeMapper mapper;
+
 	@Override
 	public int count() throws Exception {
-		return dao.count();
+		return mapper.count();
 	}
 
 	@Override
 	public List<Notice> searchAll(Map map) throws Exception {
-		return dao.searchAll(map);
+		return mapper.selectAll(map);
 	}
 
 	@Override
 	public Notice retrieve(int noticeId) throws Exception {
-		return dao.retrieve(noticeId);
+		return mapper.selectId(noticeId);
 	}
 
 	@Override
 	public List<Notice> searchTitle(Map map) throws Exception {
-		return dao.searchTitle(map);
+		return mapper.selectTitle(map);
 	}
 
 	@Override
 	public List<Notice> searchContent(Map map) throws Exception {
-		return dao.searchContent(map);
+		return mapper.selectContent(map);
 	}
 
 	@Override
 	public int regist(Notice notice) throws Exception {
-		return dao.regist(notice);
+		return mapper.insert(notice);
 	}
 
 	@Override
 	public int modify(Notice notice) throws Exception {
-		return dao.modify(notice);
+		return mapper.update(notice);
 	}
 
 	@Override
 	public int delete(int noticeId) throws Exception {
-		return dao.delete(noticeId);
+		return mapper.delete(noticeId);
 	}
-	
+
 }
