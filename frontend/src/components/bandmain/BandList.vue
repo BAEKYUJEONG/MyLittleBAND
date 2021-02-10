@@ -33,7 +33,7 @@
 
       <!-- 가입한 밴드가 존재할 때 -->
       <v-col cols="6" v-else>
-        <v-tooltip bottom nudge-top="5"  v-for="band in bandlist" :key="band.bandid">
+        <v-tooltip bottom nudge-top="5"  v-for="band in bandlist" :key="band.bandId">
           <template v-slot:activator="{ on, attrs }">
             <v-card class="mb-15"  v-bind="attrs" v-on="on">
               <v-row class="px-10">
@@ -55,13 +55,13 @@
                   ></v-img>
                 </v-col>
                 <v-col cols="6" align-self="center">
-                  <v-btn x-large text @click="BandDetail(band.bandid)"
+                  <v-btn x-large text @click="BandDetail(band.bandId)"
                     ><strong> {{ band.name }} </strong></v-btn
                   >
                 </v-col>
                 <v-col cols="3" align-self="center">
                   <!-- 밴드장이면 버튼 생성 -->
-                  <v-btn v-if="band.isChief == 0" class="ma-2" color="indigo accent-1">
+                  <v-btn v-if="band.isChief == 1" class="ma-2" color="indigo accent-1">
                     <v-icon color="#FFD600" x-large>mdi-crown</v-icon>
                   </v-btn>
                 </v-col>
@@ -80,7 +80,7 @@ import axiosCommon from '../../axios/axios-common';
 export default {
   created() {
     //소속밴드정보가져오기
-    //this.getbandlist();
+    this.getbandlist();
   },
   methods: {
     CreateBand() {
@@ -103,13 +103,13 @@ export default {
     return {
       bandlist: [
         {
-          bandid: 1,
+          bandId: 1,
           name: "잘한다밴드",
           img: '',
           isChief : 1,
         },
         {
-          bandid: 2,
+          bandId: 2,
           name: "더잘한다밴드",
           img: require("../../assets/image/pepe.jpg"),
           isChief : 0

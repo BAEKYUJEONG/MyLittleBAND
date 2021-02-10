@@ -1,7 +1,7 @@
 <!-- 밴드소속 멤버들(크루원)에게 보여 줄 페이지 -->
 <template>
   <v-main>
-    <v-row  class="px-10">
+    <v-row class="px-10">
       <v-col cols="12">
         <v-banner class="my-10">
           <strong>밴드소개</strong>
@@ -72,7 +72,6 @@
 
     <!-- 달력 -->
     <v-row class="ma-auto px-10">
-      
       <v-col cols="12">
         <!-- 제목(배너) -->
         <v-banner class="my-10">
@@ -133,9 +132,7 @@
         </div>   
         -->
         <v-sheet height="500">
-          
-          <v-calendar ref="calendar" 
-          :type="type"></v-calendar>
+          <v-calendar ref="calendar" :type="type"></v-calendar>
         </v-sheet>
       </v-col>
     </v-row>
@@ -179,7 +176,7 @@
     <!-- 활성화버튼 -->
     <v-row class="ma-auto pa-10">
       <!-- 밴드장일때 -->
-      <v-col cols="12" v-if="member.isChief">
+      <v-col cols="12" v-if="isChief == 1">
         <v-btn
           v-for="c in chief"
           :key="c.text"
@@ -233,10 +230,8 @@ export default {
   data: () => {
     return {
       dialog: false,
-      member: {
-        //로그인 한 아이디의 정보
-        isChief: true,
-      },
+      //로그인 한 아이디의 정보
+      isChief: "1",
       chief: [
         //밴드장일 때 나오는 버튼들
         {
@@ -273,26 +268,26 @@ export default {
         {
           name: "이보드",
           session: "키보드",
-          crewid : 1,
-          memberid : 2,
+          crewId: 1,
+          memberId: 2,
         },
         {
           name: "최베스",
           session: "베이스",
-          crewid : 2,
-          memberid : 3,
+          crewId: 2,
+          memberId: 3,
         },
         {
           name: "김일렉",
           session: "일렉기타",
-          crewid : 3,
-          memberid : 4,
+          crewId: 3,
+          memberId: 4,
         },
         {
           name: "최드럼",
           session: "드럼",
-          crewid : 4,
-          memberid : 5,
+          crewId: 4,
+          memberId: 5,
         },
       ],
       videolist: [
@@ -318,18 +313,16 @@ export default {
   computed: {
     ...mapGetters(MemberStore, {
       //MemberStore 모듈 내 getters 사용
-      memberid: "getMemberId", //memberid 변수에 getMemberId 리턴값 저장
+      memberId: "getMemberId", //memberId 변수에 getMemberId 리턴값 저장
     }),
   },
   created() {
     //백엔드와 연동 후 아래 주석 해제
-    /*
-      this.getBandinfo();//밴드정보가져오기
-      this.getMemberinfo();//밴드소속 멤버정보 가져오기
-      this.getVideolist();//밴드의 비디오리스트 가져오기
-      this.getMember(); //로그인 멤버 정보 가져오기
-      */
-     //this.start = this.$moment().format('YYYY-MM-DD');
+
+    this.getBandinfo(); //밴드정보가져오기
+    this.getMemberinfo(); //밴드소속 멤버정보 가져오기
+    //this.getVideolist();//밴드의 비디오리스트 가져오기
+    this.getMember(); //로그인 멤버 정보 가져오기
   },
   methods: {
     getBandinfo() {
@@ -337,9 +330,9 @@ export default {
       axios
         .get("/band/" + this.$route.params.bandno)
         .then((response) => {
-          this.band = response.data.object
+          this.band = response.data.object;
           //console.log(response.data.object.name)
-          })
+        })
         .catch((exp) => alert(exp + "밴드정보 조회에 실패하였습니다."));
     },
     getMemberinfo() {
@@ -347,9 +340,8 @@ export default {
       axios
         .get("/band/member/" + this.$route.params.bandno)
         .then((response) => {
-          this.members = response.data.object
-          //console.log(response.data.object)
-          })
+          this.members = response.data.object;
+        })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
     getVideolist() {
@@ -361,10 +353,13 @@ export default {
     },
     getMember() {
       //밴드장 여부 확인을 위해 불러옴
-      axios
-        .get("/member/" + this.memberid)
-        .then((response) => (this.member = response.data))
-        .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
+      for (let i = 0; i < this.members.length; i++) {
+        if (this.members[i].isChief == "1")
+          if (this.members[i].memberId == this.memberId) {
+            this.isChief = "1";
+            break;
+          }
+      }
     },
     memberInvite() {
       //밴드 멤버 초대
@@ -383,23 +378,22 @@ export default {
         this.upload();
       } else if (value == "공연신청") {
         this.$router.push("/band/reserve/" + this.$route.params.bandno);
-      } else if(value == "돌아가기"){
-        this.$router.push("/band/list/"+this.$route.params.bandno);
+      } else if (value == "돌아가기") {
+        this.$router.push("/band/list/" + this.$route.params.bandno);
       }
     },
     remove() {
       //밴드탈퇴
       //내 크루아이디 찾기
-      let crewid = '';
-      for(let i=0; i<this.member.length;i++){
-        if(this.member[i].memberid == this.memberid)
-        {
-          crewid = this.member[i].crewid;
+      let crewId = "";
+      for (let i = 0; i < this.members.length; i++) {
+        if (this.members[i].memberId == this.memberId) {
+          crewId = this.members[i].crewId;
           break;
         }
       }
       axios
-        .delete("/band/member/"+crewid)
+        .delete("/band/member/" + crewId)
         .then((response) => {
           if (response.data.data == "success") {
             alert("탈퇴에 성공하였습니다.");

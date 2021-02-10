@@ -220,12 +220,12 @@ export default {
   },
   created() {
     //백엔드와 연동 후 아래 주석 해제
-    /*
+    
       this.getBandinfo();//밴드정보가져오기
       this.getMemberinfo();//밴드소속 멤버정보 가져오기
       this.getVideolist();//밴드의 비디오리스트 가져오기
       this.getFollow(); //멤버의 팔로우 여부 가져오기
-      */
+      
   },
   methods: {
     getBandinfo() {
@@ -259,8 +259,8 @@ export default {
       //밴드 팔로우 여부 불러옴
       axios
         .post("/followcheck", {
-          memberid: this.memberid,
-          bandid: this.$route.params.bandno,
+          memberId: this.memberid,
+          bandId: this.$route.params.bandno,
         })
         .then((response) => {
           if(response.data.object != null)
@@ -272,11 +272,11 @@ export default {
         //팔로우상태변화 (true => false 바꿔줌)
         axios
         .put("/follow",{
-         memberid: this.memberid,
-          bandid: this.$route.params.bandno,
+          memberId: this.memberid,
+          bandId: this.$route.params.bandno,
         })
         .then((response) => {
-          if(response.data.data == "success"){
+          if(response.data.status){
             this.member.follow = !this.member.follow;
           }
         })

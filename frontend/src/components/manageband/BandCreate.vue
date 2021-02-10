@@ -15,7 +15,6 @@
         <v-file-input
           type="file"
           label="밴드프로필 이미지(추후 추가예정)"
-          @change="onChangeImages"
           ref="files"
           multiple
           disabled
@@ -39,13 +38,7 @@
         <v-btn color="error" class="mx-6" @click="bandlist()">돌아가기</v-btn>
       </v-col>
     </v-row>
-<!-- 
-  <v-row class="ma-auto">
-      <v-col cols="12" class="ma-auto">
-        <v-btn @click="show()">asdf</v-btn>
-      </v-col>
-    </v-row>
--->
+
   </v-main>
 </template>
 
@@ -80,34 +73,6 @@ export default {
     }),
   },
   methods: {
-    /*
-    onChangeImages(e) {//프로필 이미지 변경 시 
-      if(e == null){//이미지를 삭제하였을 시
-          this.band.img = "";
-          return;
-      }
-      console.log(e);
-      const file = e; //변화한 파일 거져옴
-      this.band.img = URL.createObjectURL(file); // FileURL 생성 후 저장
-      this.img = this.band.img;
-      console.log(this.band.img);
-    },*/
-    /*
-    onChangeImages(){
-      var file = document.querySelector('input[type=file]').files[0];
-      var reader = new FileReader();
-
-      reader.onload = function(e){
-        this.img = e.target.result;
-        console.log(this.band.img); 
-      };
-
-      reader.onerror=function(error){
-        alert(error);
-      };
-      reader.readAsDataURL(file);
-      console.log(file);
-    },*/
   
     show(){
       console.log(this.img);
@@ -126,9 +91,9 @@ export default {
             name : this.band.name
         })
         .then((response)=>{
-            if(response.data.data==="success"){//성공 시 알려주고 push
+            if(response.data.status){//성공 시 알려주고 push
                 alert("밴드 개설이 완료되었습니다!");
-                this.$router.push("/band/"+this.memberid);
+                this.$router.push("/band/list/"+this.memberid);
             }else{
                 alert("이미 존재하는 밴드명입니다!")
                 console.log(response.data)

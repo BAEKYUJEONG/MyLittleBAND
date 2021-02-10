@@ -25,10 +25,10 @@
     </v-row>
   
     <v-row v-else >
-      <v-col v-for="band in followBand" :key="band.bandid" cols="2">
+      <v-col v-for="band in followBand" :key="band.bandId" cols="2">
         <v-tooltip bottom nudge-top="5">
           <template v-slot:activator="{ on, attrs }">
-            <v-card style="border-radius: 50%" v-bind="attrs" v-on="on" @click="bandinfo(band.bandid)">
+            <v-card style="border-radius: 50%" v-bind="attrs" v-on="on" @click="bandinfo(band.bandId)">
               <!-- 밴드이미지가 없을 때 -->
               <v-img
                 v-if="band.img == ''"
@@ -63,7 +63,7 @@ import axiosCommon from "../../axios/axios-common";
 export default {
   created() {
     //팔로우 중인 밴드 정보 가져오기
-    //this.getFollowBand();
+    this.getFollowBand();
   },
   data() {
     return {
