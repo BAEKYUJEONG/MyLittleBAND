@@ -4,7 +4,7 @@
       <v-layout column align-center>
         <v-flex>
           <!-- 필터 영역 -->
-          <v-col >
+          <v-col>
             <v-autocomplete
               v-model="friends"
               :disabled="isUpdating"
@@ -58,27 +58,30 @@
             </v-autocomplete>
           </v-col>
         </v-flex>
-        <v-flex>
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="msg"
-                label="검색어"
-                placeholder="원하는 검색어를 입력하세요."
-                append-outer-icon = "mdi-magnify"
-                @click:append-outer="onSearch"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </v-flex>
+
+        <!-- 검색 영역 -->
+
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-model="msg"
+              label="검색어"
+              placeholder="원하는 검색어를 입력하세요."
+              append-outer-icon="mdi-magnify"
+              @click:append-outer="onSearch"
+            ></v-text-field>
+          </v-col>
+        </v-row>
       </v-layout>
     </v-container>
 
+    <!-- 비디오 리스트 영역 -->
     <v-container grid-list-sm>
       <v-layout justify-center column wrap>
         <v-flex xs12 sm9>
           <!-- 카드 뷰 시작 -->
           <v-layout row wrap>
+            <!-- 백엔드 연동 시 : v-for="card in getVideos" -->
             <v-flex
               v-for="card in cards"
               :key="card.title"
@@ -88,7 +91,7 @@
                 <v-img
                   :src="card.src"
                   height="200px"
-                  @click="onClick"
+                  @click="onVideo(card.no)"
                   style="cursor: pointer"
                 >
                 </v-img>
@@ -111,7 +114,7 @@
                   <v-spacer></v-spacer>
                   <v-btn icon @click="card.show = !card.show">
                     <v-icon>{{
-                      card.show ? "keyboard_arrow_down" : "keyboard_arrow_up"
+                      card.show ? 'keyboard_arrow_down' : 'keyboard_arrow_up'
                     }}</v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -126,93 +129,112 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-row>
+      <v-col cols="auto">
+        <v-btn block outlined color="blue" @click="onAdd"> 글쓰기 </v-btn>
+      </v-col>
+    </v-row>
   </v-main>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
+const VideoStore = 'VideoStore';
+
 export default {
   data() {
     return {
-      friends:[],
-      msg:'',
+      friends: [],
+      msg: '',
       isEditing: false,
       isUpdating: false,
-      name: "밴드 속성",
+      name: '밴드 속성',
       people: [
-        { header: "컬러" },
-        { name: "빨강", group: "색깔" },
-        { name: "보라", group: "색깔" },
-        { name: "노랑", group: "색깔" },
+        { header: '컬러' },
+        { name: '빨강', group: '색깔' },
+        { name: '보라', group: '색깔' },
+        { name: '노랑', group: '색깔' },
         { divider: true },
-        { header: "장르" },
-        { name: "락", group: "장르" },
-        { name: "팝", group: "장르" },
-        { name: "재즈", group: "장르" },
+        { header: '장르' },
+        { name: '락', group: '장르' },
+        { name: '팝', group: '장르' },
+        { name: '재즈', group: '장르' },
       ],
 
       cards: [
         {
-          title: "201215 싸피밴드",
-          src: require("@/assets/image/1.jpg"),
+          title: '201215 싸피밴드',
+          src: require('@/assets/image/1.jpg'),
           flex: 4,
           show: false,
-          content: "싸피밴드의 공연입니다",
+          content: '싸피밴드의 공연입니다',
         },
         {
-          title: "191113 써니밴드",
-          src: require("@/assets/image/2.jpg"),
+          title: '191113 써니밴드',
+          src: require('@/assets/image/2.jpg'),
           flex: 4,
           show: false,
-          content: "써니밴드 공연영상",
+          content: '써니밴드 공연영상',
         },
         {
-          title: "싸피홀 200303",
-          src: require("@/assets/image/3.jpg"),
+          title: '싸피홀 200303',
+          src: require('@/assets/image/3.jpg'),
           flex: 4,
           show: false,
-          content: "싸피홀에서의 공연",
+          content: '싸피홀에서의 공연',
         },
         {
-          title: "200903 전공밴드",
-          src: require("@/assets/image/4.jpg"),
+          title: '200903 전공밴드',
+          src: require('@/assets/image/4.jpg'),
           flex: 4,
           show: false,
-          content: "전공밴드 공연영상입니다.",
+          content: '전공밴드 공연영상입니다.',
         },
         {
-          title: "19회 싸피데이 공연",
-          src: require("@/assets/image/5.jpg"),
+          title: '19회 싸피데이 공연',
+          src: require('@/assets/image/5.jpg'),
           flex: 4,
           show: false,
-          content: "싸피데이 공연영상입니다.",
+          content: '싸피데이 공연영상입니다.',
         },
         {
-          title: "27회 싸피 정기공연",
-          src: require("@/assets/image/6.jpg"),
+          title: '27회 싸피 정기공연',
+          src: require('@/assets/image/6.jpg'),
           flex: 4,
           show: false,
-          content: "싸피...",
+          content: '싸피...',
         },
       ],
     };
   },
+  computed: {
+    ...mapGetters(VideoStore, ['getVideos']),
+  },
   methods: {
-    onSearch(){
+    ...mapActions(VideoStore, ['reqVideos', 'reqVideo']),
+
+    onSearch() {
       // 사용자가 원하는 검색어를 눌렀을 때, 검색이 되도록 처리.
       //
-      this.msg = ''
+      this.msg = '';
     },
-    onClick() {
+    onVideo(videonum) {
       // 비디오를 클릭했을 때, 비디오가 선택되도록 처리.
-      this.$router.push({ name: "videodetail" });
+      this.reqVideo(videonum).then((response) => {
+        if (!response) this.$router.push('/video/' + videonum);
+        else alert(response.msg);
+      });
     },
     remove(item) {
       const index = this.friends.indexOf(item.name);
       if (index >= 0) this.friends.splice(index, 1);
     },
+    onAdd() {
+      this.$router.push({ name: 'videocreate' });
+    },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
