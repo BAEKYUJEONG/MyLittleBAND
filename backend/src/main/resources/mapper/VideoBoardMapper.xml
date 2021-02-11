@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.blog.mapper.VideoBoardMapper">	
+	<select id="selectAll" resultType="VideoBoard">
+		select * from videoboard
+	</select>
+	
+	<select id="select" resultType="VideoBoard">
+		select * from videoboard
+		where boardId = #{boradId}
+	</select>
+	
+	<insert id="insert" parameterType="VideoBoard">
+		insert into videoboard (boardId, boardSubject, boardContent, boardDate, boardVideoUrl, boardThumnail, bandId)
+		values (#{boardId}, #{boardSubject}, #{boardContent}, #{boardDate}, #{boardVideoUrl}, #{boardThumnail}, #{bandId})
+	</insert>
+	
+	<update id="update" parameterType="VideoBoard">
+		update videoboard
+		set boardSubject = #{boardSubject}, boardContent = #{boardContent}, boardThumbnail = #{boardThumbnail}
+		where boardId = #{boardId}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from videoboard
+		where boardId = #{boardId}
+	</delete>
+</mapper>
