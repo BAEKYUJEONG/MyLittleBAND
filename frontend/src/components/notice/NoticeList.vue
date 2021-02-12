@@ -8,7 +8,7 @@
         </v-flex>
 
         <!-- icon - notice create --> 
-        <v-flex text-right>
+        <v-flex text-right v-if="manager=='1'">
           <v-btn
             icon
             color="primary"
@@ -67,7 +67,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 const NoticeStore = "NoticeStore";
-
+const MemberStore = "MemberStore";
 export default {
   data() {
     return {
@@ -76,6 +76,7 @@ export default {
   },
   computed: {
     ...mapGetters(NoticeStore, ["getNotices"]),
+    ...mapGetters(MemberStore, { manager: "getManager"}),
   },
   methods: {
     ...mapActions(NoticeStore, ["reqNotices", "reqNotice"]),

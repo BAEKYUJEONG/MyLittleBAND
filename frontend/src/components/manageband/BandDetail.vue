@@ -12,17 +12,12 @@
       <!-- 밴드 프로필 이미지-->
       <v-col cols="4" class="ma-auto">
         <v-spacer></v-spacer>
-        <v-card
-          max-height="300"
-          max-width="300"
-          id="rounded-card"
-          class="ma-auto"
-        >
+        <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
             <v-img
               class="ma-auto mp-4"
-              max-height="100%"
-              max-width="100%"
+              height="300"
+              width="300"
               style="border-radius: 50%"
               contain
               :src="band.img"
@@ -168,7 +163,8 @@ export default {
     return {
       dialog: false,
       //로그인 한 아이디의 정보
-      isChief: "1",
+      isChief: "0",
+      crewId: "",
       chief: [
         //밴드장일 때 나오는 버튼들
         {
@@ -194,39 +190,8 @@ export default {
         { text: "Month", value: "month" },
       ],
 
-      band: {
-        //밴드정보
-        name: "잘하는밴드",
-        intro: "홍대에 터를 두고 활동하는 잘하는밴드입니다.",
-        img: require("@/assets/image/pepe.jpg"),
-      },
-      members: [
-        //소속멤버정보
-        {
-          name: "이보드",
-          session: "키보드",
-          crewId: 1,
-          memberId: 2,
-        },
-        {
-          name: "최베스",
-          session: "베이스",
-          crewId: 2,
-          memberId: 3,
-        },
-        {
-          name: "김일렉",
-          session: "일렉기타",
-          crewId: 3,
-          memberId: 4,
-        },
-        {
-          name: "최드럼",
-          session: "드럼",
-          crewId: 4,
-          memberId: 5,
-        },
-      ],
+      band: {}, //밴드정보
+      members: [], //소속멤버정보
       videolist: [
         {
           title: "가을 홍대공연",
@@ -259,7 +224,6 @@ export default {
     this.getBandinfo(); //밴드정보가져오기
     this.getMemberinfo(); //밴드소속 멤버정보 가져오기
     //this.getVideolist();//밴드의 비디오리스트 가져오기
-    this.getMember(); //로그인 멤버 정보 가져오기
   },
   methods: {
     getBandinfo() {
@@ -278,6 +242,7 @@ export default {
         .get("/band/member/" + this.$route.params.bandno)
         .then((response) => {
           this.members = response.data.object;
+          this.getMember(); //로그인 멤버 정보 가져오기
         })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
@@ -291,11 +256,11 @@ export default {
     getMember() {
       //밴드장 여부 확인을 위해 불러옴
       for (let i = 0; i < this.members.length; i++) {
-        if (this.members[i].isChief == "1")
-          if (this.members[i].memberId == this.memberId) {
-            this.isChief = "1";
-            break;
-          }
+        if (this.members[i].memberId == this.memberId) {
+          if (this.members[i].isChief == "1") this.isChief = "1";
+        this.crewId = this.members[i].crewId;
+        break;
+        }
       }
     },
     memberInvite() {
@@ -316,26 +281,18 @@ export default {
       } else if (value == "공연신청") {
         this.$router.push("/band/reserve/" + this.$route.params.bandno);
       } else if (value == "돌아가기") {
-        this.$router.push("/band/list/" + this.$route.params.bandno);
+        this.$router.push("/band/list/" + this.memberId);
       }
     },
     remove() {
       //밴드탈퇴
-      //내 크루아이디 찾기
-      let crewId = "";
-      for (let i = 0; i < this.members.length; i++) {
-        if (this.members[i].memberId == this.memberId) {
-          crewId = this.members[i].crewId;
-          break;
-        }
-      }
       axios
-        .delete("/band/member/" + crewId)
+        .delete("/band/member/" + this.crewId)
         .then((response) => {
           if (response.data.data == "success") {
             alert("탈퇴에 성공하였습니다.");
             this.dialog = false;
-            this.$router.push({ name: "main" });
+            this.$router.push("/band/list/"+this.memberId);
           }
         })
         .catch((exp) => alert(exp + "탈퇴에 실패하였습니다."));
@@ -348,7 +305,7 @@ export default {
   },
   components: {
     BandCalender,
-  }
+  },
 };
 </script>
 

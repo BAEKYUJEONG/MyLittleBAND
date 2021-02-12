@@ -8,7 +8,7 @@
       </v-col>
     </v-row>
     <v-row justify="center" v-if="followBand.length == 0">
-      <v-col>
+      <v-col cols="6">
         <v-spacer />
         <v-alert
           align="center"

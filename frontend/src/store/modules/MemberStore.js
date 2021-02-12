@@ -42,7 +42,7 @@ const MemberStore = {
       //로그아웃 시 변수 초기화
       state.isLogin = false;
       state.memberId = null;
-      state.manager = false;
+      state.manager = '0';
     },
   },
 
