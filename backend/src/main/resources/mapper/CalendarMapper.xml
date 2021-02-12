@@ -13,15 +13,15 @@
 		select calendarId, title, start, end from calendar where bandId=#{bandId}
 	</select>
 	
-	<select id="bandcalendardetail" resultType="CalendarRes">
+	<select id="bandcalendardetail" resultType="Calendar">
 		select calendarId, title, start, end, content from calendar where bandId=#{bandId} and calendarId=#{calendarId}
 	</select>
 	
-	<insert id="bandcalendaradd" parameterType="CalendarReq">
+	<insert id="bandcalendaradd" parameterType="Calendar">
 		insert into calendar values(null, #{req.start}, #{req.end},null,#{bandId},null, #{req.title}, #{req.content})
 	</insert>
 	
-	<update id="bandcalendarupdate" parameterType="CalendarReq">
+	<update id="bandcalendarupdate" parameterType="Calendar">
 		update calendar set start= #{req.start}, end= #{req.end}, title=#{req.title},content= #{req.content} where bandId=#{bandId} and calendarId=#{calendarId}
 	</update>
 	

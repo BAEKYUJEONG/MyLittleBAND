@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.CalendarDao;
 import com.web.blog.dto.Calendar;
-import com.web.blog.dto.CalendarReq;
-import com.web.blog.dto.CalendarRes;
 
 
 @Service
@@ -30,17 +28,17 @@ public class CalendarServiceImpl implements CalendarService{
 	}
 
 	@Override
-	public CalendarRes bandcalendardetail(String bandId, String calendarId) {
+	public Calendar bandcalendardetail(String bandId, String calendarId) {
 		return dao.bandcalendardetail(bandId, calendarId);
 	}
 
 	@Override
-	public void bandcalendaradd(String bandId, CalendarReq req) {
+	public void bandcalendaradd(String bandId, Calendar req) {
 		dao.bandcalendaradd(bandId, req);
 	}
 
 	@Override
-	public void bandcalendarupdate(String bandId, String calendarId, CalendarReq req) {
+	public void bandcalendarupdate(String bandId, String calendarId, Calendar req) {
 		dao.bandcalendarupdate(bandId, calendarId, req);
 	}
 

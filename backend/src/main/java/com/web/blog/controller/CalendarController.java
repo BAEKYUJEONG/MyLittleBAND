@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.Calendar;
-import com.web.blog.dto.CalendarReq;
-import com.web.blog.dto.CalendarRes;
 import com.web.blog.dto.Like;
 import com.web.blog.dto.LikeReq;
 import com.web.blog.dto.Member;
@@ -36,12 +34,13 @@ import io.swagger.annotations.ApiResponses;
 //        @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 public class CalendarController {
 	@Autowired
 	CalendarService service;
 	
+	/*
 	@PostMapping(value = "/calendar/{bandId}/{month}")
 	@ApiOperation(value = "밴드캘린더(월)", notes = "성공 시 밴드캘린더 받기 완료")
 	@ApiResponses({
@@ -62,7 +61,8 @@ public class CalendarController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
-
+	*/
+	
 	@GetMapping(value = "/calendar/{bandId}")
 	@ApiOperation(value = "밴드캘린더 요청", notes = "성공 시 밴드캘린더 받기 완료")
 	public Object bandcalendar(@PathVariable String bandId) {
@@ -83,7 +83,8 @@ public class CalendarController {
 	@GetMapping(value = "/calendar/{bandId}/{calendarId}")
 	@ApiOperation(value = "밴드캘린더 세부일정 요청", notes = "성공 시 밴드캘린더 세부일정 받기 완료")
 	public Object bandcalendardetail(@PathVariable String bandId, @PathVariable String calendarId) {
-		CalendarRes list=service.bandcalendardetail(bandId, calendarId);
+		Calendar list=service.bandcalendardetail(bandId, calendarId);
+		
 		if(list!=null) {
 			final BasicResponse result = new BasicResponse();
 	        result.status = true;
@@ -99,7 +100,7 @@ public class CalendarController {
 	
 	@PostMapping(value = "/calendar/{bandId}")
 	@ApiOperation(value = "밴드캘린더 작성", notes = "성공 시 밴드캘린더 작성 완료")
-	public Object bandcalendaradd(@PathVariable String bandId, @RequestBody CalendarReq req) {
+	public Object bandcalendaradd(@PathVariable String bandId, @RequestBody Calendar req) {
 		service.bandcalendaradd(bandId, req);
 		final BasicResponse result = new BasicResponse();
         result.status = true;
@@ -110,7 +111,7 @@ public class CalendarController {
 	
 	@PutMapping(value = "/calendar/{bandId}/{calendarId}")
 	@ApiOperation(value = "밴드캘린더 수정", notes = "성공 시 밴드캘린더 수정 완료")
-	public Object bandcalendarupdate(@PathVariable String bandId, @PathVariable String calendarId,  @RequestBody CalendarReq req) {
+	public Object bandcalendarupdate(@PathVariable String bandId, @PathVariable String calendarId,  @RequestBody Calendar req) {
 		service.bandcalendarupdate(bandId, calendarId, req);
 		final BasicResponse result = new BasicResponse();
         result.status = true;
