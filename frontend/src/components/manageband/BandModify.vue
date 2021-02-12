@@ -60,7 +60,15 @@
       </v-col>
       <v-col cols="1">
         <v-btn
-          v-if="member.memberId == memberId || isChief == '1'"
+          v-if="member.memberId != memberId && isChief == '1'"
+          color="error"
+          class="white--text mx-4"
+          @click="OpenRemoveMember(member.crewId)"
+        >
+          밴드강퇴
+        </v-btn>
+        <v-btn
+          v-else-if="member.memberId == memberId && isChief == '0'"
           color="error"
           class="white--text mx-4"
           @click="OpenRemoveMember(member.crewId)"
@@ -81,11 +89,11 @@
       </v-col>
     </v-row>
 
-    <!-- 밴드탈퇴 모달창 -->
+    <!-- 밴드강퇴 모달창 -->
     <v-dialog v-model="dialog.Member" persistent max-width="290">
       <v-card style="opacity: 1">
-        <v-card-title class="headline"> 밴드탈퇴 </v-card-title>
-        <v-card-text>정말 탈퇴하시겠습니까?</v-card-text>
+        <v-card-title class="headline"> 밴드강퇴 </v-card-title>
+        <v-card-text>정말 강퇴하시겠습니까?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click="removeMember()">
@@ -164,7 +172,7 @@ export default {
   data: () => {
     return {
       tempId: "", //강퇴 or 밴드장 위임 할 크루원Id
-      
+
       dialog: {
         //모달창 관리
         Member: false, //멤버탈퇴
@@ -172,40 +180,14 @@ export default {
         Crew: false, //밴드해체
         imgbtn: false, //이미지 변경시 버튼
       },
-      isChief: "1",//로그인사용자의 밴드장여부
-      crewId: '',//로그인사용자의 crewId
+      isChief: "0", //로그인사용자의 밴드장여부
+      crewId: "", //로그인사용자의 crewId
       band: {
         imgdata: null, //null로 설정해줘야함
         imgurl: "",
       },
       sessions: ["보컬", "키보드", "드럼", "일렉기타", "베이스"],
-      members: [
-        //소속멤버정보
-        {
-          name: "이보드",
-          session: "키보드",
-          crewId: 1,
-          memberId: 12,
-        },
-        {
-          name: "최베스",
-          session: "베이스",
-          crewId: 2,
-          memberId: 3,
-        },
-        {
-          name: "김일렉",
-          session: "일렉기타",
-          crewId: 3,
-          memberId: 4,
-        },
-        {
-          name: "최드럼",
-          session: "드럼",
-          crewId: 4,
-          memberId: 5,
-        },
-      ],
+      members: [],
     };
   },
   computed: {
@@ -218,34 +200,20 @@ export default {
     //밴드정보가져오기
     this.getBandinfo();
     this.getMemberinfo(); //밴드소속 멤버정보 가져오기
-    this.getMember(); //로그인 멤버 정보 가져오기
+    
   },
   methods: {
     onChangeImage() {
       //밴드 이미지 수정
-      this.encodeImage(this.band.imgdata); //DB 저장 위해 base64 형태로 encoding
       this.dialog.imgbtn = true; //이미지 저장버튼 생성
     },
-    encodeImage(input) {
-      //이미지 인코딩
-      if (input) {
-        const reader = new FileReader(); //reader를 이용해서 읽어줘야함
-        reader.onload = (e) => {
-          this.band.imgurl = e.target.result; //결과값을 url에 저장
-          //console.log(this.base64Img);
-        };
-        reader.readAsDataURL(input);
-      }
-    },
+
     async submit() {
       let formData = new FormData(); //정보 전달을 위해 formdata 생성
-      await formData.append("image", this.band.imgdata); //이미지 정보전달
-      await formData.append("baseurl", this.band.imgurl); //이미지 base64url이 전송될 부분
-      console.log(formData.get("image"));
-      //this.formData = formData;
+      await formData.append("file", this.band.imgdata); //이미지 정보전달
 
       axiosCommon
-        .post("/image", formData, {
+        .post("/upload/band/"+this.$route.params.bandno, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((rec) => {
@@ -272,7 +240,7 @@ export default {
         .get("/band/member/" + this.$route.params.bandno)
         .then((response) => {
           this.members = response.data.object;
-          //console.log(response.data.object)
+          this.getMember(); //로그인 멤버 정보 가져오기
         })
         .catch((exp) => alert(exp + "소속 멤버 조회에 실패하였습니다."));
     },
@@ -319,12 +287,13 @@ export default {
       axiosCommon
         .delete("/band/member/" + this.tempId)
         .then((response) => {
-          if (response.data.data == "success") {
-            alert("삭제성공!");
+          if (response.data.status) {
+            alert("강퇴성공!");
             this.getMemberinfo(); //멤버정보 재호출
           }
         })
         .catch((exp) => alert(exp + "밴드삭제에 실패하였습니다."));
+      this.dialog.Member = false;
     },
     OpenChangeChief(val) {
       this.dialog.Chief = true;
@@ -332,17 +301,18 @@ export default {
     },
     changechief() {
       //밴드장 위임
+      let frm = new FormData();
+      frm.append("mandatecrewId", this.tempId);
       axiosCommon
-        .put("/band/member/chief/" + this.crewId, {
-          mandatecrewId: this.tempId,
-        })
+        .put("/band/member/chief/" + this.crewId, frm)
         .then((response) => {
-          if (response.data.data == "success") {
+          if (response.data.status) {
             alert("밴드장이 변경되었습니다!");
-            this.getMemberinfo(); //멤버정보 재호출
+            this.$router.push("/band/detail/"+this.$route.params.bandno);
           }
         })
-        .catch((exp) => alert(exp + "밴드삭제에 실패하였습니다."));
+        .catch((exp) => alert(exp + "밴드장 변경에 실패하였습니다."));
+      this.dialog.Chief = false;
     },
     removeCrew() {
       //밴드해체
@@ -350,12 +320,12 @@ export default {
         .delete("/band/" + this.$route.params.bandno)
         .then((response) => {
           if (response.data.data == "success") {
-            alert("삭제성공!");
-            this.$router.push("/");
+            alert("해체성공!");
+            this.$router.push("/band/list/"+this.$route.params.bandno);
           }
           //console.log(response.data.object.name)
         })
-        .catch((exp) => alert(exp + "밴드삭제에 실패하였습니다."));
+        .catch((exp) => alert(exp + "밴드해체에 실패하였습니다."));
     },
   },
 };
