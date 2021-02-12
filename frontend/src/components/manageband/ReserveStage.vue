@@ -290,11 +290,12 @@ export default {
       this.Dialog.modify = true;
     },
     modify() {
+      let frm = new FormData();
+      frm.append("title",this.TmpShow.title);
+      frm.append("showContent",this.TmpShow.showContent);
+
       axiosCommon
-        .put("/show/" + this.TmpShow.showId, {
-          title: this.TmpShow.title,
-          showContent: this.TmpShow.showContent,
-        })
+        .put("/show/" + this.TmpShow.showId, frm)
         .then((response) => {
           if (response.data.status) {
             alert("수정 성공!");

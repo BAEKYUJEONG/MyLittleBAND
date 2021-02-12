@@ -55,11 +55,17 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon :color="color" v-bind="attrs" v-on="on">
               <v-icon
+                v-if="member.follow"
                 size="100"
-                @click="setFollow()"
-                :color="member.follow ? 'red' : 'grey'"
+                @click="unFollow()"
+                color="red"
                 >mdi-heart</v-icon
               >
+              <v-icon v-else
+              size="100"
+                @click="setFollow()"
+                color="gray"
+                >mdi-heart</v-icon>
             </v-btn>
           </template>
           <span v-if="!member.follow">밴드 팔로우하기</span>
@@ -158,6 +164,7 @@ export default {
       color: "",
       member: {
         follow: false, //true이면 icon이 빨간색, false면 회색
+        followId : '',
       },
       band: {
         //밴드정보
@@ -215,7 +222,7 @@ export default {
   computed: {
     ...mapGetters(MemberStore, {
       //MemberStore 모듈 내 getters 사용
-      memberid: "getMemberId", //memberid 변수에 getMemberId 리턴값 저장
+      memberId: "getMemberId", //memberid 변수에 getMemberId 리턴값 저장
     }),
   },
   created() {
@@ -223,7 +230,7 @@ export default {
     
       this.getBandinfo();//밴드정보가져오기
       this.getMemberinfo();//밴드소속 멤버정보 가져오기
-      this.getVideolist();//밴드의 비디오리스트 가져오기
+      // this.getVideolist();//밴드의 비디오리스트 가져오기
       this.getFollow(); //멤버의 팔로우 여부 가져오기
       
   },
@@ -258,45 +265,52 @@ export default {
     getFollow() {
       //밴드 팔로우 여부 불러옴
       axios
-        .post("/followcheck", {
-          memberId: this.memberid,
-          bandId: this.$route.params.bandno,
-        })
+        .get("/followcheck?bandId="+this.$route.params.bandno+"&memberId="+this.memberId)
         .then((response) => {
-          if(response.data.object != null)
-          this.member.follow = true;
+          if(response.data.status){
+            this.member.follow = true;
+            this.member.followId = response.data.object.followId;
+          }
         })
-        .catch((exp) => alert(exp + "멤버정보 조회에 실패하였습니다."));
+        .catch((exp) => {
+          console.log(exp + "언팔로우중");
+          this.member.follow = false;
+          });
     },
     setFollow() {
-        //팔로우상태변화 (true => false 바꿔줌)
+        //팔로우상태변화 (false => true 바꿔줌)
+        //팔로우시켜줌
         axios
-        .put("/follow",{
-          memberId: this.memberid,
+        .post("/follow",{
+          memberId: this.memberId,
           bandId: this.$route.params.bandno,
         })
         .then((response) => {
           if(response.data.status){
-            this.member.follow = !this.member.follow;
+            this.member.follow = true;
+            this.member.followId = response.data.object.followId;
           }
         })
         .catch((exp) => alert(exp + "팔로우 상태 변화에 실패하였습니다."));
-        console.log("팔로우상태 : 팔로우취소");
+        console.log("팔로우상태 : 팔로우");
       
     },
-    memberModify() {
-      //회원 팔로우 상태 변경
-      axios
-        .put("/member/" + this.memberid, { member: this.member })
-        .then((response) => {
-          if (response.data == "success") {
-            console.log("팔로우 상태변화 성공");
+    unFollow() {
+      //팔로우상태변화 (true => false 바꿔줌)
+        //언팔로우시켜줌
+        axios
+        .delete("/follow/followlist/"+this.member.followId)
+        .then((response)=>{
+          if(response.data.status){
+            this.member.follow = false;
+            this.member.followId = "";
           }
         })
-        .catch((exp) => alert(exp + "수정에 실패하였습니다."));
+        .catch((exp) => alert(exp + "팔로우 상태 변화에 실패하였습니다."));
+        console.log("팔로우상태 : 언팔로우");
     },
     list() {
-      this.$router.push("/band/list/" + this.$route.params.bandno);
+      this.$router.push("/band/list/" + this.memberId);
     },
   },
 };
