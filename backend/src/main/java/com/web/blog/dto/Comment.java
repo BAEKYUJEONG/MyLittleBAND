@@ -2,18 +2,20 @@ package com.web.blog.dto;
 
 public class Comment {
 	private String commentId;
-	private String memberId;
 	private String boardId;
+	private String memberId;
+	private String content;
 	
 	public Comment() {
 		
 	}
 
-	public Comment(String commentId, String memberId, String boardId) {
+	public Comment(String commentId, String boardId, String memberId, String content) {
 		super();
 		this.commentId = commentId;
-		this.memberId = memberId;
 		this.boardId = boardId;
+		this.memberId = memberId;
+		this.content = content;
 	}
 
 	public String getCommentId() {
@@ -24,6 +26,14 @@ public class Comment {
 		this.commentId = commentId;
 	}
 
+	public String getBoardId() {
+		return boardId;
+	}
+
+	public void setBoardId(String boardId) {
+		this.boardId = boardId;
+	}
+
 	public String getMemberId() {
 		return memberId;
 	}
@@ -32,12 +42,12 @@ public class Comment {
 		this.memberId = memberId;
 	}
 
-	public String getBoardId() {
-		return boardId;
+	public String getContent() {
+		return content;
 	}
 
-	public void setBoardId(String boardId) {
-		this.boardId = boardId;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
 }
