@@ -14,14 +14,14 @@
     </v-row>
 
     <v-row>
-      <v-col v-for="band in suggestBand" :key="band.bandid" cols="2">
+      <v-col v-for="band in suggestBand" :key="band.bandId" cols="2">
         <v-tooltip bottom nudge-top="5">
           <template v-slot:activator="{ on, attrs }">
             <v-card
               style="border-radius: 50%"
               v-bind="attrs"
               v-on="on"
-              @click="bandinfo(band.bandid)"
+              @click="bandinfo(band.bandId)"
             >
               <!-- 밴드이미지가 없을 때 -->
               <v-img
@@ -29,7 +29,8 @@
                 src="../../assets/image/pepe.jpg"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                max-height="200px"
+                max-height="200"
+                max-width="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
               </v-img>
@@ -39,7 +40,8 @@
                 :src="band.img"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                max-height="200px"
+                max-height="200"
+                max-width="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
               </v-img>
@@ -55,16 +57,19 @@
 <script>
 import axiosCommon from '../../axios/axios-common';
 export default {
-  created() {
+  async created() {
     //추천밴드리스트 가져오기
-    //this.getFollowBand(); //팔로우중인 밴드
-    //this.getbandlist();   //내가 소속된 밴드
-    //this.getSuggestBand();//추천밴드리스트 가져오기
+    await this.getFollowBand(); //팔로우중인 밴드
+    await this.getbandlist();   //내가 소속된 밴드
+    this.getSuggestBand();//추천밴드리스트 가져오기
+  },
+  watch:{//route이동시에도 created함수를 호출할 수 있도록 함
+    '$route' : 'created'
   },
   methods: {
     BandSuggestPage() {
       //밴드 추천 페이지로 이동
-      //this.$router.push("/findfollow");
+      this.$router.push("/findfollowband/"+this.$route.params.memberno);
     },
     bandinfo(val) {
       //밴드소개페이지로 이동
@@ -72,10 +77,38 @@ export default {
     },
     getSuggestBand() {
         //추천밴드목록 만들기
-        
+        //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
+        //그중에서 이미 팔로우 중인 밴드는 제외하기
+        axiosCommon
+        .get("/followlist/1")
+        .then((response)=>{
+          if(response.data.status){
+            this.tmplist = response.data.object;
+            this.makeSuggestBand();
+          }
+        })
+        .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
+    },
+    makeSuggestBand(){
+      here : for(let i = 0; i < this.tmplist.length; i++){
+        //추천밴드목록까지 반복
 
-        //전체밴드목록 중에서 내가 소속된 밴드 제외, 내가 팔로우 중인 밴드 제외 후 랜덤으로 추출
+        for(let j=0; j< this.bandlist.length; j++){
+          //소속밴드목록만큼 반복
+          if(this.tmplist[i].bandId == this.bandlist[j].bandId){
+            continue here;
+          }
+        }
 
+        for(let j=0; j< this.followBand.length; j++){
+          //팔로우중인 밴드목록만큼 반복
+          if(this.tmplist[i].bandId == this.followBand[j].bandId){
+            continue here;
+          }
+        }
+        //해당하는게 없으면 추천밴드에 입력
+        this.suggestBand.push(this.tmplist[i]);
+      }
     },
     getFollowBand() {
       //팔로우 중인 밴드리스트 가져오기
@@ -99,29 +132,30 @@ export default {
     return {
         bandlist:[],
         followBand:[],//추천밴드를 만드는데 사용됨
+        tmplist:[],
       suggestBand: [
         {
-          bandid: 4,
+          bandId: 4,
           name: "추천밴드명 뭐로하지",
           img: "",
         },
         {
-          bandid: 5,
+          bandId: 5,
           name: "쉽지가않아요",
           img: "",
         },
         {
-          bandid: 6,
+          bandId: 6,
           name: "그래도추천인데",
           img: "",
         },
         {
-          bandid: 7,
+          bandId: 7,
           name: "밴드5개는있어야",
           img: "",
         },
         {
-          bandid: 8,
+          bandId: 8,
           name: "구실이있어보여",
           img: "",
         },
