@@ -33,6 +33,12 @@ public class Calendar {
 		this.title = title;
 	}
 
+	@Override
+	public String toString() {
+		return "Calendar [calendarId=" + calendarId + ", start=" + start + ", end=" + end + ", content=" + content
+				+ ", bandId=" + bandId + ", photo=" + photo + ", time=" + time + ", title=" + title + "]";
+	}
+
 	public String getCalendarId() {
 		return calendarId;
 	}

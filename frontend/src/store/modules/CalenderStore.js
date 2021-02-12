@@ -1,44 +1,17 @@
 import axios from "../../axios/axios-common";
 
-const ExampleStore = {
+const CalenderStore = {
   namespaced: true,
   state: {
-    events: [
-      {
-        no: 1,
-        title: "일정 1",
-        start: "2021-02-06",
-        end: "2021-02-15",
-      },
-      {
-        no: 2,
-        title: "일정 2",
-        start: "2021-02-05",
-        end: "2021-02-21",
-      },
-      {
-        no: 3,
-        title: "일정 3",
-        start: "2021-02-13",
-        end: "2021-02-16",
-      },
-    ],
-    selectedEvent: {
-      no: 2,
-      title: "일정 제목",
-      content: "일정 내용이 들어옵니다\n\
-사용자가 입력한 내용이 표시됩니다\n\
-공유할 내용을 자유롭게 쓰는 용도로 사용합니다",
-      start: "2021-02-05",
-      end: "2021-02-21",
-    },
+    events: [],
+    selectedEvent: {},
   },
   getters: {
     getEvents(state) {
       let events = [];
       state.events.forEach((val) => {
         events.push({
-          no: val.no,
+          no: val.calendarId,
           name: val.title,
           start: new Date(val.start+"T00:00:00"),
           end: new Date(val.end+"T23:59:59"),
@@ -51,7 +24,7 @@ const ExampleStore = {
     getSelectedEvent(state) {
       return {
         no: state.selectedEvent.no,
-        name: state.selectedEvent.title,
+        name: state.selectedEvent.name,
         content: state.selectedEvent.content,
         start: state.selectedEvent.start,
         end: state.selectedEvent.end,
@@ -71,9 +44,9 @@ const ExampleStore = {
     // 일정 받아오기
     reqEvents(context, bandno) {
       return axios
-        .get("/calender/" + bandno)
+        .get("/calendar/" + bandno)
         .then((response) => {
-          context.commit("setEvents", response.data.data);
+          context.commit("setEvents", response.data.object);
         })
         .catch((error) => {
           console.log(error);
@@ -82,20 +55,35 @@ const ExampleStore = {
     // 세부 일정 받아오기
     reqEvent(context, info) {
       return axios
-        .get("/calender/" + info.bandno + "/" + info.no)
+        .get("/calendar/" + info.bandno + "/" + info.no)
         .then((response) => {
-          if (response.data.status)
-            context.commit("setEvent", response.data.data);
-          else return { result: false, msg: "세부 일정을 받아오지 못했습니다" };
+          if (response.data.status){
+            console.log(response.data)
+            context.commit("setSelectedEvent", {
+              no: info.no,
+              name: response.data.object.title,
+              content: response.data.object.content,
+              start: response.data.object.start,
+              end: response.data.object.end,
+              color: info.color,
+            });
+          } else return { result: false, msg: "세부 일정을 받아오지 못했습니다" };
         })
         .catch((error) => {
           console.log(error);
         });
     },
     // 일정 등록하기
-    reqCreateEvent(context, bandno) {
+    reqCreateEvent(context, info) {
       return axios
-        .post("/calender/" + bandno, {})
+        .post("/calendar/" + info.bandno, {
+          title: info.title,
+          content: info.content,
+          start: info.start,
+          end: info.end,
+          member: info.member,
+          band: info.band
+        })
         .then((response) => {
           if (response.data.status)
             return { result: true, msg: "일정 등록이 완료되었습니다" };
@@ -108,7 +96,14 @@ const ExampleStore = {
     // 일정 수정하기
     reqModifyEvent(context, info) {
       return axios
-        .put("/calender/" + info.bandno + "/" + info.no, {})
+        .put("/calendar/" + info.bandno + "/" + info.no, {
+          title: info.title,
+          start: info.start,
+          end: info.end,
+          content: info.content,
+          member: [],
+          band: [],
+        })
         .then((response) => {
           if (response.data.status)
             return { result: true, msg: "일정 수정이 완료되었습니다" };
@@ -121,7 +116,7 @@ const ExampleStore = {
     // 일정 삭제하기
     reqDeleteEvent(context, info) {
       return axios
-        .delete("/calender/" + info.bandno + "/" + info.no)
+        .delete("/calendar/" + info.bandno + "/" + info.no)
         .then((response) => {
           if (response.data.status)
             return { result: true, msg: "일정 삭제가 완료되었습니다" };
@@ -134,4 +129,4 @@ const ExampleStore = {
   },
 };
 
-export default ExampleStore;
+export default CalenderStore;

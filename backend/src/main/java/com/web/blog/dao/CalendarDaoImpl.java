@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.blog.dto.Calendar;
-import com.web.blog.dto.CalendarReq;
-import com.web.blog.dto.CalendarRes;
 import com.web.blog.mapper.CalendarMapper;
 
 
@@ -31,17 +29,17 @@ public class CalendarDaoImpl implements CalendarDao {
 	}
 
 	@Override
-	public CalendarRes bandcalendardetail(String bandId, String calendarId) {
+	public Calendar bandcalendardetail(String bandId, String calendarId) {
 		return mapper.bandcalendardetail(bandId, calendarId);
 	}
 
 	@Override
-	public void bandcalendaradd(String bandId, CalendarReq req) {
+	public void bandcalendaradd(String bandId, Calendar req) {
 		mapper.bandcalendaradd(bandId, req);
 	}
 
 	@Override
-	public void bandcalendarupdate(String bandId, String calendarId, CalendarReq req) {
+	public void bandcalendarupdate(String bandId, String calendarId, Calendar req) {
 		mapper.bandcalendarupdate(bandId, calendarId, req);
 	}
 
