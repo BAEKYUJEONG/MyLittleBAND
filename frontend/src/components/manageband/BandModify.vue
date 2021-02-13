@@ -213,7 +213,7 @@ export default {
       await formData.append("file", this.band.imgdata); //이미지 정보전달
 
       axiosCommon
-        .post("/upload/band/"+this.$route.params.bandno, formData, {
+        .post("/upload/video/"+this.$route.params.bandno, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((rec) => {
