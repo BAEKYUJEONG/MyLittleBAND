@@ -1,82 +1,77 @@
 <template>
   <v-main>
     <v-container grid-list-xs>
-      <v-layout column align-center>
-        <v-flex>
-          <!-- 필터 영역 -->
-          <v-col>
-            <v-autocomplete
-              v-model="friends"
-              :disabled="isUpdating"
-              :items="people"
-              filled
-              chips
-              color="blue lighten-2"
-              label="필터"
-              item-text="name"
-              item-value="name"
-              multiple
-            >
-              <template v-slot:append-outer>
-                <v-slide-x-reverse-transition mode="out-in">
-                  <v-icon
-                    :key="`icon-${isEditing}`"
-                    :color="isEditing ? 'success' : 'info'"
-                    @click="isEditing = !isEditing"
-                    v-text="
-                      isEditing ? 'mdi-check-outline' : 'mdi-filter-variant'
-                    "
-                  ></v-icon>
-                </v-slide-x-reverse-transition>
+      <v-row justify="space-around">
+        <!-- 필터 영역 -->
+        <v-col cols="6" align="center">
+          <v-autocomplete
+            v-model="select"
+            :disabled="isUpdating"
+            :items="people"
+            filled
+            chips
+            color="blue lighten-2"
+            label="필터"
+            item-text="name"
+            item-value="name"
+          >
+            <template v-slot:append-outer>
+              <v-slide-x-reverse-transition mode="out-in">
+                <v-icon
+                  :key="`icon-${isEditing}`"
+                  :color="isEditing ? 'success' : 'info'"
+                  @click="onEditing"
+                  v-text="
+                    isEditing ? 'mdi-check-outline' : 'mdi-filter-variant'
+                  "
+                ></v-icon>
+              </v-slide-x-reverse-transition>
+            </template>
+            <template v-slot:selection="data">
+              <v-chip
+                v-bind="data.attrs"
+                :input-value="data.selected"
+                close
+                @click="data.select"
+                @click:close="remove(data.item)"
+              >
+                {{ data.item.name }}
+              </v-chip>
+            </template>
+            <template v-slot:item="data">
+              <template v-if="typeof data.item !== 'object'">
+                <v-list-item-content v-text="data.item"></v-list-item-content>
               </template>
-              <template v-slot:selection="data">
-                <v-chip
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  @click="data.select"
-                  @click:close="remove(data.item)"
-                >
-                  {{ data.item.name }}
-                </v-chip>
+              <template v-else>
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-html="data.item.name"
+                  ></v-list-item-title>
+                  <v-list-item-subtitle
+                    v-html="data.item.group"
+                  ></v-list-item-subtitle>
+                </v-list-item-content>
               </template>
-              <template v-slot:item="data">
-                <template v-if="typeof data.item !== 'object'">
-                  <v-list-item-content v-text="data.item"></v-list-item-content>
-                </template>
-                <template v-else>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="data.item.name"
-                    ></v-list-item-title>
-                    <v-list-item-subtitle
-                      v-html="data.item.group"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </template>
-            </v-autocomplete>
-          </v-col>
-        </v-flex>
+            </template>
+          </v-autocomplete>
+        </v-col>
+      </v-row>
 
-        <!-- 검색 영역 -->
+      <!-- 검색 영역 -->
 
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="msg"
-              label="검색어"
-              placeholder="원하는 검색어를 입력하세요."
-              append-outer-icon="mdi-magnify"
-              @click:append-outer="onSearch"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-layout>
-    </v-container>
+      <v-row justify="space-around">
+        <v-col cols="6" align="center">
+          <v-text-field
+            v-model="msg"
+            label="검색어"
+            placeholder="원하는 검색어를 입력하세요."
+            append-outer-icon="mdi-magnify"
+            @click:append-outer="onSearch"
+          ></v-text-field>
+        </v-col>
+      </v-row>
 
-    <!-- 비디오 리스트 영역 -->
-    <v-container grid-list-sm>
+      <!-- 비디오 리스트 영역 -->
       <v-layout justify-center column wrap>
         <v-flex xs12 sm9>
           <!-- 카드 뷰 시작 -->
@@ -127,25 +122,31 @@
             </v-flex>
           </v-layout>
         </v-flex>
+        <v-row align="center" justify="space-around">
+          <v-col cols="auto" class="mb-4">
+            <v-btn block outlined color="blue" @click="onAdd">
+              글쓰기
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-layout>
     </v-container>
-    <v-row>
-      <v-col cols="auto">
-        <v-btn block outlined color="blue" @click="onAdd"> 글쓰기 </v-btn>
-      </v-col>
-    </v-row>
   </v-main>
 </template>
 
 <script>
+import axios from '@/axios/axios-common.js';
+
 import { mapGetters, mapActions } from 'vuex';
 
 const VideoStore = 'VideoStore';
+const MemberStore = 'MemberStore'; //로그인 체크 용.
 
 export default {
   data() {
     return {
-      friends: [],
+      bandlist: [],
+      select: [],
       msg: '',
       isEditing: false,
       isUpdating: false,
@@ -210,28 +211,66 @@ export default {
   },
   computed: {
     ...mapGetters(VideoStore, ['getVideos']),
+    ...mapGetters(MemberStore, {
+      islogin: 'getIsLogined', //islogin 변수에 getIsLogined 리턴값 저장
+      memberid: 'getMemberId',
+    }),
   },
   methods: {
     ...mapActions(VideoStore, ['reqVideos', 'reqVideo']),
 
+    onEditing(){
+      this.isEditing = !this.isEditing;
+
+      // 여기서 axios를 이용한 검색 처리.(필터는 select에 있음)
+
+    },
+
     onSearch() {
       // 사용자가 원하는 검색어를 눌렀을 때, 검색이 되도록 처리.
-      //
+
+      // 여기서 axios를 이용한 검색 처리.
+
+      // 이후
+      let videos = [];
+      this.reqVideos(videos).then((response) => {
+        if (!response) console.log(response);
+        //여기서 가져온 데이터로 새로고침 하는 구문이 필요함.
+        else alert(response.msg);
+      });
       this.msg = '';
     },
     onVideo(videonum) {
       // 비디오를 클릭했을 때, 비디오가 선택되도록 처리.
-      this.reqVideo(videonum).then((response) => {
-        if (!response) this.$router.push('/video/' + videonum);
-        else alert(response.msg);
-      });
+      if (this.islogin) {
+        // 로그인이 되었다면,
+        this.reqVideo(videonum).then((response) => {
+          // 선택한 비디오로 req 요청 보냄.
+          if (!response) this.$router.push('/video/' + videonum);
+          else alert(response.msg);
+        });
+      } else alert('로그인 해주세요!');
     },
     remove(item) {
       const index = this.friends.indexOf(item.name);
       if (index >= 0) this.friends.splice(index, 1);
     },
     onAdd() {
-      this.$router.push({ name: 'videocreate' });
+      if (this.islogin) {
+        //로그인이 된 경우에만 글쓰기로 보냄.
+        this.getbandlist();
+        console.log(this.bandlist.length);
+        if (this.bandlist.length == 0) {
+          //가입한 밴드 리스트가 1개 이상일 경우에만,
+          this.$router.push({ name: 'videocreate' });
+        } else alert('밴드 가입 후 글쓰기 가능합니다!');
+      } else alert('로그인 해주세요!');
+    },
+    getbandlist() {
+      axios
+        .get('/band-list/' + this.memberid)
+        .then((response) => (this.bandlist = response.data.object))
+        .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
     },
   },
 };

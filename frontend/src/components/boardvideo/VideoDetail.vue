@@ -1,91 +1,93 @@
 <template>
   <!-- 동작에 따른 이벤트 처리가 가능한듯..? -->
-  <v-container>
-    <v-row
-      ><v-spacer /><v-col align="center">
-        <video-player
-          class="video-player-box"
-          ref="videoPlayer"
-          :options="playerOptions"
-          :playsinline="true"
-          customEventName="customstatechangedeventname"
-          @play="onPlayerPlay($event)"
-          @pause="onPlayerPause($event)"
-          @statechanged="playerStateChanged($event)"
-          @ready="playerReadied"
-        >
-        </video-player> </v-col
-      ><v-spacer
-    /></v-row>
-    <v-row justify="center">
-      <v-col cols="auto">
-        <v-avatar>
-          <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
-        </v-avatar>
-      </v-col>
-      <strong class="black--text mt-6">제목</strong>
-      <v-spacer></v-spacer>
-      <v-col cols="auto">
-        <v-icon
-          size="50"
-          @click="setLike()"
-          :color="member.like ? 'red' : 'grey'"
-          >mdi-heart</v-icon
-        >
-      </v-col>
-      <strong class="black--text mt-6">좋아요 수</strong>
-    </v-row>
-    <v-row
-      ><v-col><p class="black--text text-left">설명</p></v-col></v-row
-    >
-    <v-divider inset></v-divider>
-    <h3 class="display-2 mt-4">댓글</h3>
+  <v-main>
+    <v-container>
+      <v-row
+        ><v-spacer /><v-col align="center">
+          <video-player
+            class="video-player-box"
+            ref="videoPlayer"
+            :options="playerOptions"
+            :playsinline="true"
+            customEventName="customstatechangedeventname"
+            @play="onPlayerPlay($event)"
+            @pause="onPlayerPause($event)"
+            @statechanged="playerStateChanged($event)"
+            @ready="playerReadied"
+          >
+          </video-player> </v-col
+        ><v-spacer
+      /></v-row>
+      <v-row justify="center">
+        <v-col cols="auto">
+          <v-avatar>
+            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+          </v-avatar>
+        </v-col>
+        <strong class="black--text mt-6">제목</strong>
+        <v-spacer></v-spacer>
+        <v-col cols="auto">
+          <v-icon
+            size="50"
+            @click="setLike()"
+            :color="member.like ? 'red' : 'grey'"
+            >mdi-heart</v-icon
+          >
+        </v-col>
+        <strong class="black--text mt-6">좋아요 수</strong>
+      </v-row>
+      <v-row
+        ><v-col><p class="black--text text-left">설명</p></v-col></v-row
+      >
+      <v-divider inset></v-divider>
+      <h3 class="display-2 mt-4">댓글</h3>
 
-    <!-- 댓글 작성 -->
-    <v-row class="mt-2"
-      ><v-col cols="auto"
-        ><v-avatar>
-          <img
-            src="https://cdn.vuetifyjs.com/images/john.jpg"
-            alt="John"
-          /> </v-avatar
-      ></v-col>
-      <v-col>
-        <v-text-field
-          :counter="50"
-          label="내용"
-          name="usercomment"
-          required
-          v-model="usercomment"
-          maxlength="50"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="auto">
-        <v-btn block outlined color="blue" @click="onWrite"> 등록 </v-btn>
-      </v-col>
-    </v-row>
+      <!-- 댓글 작성 -->
+      <v-row class="mt-2"
+        ><v-col cols="auto"
+          ><v-avatar>
+            <img
+              src="https://cdn.vuetifyjs.com/images/john.jpg"
+              alt="John"
+            /> </v-avatar
+        ></v-col>
+        <v-col>
+          <v-text-field
+            :counter="50"
+            label="내용"
+            name="usercomment"
+            required
+            v-model="usercomment"
+            maxlength="50"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn block outlined color="blue" @click="onWrite"> 등록 </v-btn>
+        </v-col>
+      </v-row>
 
-    <!-- 작성된 댓글 목록-->
-    <v-row class="mt-2">
-      <v-list shaped>
-        <v-list-item v-for="(comment, i) in getComments" :key="i">
-          <v-list-item-icon>
-            <v-list-item-avatar>
-              <v-img :src="comment.avatar"></v-img>
-            </v-list-item-avatar>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="comment.text"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-row>
-  </v-container>
+      <!-- 작성된 댓글 목록-->
+      <v-row class="mt-2">
+        <v-list shaped>
+          <v-list-item v-for="(comment, i) in getComments" :key="i">
+            <v-list-item-icon>
+              <v-list-item-avatar>
+                <v-img :src="comment.avatar"></v-img>
+              </v-list-item-avatar>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="comment.text"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
 import 'video.js/dist/video-js.css';
-//import axios from 'axios';
+//import axios from '@/axios/axios-common.js';
 
 import { videoPlayer } from 'vue-video-player';
 import { mapGetters } from 'vuex';
@@ -98,7 +100,7 @@ export default {
   },
   created() {
     this.playerOptions.sources[0].src =
-      'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm';
+      'https://i4a408.p.ssafy.io/video/asd.mp4';
 
     //this.playerOptions.sources[0].src = this.video.src; 백엔드에서 가져올 경우 이렇게 수정
   },
