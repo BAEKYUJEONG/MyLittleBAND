@@ -1,11 +1,11 @@
-package com.web.blog.dao;
+package com.web.blog.service;
 
 import java.util.List;
 
 import com.web.blog.dto.Comment;
 
-public interface CommentDao {
-	
+public interface CommentService {
+
 	public boolean insert(Comment comment);
 	public Comment selectDetail(String commentId);
 	public boolean update(Comment comment);
