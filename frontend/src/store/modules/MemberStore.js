@@ -6,6 +6,7 @@ const MemberStore = {
     isLogin: false, // 로그인 여부
     memberId: null, // 로그인된 아이디
     manager: false, // 관리자 여부
+    memberInfo: {},
   },
 
   getters: {
@@ -20,6 +21,10 @@ const MemberStore = {
     getManager(state) {
       //멤버 관리자여부 받아옴
       return state.manager;
+    },
+    getMemberInfo(state) {
+      //멤버 정보 받아옴
+      return state.memberInfo;
     },
   },
   mutations: {
@@ -38,11 +43,16 @@ const MemberStore = {
       state.manager = manager;
     },
 
+    setMemberInfo(state, memberInfo) {
+      state.memberInfo = memberInfo
+    },
+
     logout(state) {
       //로그아웃 시 변수 초기화
       state.isLogin = false;
       state.memberId = null;
       state.manager = '0';
+      state.memberInfo = {};
     },
   },
 
@@ -70,6 +80,7 @@ const MemberStore = {
             context.commit("setIsLogined", true); //로그인 상태 true로 변환
             context.commit("setMemberId", response.data.object.memberId); //memberid 저장
             context.commit("setManager", response.data.object.manager); //관리자 여부저장
+            this.reqMemberInfo(response.data.object.memberId);
           } else {
             console.log("실패");
           }
@@ -182,6 +193,22 @@ const MemberStore = {
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    reqMemberInfo(context, no) {
+      return axios
+        .get("/member/" + no)
+        .then((response) => {
+          if (response.data.status) {
+            context.commit("setMemberInfo", response.data.object); 
+            return { result: true, msg: "회원정보조회 성공" };
+          }
+          return { result: false, msg: "회원정보가 존재하지 않습니다" };
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      
     }
   },
 };
