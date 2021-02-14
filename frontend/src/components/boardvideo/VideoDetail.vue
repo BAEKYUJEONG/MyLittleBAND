@@ -24,7 +24,7 @@
             <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
           </v-avatar>
         </v-col>
-        <strong class="black--text mt-6">제목</strong>
+        <strong class="black--text mt-6">{{ video.boardSubject }}</strong>
         <v-spacer></v-spacer>
         <v-col cols="auto">
           <v-icon
@@ -90,7 +90,7 @@ import 'video.js/dist/video-js.css';
 //import axios from '@/axios/axios-common.js';
 
 import { videoPlayer } from 'vue-video-player';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 const VideoStore = 'VideoStore';
 
@@ -101,7 +101,9 @@ export default {
   created() {
     this.playerOptions.sources[0].src =
       'https://i4a408.p.ssafy.io/video/asd.mp4';
-
+    this.reqComments(4);
+    //console.log(this.getVideo);
+    //this.reqVideo(this.getVideo.videonum);
     //this.playerOptions.sources[0].src = this.video.src; 백엔드에서 가져올 경우 이렇게 수정
   },
   data() {
@@ -136,10 +138,11 @@ export default {
     player() {
       return this.$refs.videoPlayer.player;
     },
-    ...mapGetters(VideoStore, [{ video: 'getVideo', comments: 'getComments' }]),
+    ...mapGetters(VideoStore, { video: 'getVideo', comments: 'getComments' }),
   },
   methods: {
     // listen event
+    ...mapActions(VideoStore, ['reqComments']),
     onPlayerPlay(player) {
       console.log('player play!', player);
     },
