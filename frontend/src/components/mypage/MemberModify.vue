@@ -86,13 +86,7 @@ export default {
   },
   data() {
     return {
-      member: {//백엔드 연동 후 아래 내용 삭제 및 변수명 확인
-        email: "mylittle@band.com",
-        name: "홍길동",
-        phone: "010-1234-5678",
-        profile:
-          "제 소개로 말할 것 같으면 \n99년 LA에 있었을 당시였습니다. \n당시 저는 메이저리그에서",
-      }
+      member: {}
     };
   },
 };

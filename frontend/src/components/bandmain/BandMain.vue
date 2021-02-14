@@ -7,7 +7,7 @@
       <!-- FollowingBandList -->
       <FollowingBandList />
       <v-divider></v-divider>
-      <SuggestBandList/>
+      <SuggestBandList />
       <!-- SuggestBandList -->
     </v-container>
   </v-main>

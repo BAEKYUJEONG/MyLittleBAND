@@ -6,7 +6,7 @@ const BandStore = {
         BandList: [], //유저의 소속 밴드 리스트
         MamberList: [],  //밴드의 멤버리스트
         VideoList: [],//밴드의 비디오리스트
-        BandInfo: [], //밴드 정보
+        BandInfo: {}, //밴드 정보
     },
     getters: {
         //밴드리스트 반환

@@ -48,13 +48,14 @@ const FollowStore = {
         // 팔로우 중인 지 확인하기
         reqFollowCheck(context, info) {
             return axios
-                .put("/followcheck?bandId=" + info.bandId + "&memberId="+info.memberId)
+                .get("/followcheck?bandId=" + info.bandId + "&memberId="+info.memberId)
                 .then((response) => {
-                    if (response.data.status) return { result: true, msg: "팔로우중입니다." };
+                    if (response.data.status) return { result: true, msg: response.data.object.followId };
                     else return { result: false, msg: "팔로우 중이 아닙니다." };
                 })
                 .catch((error) => {
                     console.log(error);
+                    return { result: false };
                 })
         },
         
