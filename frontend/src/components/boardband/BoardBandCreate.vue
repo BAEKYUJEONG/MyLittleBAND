@@ -1,84 +1,97 @@
 <template>
-  <v-form>
+  <v-main>
     <v-container>
-      <h1 style="margin: 10px auto">밴드 게시글 작성</h1>
-      <v-layout>
-        <v-flex><h2 style="margin: 20px auto">제목</h2></v-flex>
-        <v-flex>
-          <v-text-field solo style="margin: 20px auto" v-model="board.title">
-          </v-text-field>
+      <v-layout col-8 offset-2 column>
+        <!-- title -->
+        <v-flex text-center class="ma-10">
+          <h1>게시글 작성</h1>
         </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex><h2 style="margin: 20px auto">내용</h2></v-flex>
-        <v-flex>
-          <v-textarea
-            solo
-            full-width
-            height="200"
-            style="margin: 20px auto"
-            v-model="board.content"
-          ></v-textarea>
-        </v-flex>
-      </v-layout>
 
-      <v-layout>
+        <!-- icons - modify, delete -->
+        <v-flex text-right>
+          <v-btn icon color="blue" large @click="onCreate()">
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+
+          <v-btn
+            icon
+            color="primary"
+            large
+            @click="
+              () => {
+                this.$router.go(-1);
+              }
+            "
+          >
+            <v-icon size="40">mdi-undo-variant</v-icon>
+          </v-btn>
+        </v-flex>
+
+        <!-- content -->
         <v-flex>
-          <v-btn color="blue" style="margin: 10px" @click="create()"
-            >작성완료</v-btn
-          >
-          <v-btn color="blue" style="margin: 10px" @click="list()"
-            >돌아가기</v-btn
-          >
+          <v-layout>
+            <v-flex col-2 text-right><h2>제목</h2></v-flex>
+            <v-flex col-1><v-spacer /></v-flex>
+            <v-flex col-7>
+              <v-text-field solo style="margin: 20px auto" v-model="title">
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout>
+            <v-flex col-2 text-right><h2>내용</h2></v-flex>
+            <v-flex col-1><v-spacer /></v-flex>
+            <v-flex col-7>
+              <v-textarea
+                solo
+                height="200"
+                style="margin: 20px auto"
+                v-model="content"
+              ></v-textarea>
+            </v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-container>
-  </v-form>
+  </v-main>
 </template>
 
 <script>
-import axios from "axios";
+import { mapGetters, mapActions } from 'vuex';
+
+const BandBoardStore = "BandBoardStore";
+const MemberStore = "MemberStore"; 
+
 
 export default {
-  methods: {
-    list() {
-      //밴드게시판 목록으로 돌아감
-      this.$router.push("/boardbandlist/"+this.$route.params.bandnum);
-    },
-    create() {
-      //밴드게시판 게시글 작성
-
-      //공백이 존재하면 경고
-      if (this.board.title == "" || this.board.content == "") {
-        alert("공백이 존재합니다.");
-        return;
-      }
-
-      axios
-        .post("/board/band", {
-          bandid : this.$route.params.bandnum, //백엔드와 통일할 필요 있음
-          title : this.board.title,
-          content : this.board.content,
-          memberid : "" //로그인 기능 구현 후 추가필요
-        })
-        .then(() => {
-          //성공하면 alert 후 리스트 페이지로
-          alert("글쓰기성공!");
-          this.$router.push("/boardbandlist/"+this.$route.params.bandnum);
-        })
-        .catch((exp) => alert("생성에 실패하였습니다." + exp));
-    },
-  },
   data() {
     return {
-      board: {
-        title: "",
-        content: "",
-      },
+      title: "",
+      content: "",
     };
   },
+  computed: {
+    ...mapGetters(MemberStore, {
+      memberid: "getMemberId", 
+    }),
+  },
+  methods: {
+    ...mapActions(BandBoardStore,["reqCreateBoard"]),
+
+    onCreate(){
+      this.reqCreateBoard({ 
+        title: this.title, 
+        content: this.content,
+        writer : this.memberid})
+      .then((response) => {
+        if(response.data.result)  alert(response.data.msg);
+        else                      alert(response.data.msg);  
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

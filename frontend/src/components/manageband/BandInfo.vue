@@ -11,22 +11,17 @@
 
     <v-row class="ma-auto pa-10" justify="center">
       <!-- 밴드 프로필 이미지-->
-      <v-col cols="4" class="ma-auto">
+      <v-col cols="3" class="ma-auto">
         <v-spacer></v-spacer>
-        <v-card
-          max-height="300"
-          max-width="300"
-          id="rounded-card"
-          class="ma-auto"
-        >
+        <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
             <v-img
               class="ma-auto mp-4"
-              max-height="100%"
-              max-width="100%"
+              height="300"
+              width="300"
               style="border-radius: 50%"
               contain
-              :src="band.imgurl"
+              :src="band.img"
             >
             </v-img>
           </v-layout>
@@ -83,9 +78,10 @@
       </v-col>
     </v-row>
     <v-row class="ma-auto pa-10">
+      <v-col  v-for="member in members"
+        :key="member.id" cols = "2">
       <v-card
-        v-for="member in members"
-        :key="member.id"
+       
         max-height="200"
         max-width="200"
         id="rounded-card"
@@ -109,6 +105,7 @@
           </v-slide-y-transition>
         </v-layout>
       </v-card>
+      </v-col>
     </v-row>
 
     <v-divider></v-divider>

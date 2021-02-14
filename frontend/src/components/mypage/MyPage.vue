@@ -254,40 +254,11 @@ export default {
     return {
       image: null,
       dialog: false,
-      member: {
-        email: "mylittle@band.com",
-        name: "홍길동",
-        phone: "010-1234-5678",
-        profile:
-          "제 소개로 말할 것 같으면 \n99년 LA에 있었을 당시였습니다. \n당시 저는 메이저리그에서",
-        img: "/profile/HBD.jpg",
-        imgdata: null,
-      },
+      member: {},
       currentOffset: 0, //현재 밴드 위치
       windowSize: 3, //한번에 나오는 밴드 개수
       paginationFactor: 210, //좌우로 움직이는 정도
-      bandlist: [
-        {
-          bandId: "01",
-          name: "잘한다밴드",
-          isChief: 0,
-        },
-        {
-          bandId: "02",
-          name: "더잘한다밴드",
-          isChief: 1,
-        },
-        {
-          bandId: "03",
-          name: "못한다밴드",
-          isChief: 0,
-        },
-        {
-          bandId: "04",
-          name: "조금못한다밴드",
-          isChief: 1,
-        },
-      ],
+      bandlist: [],
     };
   },
 };
