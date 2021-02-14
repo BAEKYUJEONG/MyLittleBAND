@@ -8,6 +8,9 @@ import RankingStore from './modules/RankingStore';
 import CalenderStore from './modules/CalenderStore';
 import NoticeStore from './modules/NoticeStore';
 import VideoStore from './modules/VideoStore';
+import BandStore from './modules/BandStore';
+import BandBoardStore from './modules/BandBoardStore';
+import FollowStore from './modules/Follow';
 
 //yarn add vuex-persistedstate 필요
 import createPersistedState from 'vuex-persistedstate'; //새로고침해도 store 정보가 사라지지 않게 해줌
@@ -26,6 +29,9 @@ export default new Vuex.Store({
     CalenderStore,
     NoticeStore,
     VideoStore,
+    BandStore,
+    BandBoardStore,
+    FollowStore
   },
   plugins: [
     createPersistedState({

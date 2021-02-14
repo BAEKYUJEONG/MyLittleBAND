@@ -59,7 +59,7 @@ const ExampleStore = {
         .get("/notice?page=" + page)
         .then((response) => {
             if(response.data.status){
-                context.commit("setNotices", response.data);
+                context.commit("setNotices", response.data.object);
                 return { result: true, msg: "글 목록 받아오기 성공" };
             } else {
                 return { result: false, msg: "글 목록을 불러오는데 실패했습니다" };
@@ -75,7 +75,7 @@ const ExampleStore = {
         .get("/notice/"+no)
         .then((response) => {
             if(response.data.status){
-                context.commit("setNotice", response.data);
+                context.commit("setNotice", response.data.object);
             } else {
                 return { result: false, msg: "글을 불러오는데 실패했습니다" };
             }
@@ -93,7 +93,7 @@ const ExampleStore = {
         })
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 작성이 완료되었습니다" };
-            else                        return { false: false, msg: "글 작성이 실패했습니다" };
+            else                        return { result: false, msg: "글 작성이 실패했습니다" };
         })
         .catch((error) => {
             console.log(error);
@@ -108,7 +108,7 @@ const ExampleStore = {
         })
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 수정이 완료되었습니다" };
-            else                        return { false: false, msg: "글 수정이 실패했습니다" };
+            else                        return { result: false, msg: "글 수정이 실패했습니다" };
         })
         .catch((error) => {
             console.log(error);
@@ -120,7 +120,7 @@ const ExampleStore = {
         .delete("/notice/"+info.no)
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 삭제가 완료되었습니다" };
-            else                        return { false: false, msg: "글 삭제가 실패했습니다" };
+            else                        return { result: false, msg: "글 삭제가 실패했습니다" };
         })
         .catch((error) => {
             console.log(error);

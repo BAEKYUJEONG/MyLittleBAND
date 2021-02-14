@@ -10,7 +10,7 @@
     </v-row>
     <v-row class="ma-auto pa-10" justify="center">
       <!-- 밴드 프로필 이미지-->
-      <v-col cols="4" class="ma-auto">
+      <v-col cols="3" class="ma-auto">
         <v-spacer></v-spacer>
         <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
@@ -223,7 +223,7 @@ export default {
 
     this.getBandinfo(); //밴드정보가져오기
     this.getMemberinfo(); //밴드소속 멤버정보 가져오기
-    //this.getVideolist();//밴드의 비디오리스트 가져오기
+    this.getVideolist();//밴드의 비디오리스트 가져오기
   },
   methods: {
     getBandinfo() {

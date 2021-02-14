@@ -123,6 +123,7 @@
                     color="error"
                     class="white--text mx-4"
                     @click="OpenCancle(show)"
+                    :disabled="show.date < new Date().toISOString().substr(0, 10)"
                   >
                     공연취소
                   </v-btn>
@@ -165,7 +166,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="modify()">
+          <v-btn color="green darken-1" :disabled="TmpShow.date < new Date().toISOString().substr(0, 10)" text @click="modify()">
             수정하기
           </v-btn>
           <v-btn color="green darken-1" text @click="Dialog.modify=false">
