@@ -12,6 +12,7 @@ import BandStore from './modules/BandStore';
 import BandBoardStore from './modules/BandBoardStore';
 import FollowStore from './modules/FollowStore';
 
+
 //yarn add vuex-persistedstate 필요
 import createPersistedState from 'vuex-persistedstate'; //새로고침해도 store 정보가 사라지지 않게 해줌
 
