@@ -3,7 +3,6 @@ import axios from "../../axios/axios-common";
 const timelineStore = {
     namespaced: true,
     state: {
-        
         /*
             todayTime: 오늘 시간
             shows: 오늘의 공연 정보를 담고 있는 배열 
