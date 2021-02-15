@@ -5,6 +5,7 @@ package com.web.blog.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,16 @@ public class ShowServiceImpl implements ShowService{
 	@Override
 	public void updateshow(String showId, String title, String showContent) {
 		dao.updateshow(showId, title, showContent);
+	}
+
+	@Override
+	public List<BandShow> showTermList(String start, String end) {
+		return dao.showTermList(start, end);
+	}
+
+	@Override
+	public BandShow showDetail(String showId) {
+		return dao.showdetail(showId);
 	}
 
 //	@Override
