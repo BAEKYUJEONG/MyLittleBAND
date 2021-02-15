@@ -20,8 +20,8 @@ public class BandBoardServiceImpl implements BandBoardService{
 	}
 
 	@Override
-	public List<BandBoard> bandboardlist() {
-		return dao.bandboardlist();
+	public List<BandBoard> bandboardlist(String bandId) {
+		return dao.bandboardlist(bandId);
 	}
 
 	@Override

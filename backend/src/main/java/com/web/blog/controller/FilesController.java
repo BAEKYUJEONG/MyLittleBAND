@@ -1,6 +1,8 @@
 package com.web.blog.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,8 @@ public class FilesController {
   @Autowired
   BandService bandservice;
   
+  
+  
   @PostMapping("/upload/member/{memberId}")
   public ResponseEntity<String> uploadFile(@PathVariable String memberId, @RequestParam("file") MultipartFile file) {
 //	  System.out.println(file.getOriginalFilename()); //HBD.jpg
@@ -49,26 +53,32 @@ public class FilesController {
 //		e1.printStackTrace();
 //	}
 //	  System.out.println(file.getResource()); //MultipartFile resource [file]
+	  SimpleDateFormat format= new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String timeurl=format.format(time);
+//		System.out.println(timeurl);
 	  
-    String message = "";
-    try {
-    	memberservice.imgupdate(memberId, "https://i4a408.p.ssafy.io/profile/"+file.getOriginalFilename());
-      storageService.saveimage(file);
-      message = "https://i4a408.p.ssafy.io/profile/" + file.getOriginalFilename();
-      return ResponseEntity.status(HttpStatus.OK).body(message);
-    } catch (Exception e) {
-      message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-    }
-  }
+	  String message = "";
+	    try {
+	    	memberservice.imgupdate(memberId, "https://i4a408.p.ssafy.io/profile/"+timeurl+file.getOriginalFilename());
+	    	storageService.saveimage(file,timeurl);
+	    	message = "https://i4a408.p.ssafy.io/profile/"+timeurl + file.getOriginalFilename();
+	    	return ResponseEntity.status(HttpStatus.OK).body(message);
+	    	} catch (Exception e) {
+	    		message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+	    		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+	    	}
+	    }
   
   @PostMapping("/upload/video/{bandId}")
   public ResponseEntity<String> uploadFilevideo(@PathVariable String bandId, @RequestParam("file") MultipartFile file) {
-	  
+	  SimpleDateFormat format= new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String timeurl=format.format(time);
     String message = "";
     try {
-      storageService.savevideo(file);
-      message = "https://i4a408.p.ssafy.io/video/" + file.getOriginalFilename();
+      storageService.savevideo(file,timeurl);
+      message = "https://i4a408.p.ssafy.io/video/"+timeurl + file.getOriginalFilename();
       return ResponseEntity.status(HttpStatus.OK).body(message);
     } catch (Exception e) {
       message = "Could not upload the file: " + file.getOriginalFilename() + "!";
@@ -78,11 +88,13 @@ public class FilesController {
   
   @PostMapping("/upload/thumbnail/{bandId}")
   public ResponseEntity<String> uploadFilethumbnail(@PathVariable String bandId, @RequestParam("file") MultipartFile file) {
-	  
+	  SimpleDateFormat format= new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String timeurl=format.format(time);
     String message = "";
     try {
-      storageService.savethumbnail(file);
-      message = "https://i4a408.p.ssafy.io/thumbnail/" + file.getOriginalFilename();
+      storageService.savethumbnail(file,timeurl);
+      message = "https://i4a408.p.ssafy.io/thumbnail/"+timeurl + file.getOriginalFilename();
       return ResponseEntity.status(HttpStatus.OK).body(message);
     } catch (Exception e) {
       message = "Could not upload the file: " + file.getOriginalFilename() + "!";
@@ -92,12 +104,14 @@ public class FilesController {
   
   @PostMapping("/upload/band/{bandId}")
   public ResponseEntity<String> uploadFilebandimage(@PathVariable String bandId, @RequestParam("file") MultipartFile file) {
-	  
+	  SimpleDateFormat format= new SimpleDateFormat("yyyyMMddHHmmss");
+		Date time = new Date();
+		String timeurl=format.format(time);
     String message = "";
     try {
-    	bandservice.imgupdate(bandId, "https://i4a408.p.ssafy.io/band/"+file.getOriginalFilename());
-      storageService.savebandimage(file);
-      message = "https://i4a408.p.ssafy.io/band/" + file.getOriginalFilename();
+    	bandservice.imgupdate(bandId, "https://i4a408.p.ssafy.io/bandprofile/"+timeurl+file.getOriginalFilename());
+      storageService.savebandimage(file,timeurl);
+      message = "https://i4a408.p.ssafy.io/bandprofile/"+timeurl + file.getOriginalFilename();
       return ResponseEntity.status(HttpStatus.OK).body(message);
     } catch (Exception e) {
       message = "Could not upload the file: " + file.getOriginalFilename() + "!";

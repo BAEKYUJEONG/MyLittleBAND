@@ -11,12 +11,14 @@ public class Band {
 	private String debut;
 	private String genre;
 	private String sns;
+	private String follownum;
 	
 	public Band() {
 	}
 
+
 	public Band(String bandId, String rolecode, String colorid, String img, String name, String intro, String local,
-			String debut, String genre, String sns) {
+			String debut, String genre, String sns, String follownum) {
 		this.bandId = bandId;
 		this.rolecode = rolecode;
 		this.colorid = colorid;
@@ -27,9 +29,11 @@ public class Band {
 		this.debut = debut;
 		this.genre = genre;
 		this.sns = sns;
+		this.follownum = follownum;
 	}
 
-	
+
+
 
 	public String getBandId() {
 		return bandId;
@@ -109,6 +113,16 @@ public class Band {
 
 	public void setSns(String sns) {
 		this.sns = sns;
+	}
+
+
+	public String getFollownum() {
+		return follownum;
+	}
+
+
+	public void setFollownum(String follownum) {
+		this.follownum = follownum;
 	}
 	
 	

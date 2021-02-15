@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.Member;
+import com.web.blog.dto.Memberupdate;
 import com.web.blog.dto.loginReq;
 import com.web.blog.dto.signupReq;
 import com.web.blog.service.MailService;
@@ -184,10 +185,10 @@ public class MemberController {
 	
 	@PutMapping(value = "/member/{memberId}")
 	@ApiOperation(value = "회원정보수정")
-	public Object update(@RequestBody Member m, @PathVariable String memberId) {
+	public Object update(@RequestBody Memberupdate req, @PathVariable String memberId) {
 		System.out.println(memberId);
-		
-		service.update(memberId, m);
+		req.setMemberId(memberId);
+		service.update(req);
 		final BasicResponse result = new BasicResponse();
         result.status = true;
         result.data = "success";

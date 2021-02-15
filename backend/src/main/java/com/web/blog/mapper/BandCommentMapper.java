@@ -2,12 +2,15 @@ package com.web.blog.mapper;
 
 import java.util.List;
 
+import com.web.blog.dto.BandComment;
 import com.web.blog.dto.Comment;
 import com.web.blog.dto.OtherComment;
 
-public interface CommentMapper {
+public interface BandCommentMapper {
 	
-	public boolean insert(Comment comment);
+	public boolean insert(BandComment comment);
 	public List<OtherComment> selectList(String boardId);
 	public int count(String boardId);
+	public boolean delete(String commentId);
+	public boolean modify(String commentId, String content);
 }

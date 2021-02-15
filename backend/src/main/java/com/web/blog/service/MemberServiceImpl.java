@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.MemberDao;
 import com.web.blog.dto.Member;
+import com.web.blog.dto.Memberupdate;
 import com.web.blog.dto.loginReq;
 import com.web.blog.dto.signupReq;
 
@@ -21,8 +22,8 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public void update(String memberId, Member m) {
-		dao.update(memberId, m);
+	public void update(Memberupdate req) {
+		dao.update(req);
 	}
 	
 	@Override

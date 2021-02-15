@@ -6,11 +6,11 @@
 <mapper namespace="com.web.blog.mapper.BandBoardMapper">
 	
 	<insert id="writebandboard" parameterType="BandBoardReq">
-		insert into bandboard values(null, #{title}, #{content}, now(), 0, #{bandId})
+		insert into bandboard values(null, #{title}, #{content}, now(), 0, #{memberId}, #{bandId})
 	</insert>
 	
 	<select id="bandboardlist" resultType="BandBoard">
-		select * from bandboard
+		select * from bandboard where bandId=#{bandId}
 	</select>
 	
 	

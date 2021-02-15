@@ -18,7 +18,18 @@
 	</select>
 	
 	<select id="likelist" parameterType="String" resultType="java.util.Map">
-		select bandId,img,name from band where bandId in(select bandId from follow where memberId=#{memberId})
+		select * from videoboard where boardId in(select boardId from likeboard where memberId=#{memberId})
 	</select>
 	
+	<select id="likecheck" parameterType="String" resultType="java.util.Map">
+		select likeId from likeboard where boardId=#{boardId} and memberId=#{memberId}
+	</select>
+	
+	<update id="likeup">
+		update videoboard set boardLike=boardLike+1 where boardId=#{boardId}
+	</update>
+	
+	<update id="likedown">
+		update videoboard set boardLike=boardLike-1 where boardId=(select boardId from likeboard where likeId=#{likeId});
+	</update>
 </mapper>

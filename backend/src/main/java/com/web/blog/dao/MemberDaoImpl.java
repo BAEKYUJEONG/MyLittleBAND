@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.blog.dto.Member;
+import com.web.blog.dto.Memberupdate;
 import com.web.blog.dto.loginReq;
 import com.web.blog.dto.signupReq;
 import com.web.blog.mapper.MemberMapper;
@@ -22,8 +23,8 @@ public class MemberDaoImpl implements MemberDao {
 	}
 
 	@Override
-	public void update(String memberId, Member m) {
-		mapper.update(memberId, m);
+	public void update(Memberupdate req) {
+		mapper.update(req);
 	}
 	
 	@Override

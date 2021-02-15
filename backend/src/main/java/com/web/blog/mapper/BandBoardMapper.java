@@ -7,7 +7,7 @@ import com.web.blog.dto.BandBoardReq;
 
 public interface BandBoardMapper {
 	public void writebandboard(BandBoardReq req);
-	public List<BandBoard> bandboardlist();
+	public List<BandBoard> bandboardlist(String bandId);
 	public void settime();
 	public BandBoard readbandboard(String bandboardId);
 	public void countup(String bandboardId);
