@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 // store module import
 import MemberStore from './modules/MemberStore';
 import timelineStore from './modules/timelineStore';
+import TimetableStore from './modules/TimetableStore'
 import RankingStore from './modules/RankingStore';
 import CalenderStore from './modules/CalenderStore';
 import NoticeStore from './modules/NoticeStore';
@@ -25,6 +26,7 @@ export default new Vuex.Store({
   modules: {
     // imported modules
     timelineStore,
+    TimetableStore,
     RankingStore,
     MemberStore,
     CalenderStore,
