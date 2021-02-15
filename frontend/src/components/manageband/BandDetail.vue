@@ -83,7 +83,7 @@
           <v-slide-group class="pa-4" show-arrows>
             <v-slide-item
               v-for="video in videolist"
-              :key="video.videono"
+              :key="video.boardId"
               v-slot="{ active }"
             >
               <v-card
@@ -91,10 +91,10 @@
                 class="d-flex ma-4 flex-end flex-column"
                 height="300"
                 width="500"
-                @click="[active, videoDetail(video.videono)]"
+                @click="[active, videoDetail(video.boardId)]"
               >
                 <v-card-text class="text-end mt-auto">
-                  <p>{{ video.title }}</p>
+                  <p>{{ video.boardSubject }}</p>
                 </v-card-text>
               </v-card>
             </v-slide-item>
@@ -122,6 +122,8 @@
       <!-- 밴드원일때 -->
       <v-col cols="12" v-else>
         <v-btn color="primary" class="mx-6" @click="upload()">영상업로드</v-btn>
+
+        <v-btn color="primary" class="mx-6" router-link :to="'/band/board/' + this.$route.params.bandno" >밴드게시판</v-btn>
 
         <!-- 밴드탈퇴 모달창 -->
         <v-dialog v-model="dialog" persistent max-width="290">
@@ -174,6 +176,9 @@ export default {
           text: "영상업로드",
         },
         {
+          text: "밴드게시판",
+        },
+        {
           text: "공연신청",
         },
         {
@@ -193,22 +198,6 @@ export default {
       band: {}, //밴드정보
       members: [], //소속멤버정보
       videolist: [
-        {
-          title: "가을 홍대공연",
-          videono: "123", //이동할 게시판의 게시글번호
-        },
-        {
-          title: "200202 홍대버스킹",
-          videono: "456",
-        },
-        {
-          title: "191213 합정역 5번출구",
-          videono: "78",
-        },
-        {
-          title: "문래 재즈바 공연",
-          videono: "91",
-        },
       ],
     };
   },
@@ -249,8 +238,8 @@ export default {
     getVideolist() {
       //밴드의 비디오 리스트를 조회합니다.
       axios
-        .post("/band/video", { bandid: this.$route.params.bandno })
-        .then((response) => (this.videolist = response.data))
+        .get("/videoboard/videolist/"+this.$route.params.bandno)
+        .then((response) => (this.videolist = response.data.object))
         .catch((exp) => alert(exp + "비디오리스트 조회에 실패하였습니다."));
     },
     getMember() {
@@ -270,7 +259,7 @@ export default {
     },
     videoDetail(value) {
       //비디오게시판 비디오 상세로 라우터링크
-      this.$router.push("/video/detail/" + value);
+      this.$router.push("/video/" + value);
     },
     onClick(value) {
       console.log(value);
@@ -278,6 +267,8 @@ export default {
         this.$router.push("/band/modify/" + this.$route.params.bandno);
       } else if (value == "영상업로드") {
         this.upload();
+      } else if (value == "밴드게시판") {
+        this.$router.push("/band/board/" + this.$route.params.bandno);
       } else if (value == "공연신청") {
         this.$router.push("/band/reserve/" + this.$route.params.bandno);
       } else if (value == "돌아가기") {
