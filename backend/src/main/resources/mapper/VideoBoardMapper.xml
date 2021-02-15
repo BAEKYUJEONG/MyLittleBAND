@@ -6,7 +6,7 @@
 <mapper namespace="com.web.blog.mapper.VideoBoardMapper">
 	
 	<insert id="writevideo" parameterType="VideoBoardReq">
-		insert into videoboard values(null, #{boardSubject}, #{boardContent}, now(), #{boardVideoUrl}, #{boardThumbnail}, 0, 0, #{bandId})
+		insert into videoboard values(null, #{boardSubject}, #{boardContent}, now(), #{boardVideoUrl}, #{boardThumbnail}, 0, 0, #{bandId},#{img})
 	</insert>
 	
 	<select id="videoboardlist" resultType="java.util.Map">
@@ -18,14 +18,15 @@
 			   videoboard.boardThumbnail, 
 			   videoboard.boardView, 
 			   videoboard.boardLike, 
-			   videoboard.bandId, 
+			   videoboard.bandId,
+			   0 as shows, 
 			   band.img 
 			   from videoboard,band 
 			   where videoboard.bandId=band.bandId;
 	</select>
 	
-	<select id="readvideo" resultType="VideoBoard">
-		select * from videoboard where boardId=#{boardId}
+	<select id="readvideo" resultType="java.util.Map">
+		select videoboard.*,band.img from videoboard,band where boardId=#{boardId} and videoboard.bandId=band.bandId;
 	</select>
 	
 	<update id="countup">
@@ -53,11 +54,23 @@
 			   videoboard.boardSubject, 
 			   videoboard.boardThumbnail, 
 			   videoboard.boardView, 
-			   videoboard.boardLike,
-			   band.img 
-			   from videoboard,band 
-			   where videoboard.bandId=band.bandId
-			   order by boardView desc;
+			   band.bandId 
+			   from videoboard,band
+			   where videoboard.bandId=band.bandId and (boardDate>curdate()-7)
+			   order by boardView desc
+			   limit 5;
+	</select>
+	
+	<select id="videoboardrankingpopular" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardLike, 
+			   band.bandId 
+			   from videoboard,band
+			   where videoboard.bandId=band.bandId and (boardDate>curdate()-7)
+			   order by (boardView+boardLike*10) desc
+			   limit 5;
 	</select>
 	
 </mapper>

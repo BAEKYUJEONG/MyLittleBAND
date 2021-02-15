@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.web.blog.dto.Band;
+import com.web.blog.dto.BandInvite;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
 import com.web.blog.dto.VideoBoard;
@@ -29,4 +30,6 @@ public interface BandService {
 	public void delcalendar(String bandId);
 	public void imgupdate(String bandId, String img);
 	public List<VideoBoard> videoofband(String bandId);
+	public List<HashMap<String, String>> searchband(String keyword);
+	public void bandinvite(BandInvite req);
 }

@@ -37,5 +37,20 @@ public class LikeServiceImpl implements LikeService{
 		return dao.likelist(memberId);
 	}
 
+	@Override
+	public HashMap<String, String> likecheck(String memberId, String boardId) {
+		return dao.likecheck(memberId, boardId);
+	}
+
+	@Override
+	public void likeup(String boardId) {
+		dao.likeup(boardId);
+	}
+
+	@Override
+	public void likedown(String likeId) {
+		dao.likedown(likeId);
+	}
+
 
 }

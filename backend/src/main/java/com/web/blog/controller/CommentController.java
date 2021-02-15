@@ -19,6 +19,8 @@ import com.web.blog.dto.OtherComment;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.service.CommentService;
 
+import io.swagger.annotations.ApiOperation;
+
 @CrossOrigin
 @RestController
 public class CommentController {
@@ -28,6 +30,7 @@ public class CommentController {
 	
 	//댓글 업로드
 	@PostMapping(value = "/comment")
+	@ApiOperation(value = "1", notes = "2")
 	private ResponseEntity create(@RequestBody Comment comment) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
@@ -52,6 +55,7 @@ public class CommentController {
 	
 	//댓글 목록 불러오기.
 	@GetMapping(value = "/comment/{boardId}")
+	@ApiOperation(value = "1", notes = "2")
 	private ResponseEntity selectList(@PathVariable String boardId) {
 		ResponseEntity entity = null;
 		Map result = new HashMap();
@@ -76,6 +80,7 @@ public class CommentController {
 	}
 	
 	@GetMapping(value= "/count/{boardId}")
+	@ApiOperation(value = "1", notes = "2")
 	private Object count(@PathVariable String boardId) {
 		int comment = service.count(boardId);
 		if(comment!=0) {

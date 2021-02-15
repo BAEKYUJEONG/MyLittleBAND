@@ -7,19 +7,23 @@ public class VideoBoardReq {
 	private String boardVideoUrl;
 	private String boardThumbnail;
 	private String bandId;
+	private String img;
 	
 	public VideoBoardReq() {
 
 	}
 
+	
 	public VideoBoardReq(String boardSubject, String boardContent, String boardVideoUrl, String boardThumbnail,
-			String bandId) {
+			String bandId, String img) {
 		this.boardSubject = boardSubject;
 		this.boardContent = boardContent;
 		this.boardVideoUrl = boardVideoUrl;
 		this.boardThumbnail = boardThumbnail;
 		this.bandId = bandId;
+		this.img = img;
 	}
+
 
 	public String getBoardSubject() {
 		return boardSubject;
@@ -61,7 +65,18 @@ public class VideoBoardReq {
 		this.bandId = bandId;
 	}
 
-	
 
+	public String getImg() {
+		return img;
+	}
+
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+
+	
+	
 	
 }

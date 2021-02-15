@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.Band;
+import com.web.blog.dto.BandInvite;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
 import com.web.blog.dto.Member;
@@ -24,6 +25,7 @@ import com.web.blog.dto.VideoBoard;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.service.BandService;
 import com.web.blog.service.MemberService;
+import com.web.blog.service.VideoBoardService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,6 +44,8 @@ public class BandController {
 	BandService service;
 	@Autowired
 	MemberService mservice;
+	@Autowired
+	VideoBoardService videoboardservice;
 	
 	@PostMapping(value = "/band/{memberId}")
 	@ApiOperation(value = "밴드개설", notes = "밴드개설 요청을 보낸다.")
@@ -56,6 +60,7 @@ public class BandController {
 //			Member m= mservice.getUserById(memberId);
 //			System.out.println(m.getEmail());
 //			System.out.println("들어옴");
+			videoboardservice.settime();
 			service.opened(req);
 			Band b= service.getBandByName(req.getName());
 //			System.out.println(memberId);
@@ -244,5 +249,34 @@ public class BandController {
 		else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping(value = "/band/find/{keyword}")
+	@ApiOperation(value = "밴드이름으로 검색", notes = "밴드이름으로 검색 목록을 보여준다.")
+	
+	public Object searchband(@PathVariable String keyword) {
+		List<HashMap<String, String>> list= service.searchband(keyword);
+		if(list!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=list;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping(value = "/band/invite")
+	@ApiOperation(value = "밴드초대", notes = "밴드초대 요청을 보낸다.")
+	public Object bandinvite(@RequestBody BandInvite req) {
+		
+		service.bandinvite(req);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
