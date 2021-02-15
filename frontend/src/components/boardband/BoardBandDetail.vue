@@ -73,11 +73,7 @@
             icon
             color="primary"
             large
-            @click="
-              () => {
-                this.$router.go(-1);
-              }
-            "
+            @click="moveList()"
           >
             <v-icon size="40">mdi-undo-variant</v-icon>
           </v-btn>
@@ -121,7 +117,9 @@ export default {
       });
       this.dialog = false;
     },
-
+    moveList(){
+      this.$router.push("/band/board/"+this.getBoard.bandId);
+    },
     //글쓴이 이름 가져오기
     getWriter(){
       axiosCommon.get("/member/"+this.getBoard.memberId)

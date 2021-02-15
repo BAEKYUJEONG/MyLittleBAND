@@ -70,7 +70,7 @@ const BandStore = {
                     if (response.data.status) {
                         return { result: true, msg: "밴드개설 성공" };
                     }
-                    else return { result: false, msg: "밴드 개설에 실패했습니다" };
+                    else return { result: false, msg: "이미 존재하는 밴드명입니다" };
                 })
                 .catch((error) => console.log(error));
         },

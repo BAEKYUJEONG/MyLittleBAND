@@ -107,6 +107,13 @@ export default {
   },
   methods: {
     ...mapActions(MemberStore, ["reqSignup", "reqSignupValidation"]),
+    reset(){
+      this.email = "",
+      this.pw = "",
+      this.pwvaild = "",
+      this.phone = "",
+      this.name = ""
+    },
     async onSignup() {
       // form 검증
       if (this.$refs.form.validate() === false) return;

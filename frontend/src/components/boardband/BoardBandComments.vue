@@ -10,7 +10,10 @@
     <!-- 댓글 작성 -->
     <v-row class="mt-2"
       ><v-col cols="auto"
-        ><v-avatar> <v-img :src="getMemberInfo.img" alt="John" /> </v-avatar
+        ><v-avatar> 
+          <v-img v-if="getMemberInfo.img == '' || getMemberInfo.img == null" src="https://i4a408.p.ssafy.io/profile/LogoMini.png" />
+        <v-img v-else :src="getMemberInfo.img" />
+         </v-avatar
       ></v-col>
       <v-col>
         <v-text-field
@@ -33,7 +36,8 @@
         <v-list-item v-for="comment in getComments" :key="comment.commentId">
           <v-list-item-icon>
             <v-list-item-avatar>
-              <v-img :src="comment.img"></v-img>
+              <v-img v-if="comment.img == '' || comment.img == null" src="https://i4a408.p.ssafy.io/profile/LogoMini.png" />
+              <v-img v-else :src="comment.img"></v-img>
             </v-list-item-avatar>
           </v-list-item-icon>
           <v-list-item-content>

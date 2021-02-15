@@ -64,7 +64,7 @@ export default {
     modify(){//회원정보 수정
       axios
       .put('/member/'+this.$route.params.memberno,{
-        member : this.member.name,
+        name : this.member.name,
         phone : this.member.phone,
         profile : this.member.profile
         })

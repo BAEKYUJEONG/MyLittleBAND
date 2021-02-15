@@ -31,8 +31,8 @@
             <v-card style="border-radius: 50%" v-bind="attrs" v-on="on" @click="bandinfo(band.bandId)">
               <!-- 밴드이미지가 없을 때 -->
               <v-img
-                v-if="band.img == ''"
-                src="../../assets/image/pepe.jpg"
+                v-if="band.img == '' || band.img == null"
+                src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 max-height="200px"

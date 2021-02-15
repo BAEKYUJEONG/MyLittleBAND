@@ -14,10 +14,10 @@
         <v-col cols="4">
           <v-text-field
             v-model="msg"
-            label="밴드명"
-            placeholder="원하는 밴드명을 입력하세요."
+            label="원하는 밴드명을 입력하세요."
             append-outer-icon="mdi-magnify"
             clearable
+            @keypress.enter="onSearch()"
             @click:append-outer="onSearch()"
           ></v-text-field>
         </v-col>
@@ -25,19 +25,15 @@
       <!-- 밴드리스트 -->
       <v-row justify="center">
         <v-col cols="6">
-          <v-tooltip
-            right
-            v-for="band in bandlist"
-            :key="band.bandId"
-          >
+          <v-tooltip right v-for="band in bandlist" :key="band.bandId">
             <template v-slot:activator="{ on, attrs }">
               <v-card class="mb-15" v-bind="attrs" v-on="on">
                 <v-row class="px-10" align="center">
                   <v-col cols="3">
                     <!-- 밴드이미지가 없을 때 -->
                     <v-img
-                      v-if="band.img == ''"
-                      src="../../assets/image/pepe.jpg"
+                      v-if="band.img == '' || band.img == null"
+                      src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
                       max-height="100"
                       max-width="100"
                       style="border-radius: 50%"
@@ -56,14 +52,16 @@
                     <v-row>
                       <v-col>
                         <v-btn x-large text @click="BandDetail(band.bandId)"
-                          ><strong> {{ band.name }} </strong></v-btn
+                          ><h2>{{ band.name }}</h2></v-btn
                         ></v-col
                       >
                     </v-row>
                     <v-row>
-                      <v-col>
-                        <v-btn>{{band.follow}}</v-btn>
-                      </v-col>
+                      <v-col
+                        ><h3 style="color: black">
+                          팔로워 수 : {{ band.follownum }}
+                        </h3></v-col
+                      >
                     </v-row>
                   </v-col>
                 </v-row>
@@ -79,22 +77,29 @@
                 <v-expand-transition>
                   <div v-show="show">
                     <v-divider></v-divider>
-                    <v-card-text> {{band.intro}} </v-card-text>
+                    <v-card-text> {{ band.intro }} </v-card-text>
                   </div>
                 </v-expand-transition>
               </v-card>
             </template>
-            <span >
-                <div>밴드명 클릭 시</div>
-                <div>해당밴드로 이동합니다</div>
-                </span>
+            <span>
+              <div>밴드명 클릭 시</div>
+              <div>해당밴드로 이동합니다</div>
+            </span>
           </v-tooltip>
         </v-col>
       </v-row>
       <!-- 검색초기화, 돌아가기 버튼 -->
       <v-row justify="center">
         <v-col cols="4">
-          <v-btn class="mx-6" color="primary" @click="getSuggetBandList()"
+          <v-btn
+            class="mx-6"
+            color="primary"
+            @click="
+              () => {
+                this.$router.go(0);
+              }
+            "
             >검색초기화</v-btn
           >
           <v-btn class="mx-6" color="primary" @click="ToBandList()"
@@ -107,50 +112,49 @@
 </template>
 
 <script>
-import axios from "../../axios/axios-common"
+import axios from "../../axios/axios-common";
 import { mapGetters } from "vuex";
 const FollowStore = "FollowStore";
 const BandStore = "BandStore";
 
 export default {
-
   async created() {
-     this.getSuggestBand();//추천밴드리스트 가져오기
+    this.getSuggestBand(); //추천밴드리스트 가져오기
     //this.getFollownum();
   },
   computed: {
-    ...mapGetters(BandStore, [ "getBandList" ]),
-    ...mapGetters(FollowStore, [ "getFollowList" ]),
+    ...mapGetters(BandStore, ["getBandList"]),
+    ...mapGetters(FollowStore, ["getFollowList"]),
   },
   methods: {
     getSuggestBand() {
-        //추천밴드목록 만들기
-        //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
-        //그중에서 이미 팔로우 중인 밴드는 제외하기
-        axios
+      //추천밴드목록 만들기
+      //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
+      //그중에서 이미 팔로우 중인 밴드는 제외하기
+      axios
         .get("/followlist/1")
-        .then((response)=>{
-          if(response.data.status){
+        .then((response) => {
+          if (response.data.status) {
             this.tmplist = response.data.object;
             this.makeSuggestBand();
           }
         })
         .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
     },
-    makeSuggestBand(){
-      here : for(let i = 0; i < this.tmplist.length; i++){
+    makeSuggestBand() {
+      here: for (let i = 0; i < this.tmplist.length; i++) {
         //추천밴드목록까지 반복
 
-        for(let j=0; j< this.getBandList.length; j++){
+        for (let j = 0; j < this.getBandList.length; j++) {
           //소속밴드목록만큼 반복
-          if(this.tmplist[i].bandId == this.getBandList[j].bandId){
+          if (this.tmplist[i].bandId == this.getBandList[j].bandId) {
             continue here;
           }
         }
 
-        for(let j=0; j< this.getFollowList.length; j++){
+        for (let j = 0; j < this.getFollowList.length; j++) {
           //팔로우중인 밴드목록만큼 반복
-          if(this.tmplist[i].bandId == this.getFollowList[j].bandId){
+          if (this.tmplist[i].bandId == this.getFollowList[j].bandId) {
             continue here;
           }
         }
@@ -158,35 +162,41 @@ export default {
         this.bandlist.push(this.tmplist[i]);
       }
     },
-    getFollownum(){
-        //밴드별 팔로우 수 조회
-        this.bandlist.follow = "1";
-    },
     onSearch() {
-        //밴드명으로 검색
-
       //만약 빈칸이면 초기 밴드정보 호출
       if (this.msg == "") {
-        this.getSuggetBandList();
+        this.$router.go(0);
         return;
       }
-       axios
-       .post("/band/find",{msg : this.msg})
-       .then((response)=>{
-           if(response.data.status){
-               this.bandlist = response.data.object;
-           }else{
-               alert("해당하는 검색 결과가 없습니다.");
-           }
-       })
-       .catch((exp)=>alert(exp+"조회에 실패하였습니다."));
+      axios
+        .get("/band/find/" + this.msg)
+        .then((response) => {
+          if (response.data.status) {
+            this.bandlist = response.data.object;
+
+            for (let i = 0; i < this.bandlist.length; i++) {
+              axios
+                .get("/follownum/" + this.bandlist[i].bandId)
+                .then((res) => {
+                  if (res.data.status) {
+                    this.bandlist[i].follownum = res.data.object[0].follownum;
+                    console.log(this.bandlist[i]);
+                  }
+                })
+                .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+            }
+          } else {
+            alert("해당하는 검색 결과가 없습니다.");
+          }
+        })
+        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
     BandDetail(val) {
       //밴드상세페이지로 이동
-      this.$router.push("/band/detail/" + val);
+      this.$router.push("/band/introduce/" + val);
     },
     ToBandList() {
-        //밴드리스트 페이지로 이동
+      //밴드리스트 페이지로 이동
       this.$router.push("/band/list/" + this.$route.params.memberno);
     },
   },
@@ -195,7 +205,7 @@ export default {
     return {
       msg: "",
       show: false,
-      tmplist:[],
+      tmplist: [],
       bandlist: [],
     };
   },
