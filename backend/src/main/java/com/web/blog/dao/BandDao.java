@@ -6,6 +6,7 @@ import java.util.List;
 import com.web.blog.dto.Band;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
+import com.web.blog.dto.VideoBoard;
 
 public interface BandDao {
 	public Band getBandByName(String name);
@@ -25,5 +26,6 @@ public interface BandDao {
 	public void delcrew(String bandId);
 	public void delfollow(String bandId);
 	public void delcalendar(String bandId);
-	
+	public void imgupdate(String bandId, String img);
+	public List<VideoBoard> videoofband(String bandId);
 }

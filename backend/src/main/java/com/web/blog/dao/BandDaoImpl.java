@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.web.blog.dto.Band;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
+import com.web.blog.dto.VideoBoard;
 import com.web.blog.mapper.BandMapper;
 
 @Repository
@@ -99,6 +100,16 @@ public class BandDaoImpl implements BandDao {
 	@Override
 	public void delcalendar(String bandId) {
 		mapper.delcalendar(bandId);
+	}
+
+	@Override
+	public void imgupdate(String bandId, String img) {
+		mapper.imgupdate(bandId, img);
+	}
+
+	@Override
+	public List<VideoBoard> videoofband(String bandId) {
+		return mapper.videoofband(bandId);
 	}
 
 	

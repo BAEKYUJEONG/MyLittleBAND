@@ -10,6 +10,7 @@ import com.web.blog.dao.BandDao;
 import com.web.blog.dto.Band;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
+import com.web.blog.dto.VideoBoard;
 
 @Service
 public class BandServiceImpl implements BandService{
@@ -99,6 +100,16 @@ public class BandServiceImpl implements BandService{
 	@Override
 	public void delcalendar(String bandId) {
 		dao.delcalendar(bandId);
+	}
+
+	@Override
+	public void imgupdate(String bandId, String img) {
+		dao.imgupdate(bandId, img);
+	}
+
+	@Override
+	public List<VideoBoard> videoofband(String bandId) {
+		return dao.videoofband(bandId);
 	}
 
 }

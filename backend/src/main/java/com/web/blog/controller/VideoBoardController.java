@@ -1,103 +1,124 @@
 package com.web.blog.controller;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.VideoBoard;
+import com.web.blog.dto.VideoBoardReq;
+import com.web.blog.model.BasicResponse;
 import com.web.blog.service.VideoBoardService;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 
 @CrossOrigin
 @RestController
-//@RequestMapping("/video")
 public class VideoBoardController {
-	
 	@Autowired
-	private VideoBoardService videoboard;
+	VideoBoardService service;
 	
-	//비디오 업로드
-	@PostMapping(value = "/video")
-	private ResponseEntity create(@RequestBody VideoBoard video) {
-		ResponseEntity entity = null;
-		Map result = new HashMap();
-		try {
-			int res = videoboard.update(video);
-			System.out.println(res);
-			if(res == 1) {
-				result.put("succes", "success");
-				entity = new ResponseEntity(result, HttpStatus.OK);
-			}
-			else {
-				result.put("success", "fail");
-				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", "error");
-			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
-		}
-		return entity;
+	@PostMapping(value = "/videoboard/{bandId}")
+	@ApiOperation(value = "영상게시글 작성", notes = "영상게시글 작성 요청을 보낸다.")
+	public Object writevideo(@RequestBody VideoBoardReq req,@PathVariable String bandId) {
+		
+		req.setBandId(bandId);
+		service.settime();
+		service.writevideo(req);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	//비디오 수정
-	@PutMapping(value = "/video/{boardId}")
-	private ResponseEntity update(@RequestBody VideoBoard video, @PathVariable String boardId) {
-		ResponseEntity entity = null;
-        Map result = new HashMap();
-        try {
-        	int res = videoboard.update(video);
-            if(res == 1) {
-                result.put("success", "success");
-                entity = new ResponseEntity(result, HttpStatus.OK);
-                
-            }
-            else {
-                result.put("success", "fail");
-                entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
-            }
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("success", "error");
-			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+	@GetMapping(value = "/videoboard/list")
+	@ApiOperation(value = "영상게시글 리스트", notes = "영상게시글 리스트를 보여준다.")
+	public Object videoboardlist() {
+		List<HashMap<String, String>> map= service.videoboardlist();
+		
+		if(map!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
 		}
-        return entity;
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 	}
 	
-	//비디오 삭제
-    @DeleteMapping(value = "/video/{boardId}")
-    private ResponseEntity delete(@PathVariable String boardId) {
-        ResponseEntity entity = null;
-        Map result = new HashMap();
-        try {
-            int res = videoboard.delete(boardId);
-            if(res == 1) {
-                result.put("success", "success");
-                entity = new ResponseEntity(result, HttpStatus.OK);
-
-            }
-            else {
-                result.put("success", "fail");
-                entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("success", "error");
-            entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
-        }
-        return entity;
-    }
-    
+	@GetMapping(value = "/videoboard/list/{boardId}")
+	@ApiOperation(value = "영상게시글 읽기", notes = "영상게시글 내용을 보여준다.")
+	public Object readvideo(@PathVariable String boardId) {
+		VideoBoard map= service.readvideo(boardId);
+		if(map!=null) {
+			service.countup(boardId);
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	@DeleteMapping(value = "/videoboard/{boardId}")
+	@ApiOperation(value = "영상게시글 삭제", notes = "영상게시글 삭제를 요청한다.")
+	public Object delvideo(@PathVariable String boardId) {
+		service.dellike(boardId);
+		service.delvideo(boardId);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/videoboard/{boardId}")
+	@ApiOperation(value = "영상게시글 수정", notes = "영상게시글 수정요청을 보낸다.")
+	public Object changevideo(@PathVariable String boardId, String boardSubject, String boardContent) {
+		service.changevideo(boardId, boardSubject, boardContent);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+	}
+	
+//	@GetMapping(value = "/videoboard/ranking/view")
+//	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 랭킹을 보여준다.")
+//	public Object rankingvideo() {
+//		List<HashMap<String, String>> map
+////		if(map!=null) {
+////			service.countup(boardId);
+////			final BasicResponse result = new BasicResponse();
+////	        result.status = true;
+////	        result.data = "success";
+////	        result.object=map;
+////	        return new ResponseEntity<>(result, HttpStatus.OK);
+////	      
+////		}
+////		else {
+////			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+////		}
+//		
+//	}
 }

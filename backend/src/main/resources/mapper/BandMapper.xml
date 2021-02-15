@@ -72,4 +72,14 @@
 		delete from calendar where bandId=#{bandId} 
 	</delete>
 	
+	<update id="imgupdate" parameterType="string">
+      update band set img=#{img} where bandId = #{bandId}
+	</update>
+	
+	<select id="videoofband" resultType="VideoBoard">
+		select * from videoboard where bandId=#{bandId}
+	</select>
+  
+
+	
 </mapper>

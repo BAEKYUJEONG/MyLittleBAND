@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
 
-  private final Path root = Paths.get("./");
+  private final Path root = Paths.get("/home/ubuntu/backend/");
 
   @Override
   public void init() {
@@ -28,14 +28,42 @@ public class FilesStorageServiceImpl implements FilesStorageService {
   }
 
   @Override
-  public void save(MultipartFile file) {
+  public void saveimage(MultipartFile file) {
     try {
-      Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+//    	System.out.println(this.root.resolve(file.getOriginalFilename())); //.\HBD.jpg
+      Files.copy(file.getInputStream(), this.root.resolve("profile/"+file.getOriginalFilename()));
+    } catch (Exception e) {
+      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+    }
+  }
+  
+  @Override
+  public void savevideo(MultipartFile file) {
+    try {
+      Files.copy(file.getInputStream(), this.root.resolve("video/"+file.getOriginalFilename()));
     } catch (Exception e) {
       throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
     }
   }
 
+  @Override
+  public void savethumbnail(MultipartFile file) {
+	  try {
+		  Files.copy(file.getInputStream(), this.root.resolve("thumbnail/"+file.getOriginalFilename()));
+	  } catch (Exception e) {
+		  throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+	  }
+  }
+  
+  @Override
+  public void savebandimage(MultipartFile file) {
+	  try {
+		  Files.copy(file.getInputStream(), this.root.resolve("band/"+file.getOriginalFilename()));
+	  } catch (Exception e) {
+		  throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+	  }
+  }
+  
   @Override
   public Resource load(String filename) {
     try {
