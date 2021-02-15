@@ -35,6 +35,7 @@ const BandBoardRoute = [
     component: BoardBandModify,
     props: true,
   },
+
 ];
 
 export default BandBoardRoute;
