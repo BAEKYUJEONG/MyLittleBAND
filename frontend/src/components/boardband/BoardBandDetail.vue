@@ -42,7 +42,7 @@
         </v-dialog>
 
         <!-- content -->
-        <v-flex>
+        <v-flex >
           <v-layout>
             <v-flex col-2 text-right><h2>작성자</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
@@ -62,7 +62,7 @@
             <v-flex col-2 text-right><h2>내용</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-textarea auto-grow readonly :value="getBoard.content" />
+              <v-textarea outlined auto-grow readonly :value="getBoard.content" />
             </v-flex>
           </v-layout>
         </v-flex>

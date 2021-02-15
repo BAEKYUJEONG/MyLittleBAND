@@ -10,8 +10,8 @@
 		NOW(), NULL)
 	</insert>
 
-	<select id="selectList" parameterType="String" resultType="OtherComment">
-		select c.commentId, c.content, m.img
+	<select id="selectList" parameterType="String" resultType="BandCommentReq">
+		select c.commentId, c.content, m.img, m.memberId
 		from bandcomment c, member m where c.bandboardId = #{bandboardId} and m.memberId = c.memberId
 	</select>
 

@@ -37,15 +37,18 @@ public class BandCommentController {
 			List<OtherComment> commentList = service.selectList(bandboardId);
 
 			if (commentList.size() > 0) {
-				result.put("succes", "success");
+				result.put("status", true); 
+				result.put("succes", "success");    
 				result.put("object", commentList);
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
+				result.put("status", false); 
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.put("status", false); 
 			result.put("success", "error");
 			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
@@ -62,14 +65,17 @@ public class BandCommentController {
 			boolean res = service.insert(comment);
 			System.out.println(res);
 			if (res) {
+				result.put("status", true);
 				result.put("succes", "success");
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
+				result.put("status", false); 
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.put("status", false); 
 			result.put("success", "error");
 			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
@@ -85,14 +91,17 @@ public class BandCommentController {
 			boolean res = service.modify(commentId,content);
 			System.out.println(res);
 			if (res) {
+				result.put("status", true);
 				result.put("succes", "success");
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
+				result.put("status", false); 
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.put("status", false); 
 			result.put("success", "error");
 			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}
@@ -109,14 +118,17 @@ public class BandCommentController {
 			boolean res = service.delete(commentId);
 			System.out.println(res);
 			if (res) {
+				result.put("status", true);
 				result.put("succes", "success");
 				entity = new ResponseEntity(result, HttpStatus.OK);
 			} else {
+				result.put("status", false); 
 				result.put("success", "fail");
 				entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.put("status", false); 
 			result.put("success", "error");
 			entity = new ResponseEntity(result, HttpStatus.BAD_REQUEST);
 		}

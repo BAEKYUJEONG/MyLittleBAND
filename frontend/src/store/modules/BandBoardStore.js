@@ -117,7 +117,7 @@ const BandBoardStore = {
                 .get('/bandcomment/' + boardno)
                 .then((response) => {
                     if (response.data.status) {
-                        context.commit('setComments', response.data);
+                        context.commit('setComments', response.data.object);
                         return { result: true, msg: '댓글 목록 받아오기 성공' };
                     } else {
                         return {
@@ -136,11 +136,11 @@ const BandBoardStore = {
             return axios
                 .post("/bandcomment/" + info.boardno, {
                     content: info.content,
-                    writer: info.memberId,
+                    memberId: info.memberId,
                 })
                 .then((response) => {
-                    if (response.data.status) return { result: true, msg: "댓글 작성이 완료되었습니다" };
-                    else return { result: false, msg: "글 작성이 실패했습니다" };
+                    if (response.data.status) return { result: true, msg: "댓글 작성 완료" };
+                    else return { result: false, msg: "댓글 작성 실패" };
                 })
                 .catch((error) => {
                     console.log(error);
@@ -154,8 +154,8 @@ const BandBoardStore = {
             return axios
                 .put("/bandcomment/" + info.commentno, frm)
                 .then((response) => {
-                    if (response.data.status) return { result: true, msg: "댓글 수정이 완료되었습니다" };
-                    else return { result: false, msg: "글 수정이 실패했습니다" };
+                    if (response.data.status) return { result: true, msg: "댓글 수정 완료" };
+                    else return { result: false, msg: "댓글 수정 실패" };
                 })
                 .catch((error) => {
                     console.log(error);
@@ -167,8 +167,8 @@ const BandBoardStore = {
             return axios
                 .delete("/bandcomment/" + commentno)
                 .then((response) => {
-                    if (response.data.status) return { result: true, msg: "글 삭제가 완료되었습니다" };
-                    else return { result: false, msg: "글 삭제가 실패했습니다" };
+                    if (response.data.status) return { result: true, msg: "댓글 삭제 완료" };
+                    else return { result: false, msg: "댓글 삭제 실패" };
                 })
                 .catch((error) => {
                     console.log(error);
