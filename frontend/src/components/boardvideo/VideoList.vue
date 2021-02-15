@@ -5,7 +5,7 @@
         <!-- 필터 영역 -->
         <v-col cols="6" align="center">
           <v-autocomplete
-            v-model="select"
+            v-model="selectOption"
             :disabled="isUpdating"
             :items="people"
             filled
@@ -14,7 +14,9 @@
             label="필터"
             item-text="name"
             item-value="name"
+            multiple
           >
+            <!-- 버튼 -->
             <template v-slot:append-outer>
               <v-slide-x-reverse-transition mode="out-in">
                 <v-icon
@@ -27,29 +29,26 @@
                 ></v-icon>
               </v-slide-x-reverse-transition>
             </template>
+
             <template v-slot:selection="data">
+              <!-- close 옵션을 없애고 하나씩 선택하는 것으로 변 경-->
               <v-chip
                 v-bind="data.attrs"
                 :input-value="data.selected"
-                close
                 @click="data.select"
-                @click:close="remove(data.item)"
               >
                 {{ data.item.name }}
               </v-chip>
             </template>
-            <template v-slot:item="data">
+            <template :disabled="isButton" v-slot:item="data">
               <template v-if="typeof data.item !== 'object'">
                 <v-list-item-content v-text="data.item"></v-list-item-content>
               </template>
               <template v-else>
-                <v-list-item-content>
+                <v-list-item-content @click="onItemClick(data.item.idx)">
                   <v-list-item-title
                     v-html="data.item.name"
                   ></v-list-item-title>
-                  <v-list-item-subtitle
-                    v-html="data.item.group"
-                  ></v-list-item-subtitle>
                 </v-list-item-content>
               </template>
             </template>
@@ -76,17 +75,16 @@
         <v-flex xs12 sm9>
           <!-- 카드 뷰 시작 -->
           <v-layout row wrap>
-            <!-- 백엔드 연동 시 : v-for="card in getVideos" -->
             <v-flex
-              v-for="card in cards"
-              :key="card.title"
-              v-bind="{ [`xs${card.flex}`]: true }"
+              v-for="(card, idx) in getVideos"
+              :key="idx"
+              v-bind="{ [`xs4`]: true }"
             >
               <v-card class="mx-10 my-10">
                 <v-img
-                  :src="card.src"
+                  :src="card.boardThumbnail"
                   height="200px"
-                  @click="onVideo(card.no)"
+                  @click="onVideo(card.boardId)"
                   style="cursor: pointer"
                 >
                 </v-img>
@@ -95,27 +93,25 @@
                   <v-list>
                     <v-list-item class="grow">
                       <v-list-item-avatar color="grey darken-3">
-                        <v-img
-                          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                        ></v-img>
+                        <v-img :src="card.img"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content>
                         <v-list-item-title
-                          v-text="card.title"
+                          v-text="card.boardSubject"
                         ></v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
                   <v-spacer></v-spacer>
-                  <v-btn icon @click="card.show = !card.show">
+                  <v-btn icon @click="card.shows = !card.shows">
                     <v-icon>{{
-                      card.show ? 'keyboard_arrow_down' : 'keyboard_arrow_up'
+                      card.shows ? 'keyboard_arrow_down' : 'keyboard_arrow_up'
                     }}</v-icon>
                   </v-btn>
                 </v-card-actions>
 
                 <v-slide-y-transition>
-                  <v-card-text v-show="card.show" v-text="card.content">
+                  <v-card-text v-show="card.shows" v-text="card.boardContent">
                   </v-card-text>
                 </v-slide-y-transition>
               </v-card>
@@ -124,9 +120,7 @@
         </v-flex>
         <v-row align="center" justify="space-around">
           <v-col cols="auto" class="mb-4">
-            <v-btn block outlined color="blue" @click="onAdd">
-              글쓰기
-            </v-btn>
+            <v-btn block outlined color="blue" @click="onAdd"> 글쓰기 </v-btn>
           </v-col>
         </v-row>
       </v-layout>
@@ -137,75 +131,39 @@
 <script>
 import axios from '@/axios/axios-common.js';
 
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
-const VideoStore = 'VideoStore';
+const VideoStore = 'VideoStore'; //비디오 store
 const MemberStore = 'MemberStore'; //로그인 체크 용.
 
 export default {
+  created() {
+    this.reqVideos();
+  },
+  mounted() {
+    this.getbandlist();
+  },
   data() {
     return {
+      isButton: false,
+      filter1: 1,
+      filter2: 0,
       bandlist: [],
-      select: [],
+      selectOption: ['빨강'],
       msg: '',
       isEditing: false,
       isUpdating: false,
       name: '밴드 속성',
       people: [
         { header: '컬러' },
-        { name: '빨강', group: '색깔' },
-        { name: '보라', group: '색깔' },
-        { name: '노랑', group: '색깔' },
+        { name: '빨강', group: '색깔', flag: true, idx: 1 },
+        { name: '보라', group: '색깔', flag: false, idx: 2 },
+        { name: '노랑', group: '색깔', flag: false, idx: 3 },
         { divider: true },
         { header: '장르' },
-        { name: '락', group: '장르' },
-        { name: '팝', group: '장르' },
-        { name: '재즈', group: '장르' },
-      ],
-
-      cards: [
-        {
-          title: '201215 싸피밴드',
-          src: require('@/assets/image/1.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피밴드의 공연입니다',
-        },
-        {
-          title: '191113 써니밴드',
-          src: require('@/assets/image/2.jpg'),
-          flex: 4,
-          show: false,
-          content: '써니밴드 공연영상',
-        },
-        {
-          title: '싸피홀 200303',
-          src: require('@/assets/image/3.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피홀에서의 공연',
-        },
-        {
-          title: '200903 전공밴드',
-          src: require('@/assets/image/4.jpg'),
-          flex: 4,
-          show: false,
-          content: '전공밴드 공연영상입니다.',
-        },
-        {
-          title: '19회 싸피데이 공연',
-          src: require('@/assets/image/5.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피데이 공연영상입니다.',
-        },
-        {
-          title: '27회 싸피 정기공연',
-          src: require('@/assets/image/6.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피...',
-        },
+        { name: '락', group: '장르', flag: false, idx: 6 },
+        { name: '팝', group: '장르', flag: false, idx: 7 },
+        { name: '재즈', group: '장르', flag: false, idx: 8 },
       ],
     };
   },
@@ -218,30 +176,54 @@ export default {
   },
   methods: {
     ...mapActions(VideoStore, ['reqVideos', 'reqVideo']),
+    ...mapMutations(VideoStore, ['setVideos', 'setVideo']),
+    onEditing() {
+      // 여긴 선택한 필터로 검색하는 곳.
 
-    onEditing(){
-      this.isEditing = !this.isEditing;
+      // 필터에서 하나씩만 선택했다면,
 
-      // 여기서 axios를 이용한 검색 처리.(필터는 select에 있음)
+      if (this.filter1 == 1 && this.filter2 == 1) {
+        let st1, st2;
 
+        // 순서 맞춰 주는 곳.
+        this.isEditing = !this.isEditing;
+        let tmpFlag = false;
+        for (let i = 1; i < 4; i++) {
+          if (this.selectOption[0] == this.people[i].name) {
+            st1 = this.selectOption[0];
+            st2 = this.selectOption[1];
+            tmpFlag = true;
+            break;
+          }
+        }
+        if (!tmpFlag) {
+          st1 = this.selectOption[1];
+          st2 = this.selectOption[0];
+        }
+
+        axios
+          .post('/filter', { genre: st2, color: st1 })
+          .then((response) => this.setVideos(response.data.object))
+          .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
+        // 여기서 axios를 이용한 검색 처리.(필터는 select에 있음)
+      } else alert('속성을 각각 하나씩 선택해 주세요!');
     },
 
     onSearch() {
       // 사용자가 원하는 검색어를 눌렀을 때, 검색이 되도록 처리.
+      axios
+        .get('/filter/' + this.msg)
+        .then((response) => {
+          this.setVideos(response.data.object);
+        })
+        .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
 
-      // 여기서 axios를 이용한 검색 처리.
-
-      // 이후
-      let videos = [];
-      this.reqVideos(videos).then((response) => {
-        if (!response) console.log(response);
-        //여기서 가져온 데이터로 새로고침 하는 구문이 필요함.
-        else alert(response.msg);
-      });
+      //this.$router.go(0); //자동 새로고침. 쓰지는 않음.
       this.msg = '';
     },
     onVideo(videonum) {
       // 비디오를 클릭했을 때, 비디오가 선택되도록 처리.
+      console.log(videonum);
       if (this.islogin) {
         // 로그인이 되었다면,
         this.reqVideo(videonum).then((response) => {
@@ -252,15 +234,16 @@ export default {
       } else alert('로그인 해주세요!');
     },
     remove(item) {
-      const index = this.friends.indexOf(item.name);
-      if (index >= 0) this.friends.splice(index, 1);
+      //chip뒤에 달리는 close 옵션인데, 현재는 사용하지 않음.
+      console.log(this.selectOption);
+      const index = this.selectOption.indexOf(item.name);
+      if (index >= 0) this.selectOption.splice(index, 1);
     },
     onAdd() {
       if (this.islogin) {
         //로그인이 된 경우에만 글쓰기로 보냄.
-        this.getbandlist();
         console.log(this.bandlist.length);
-        if (this.bandlist.length == 0) {
+        if (this.bandlist.length > 0) {
           //가입한 밴드 리스트가 1개 이상일 경우에만,
           this.$router.push({ name: 'videocreate' });
         } else alert('밴드 가입 후 글쓰기 가능합니다!');
@@ -271,6 +254,22 @@ export default {
         .get('/band-list/' + this.memberid)
         .then((response) => (this.bandlist = response.data.object))
         .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
+    },
+    onItemClick(idx) {
+      //console.log(this.filter1);
+
+      // 클릭시 속성에 맞게 boolean 값을 변경 하고. 카운팅 해줌.
+      if (this.people[idx].group == '색깔') {
+        if (!this.people[idx].flag) {
+          this.filter1++;
+        } else this.filter1--;
+        this.people[idx].flag = !this.people[idx].flag;
+      } else {
+        if (!this.people[idx].flag) {
+          this.filter2++;
+        } else this.filter2--;
+        this.people[idx].flag = !this.people[idx].flag;
+      }
     },
   },
 };

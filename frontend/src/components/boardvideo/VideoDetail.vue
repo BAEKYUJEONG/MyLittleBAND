@@ -21,23 +21,38 @@
       <v-row justify="center">
         <v-col cols="auto">
           <v-avatar>
-            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+            <img :src="video.img" alt="John" />
           </v-avatar>
         </v-col>
-        <strong class="black--text mt-6">제목</strong>
+        <strong class="black--text mt-6">{{ video.boardSubject }}</strong>
         <v-spacer></v-spacer>
-        <v-col cols="auto">
-          <v-icon
-            size="50"
-            @click="setLike()"
-            :color="member.like ? 'red' : 'grey'"
-            >mdi-heart</v-icon
-          >
+        <!-- 좋아요 버튼 -->
+        <v-col cols="4" class="ma-auto">
+          <v-tooltip bottom nudge-bottom="20">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon :color="color" v-bind="attrs" v-on="on">
+                <v-icon
+                  v-if="member.follow"
+                  size="80"
+                  @click="unLike()"
+                  color="red"
+                  >mdi-heart</v-icon
+                >
+                <v-icon v-else size="80" @click="setLike()" color="gray"
+                  >mdi-heart</v-icon
+                >
+              </v-btn>
+            </template>
+            <span v-if="!member.follow">좋아요 버튼</span>
+            <span v-else>좋아요 취소</span>
+          </v-tooltip>
         </v-col>
-        <strong class="black--text mt-6">좋아요 수</strong>
+        <strong class="black--text mt-6">{{ video.boardLike }}</strong>
       </v-row>
       <v-row
-        ><v-col><p class="black--text text-left">설명</p></v-col></v-row
+        ><v-col
+          ><p class="black--text text-left">{{ video.boardContent }}</p></v-col
+        ></v-row
       >
       <v-divider inset></v-divider>
       <h3 class="display-2 mt-4">댓글</h3>
@@ -46,10 +61,7 @@
       <v-row class="mt-2"
         ><v-col cols="auto"
           ><v-avatar>
-            <img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-              alt="John"
-            /> </v-avatar
+            <img :src="memberinfo.img" alt="video.boardId" /> </v-avatar
         ></v-col>
         <v-col>
           <v-text-field
@@ -69,14 +81,14 @@
       <!-- 작성된 댓글 목록-->
       <v-row class="mt-2">
         <v-list shaped>
-          <v-list-item v-for="(comment, i) in getComments" :key="i">
+          <v-list-item v-for="(comment, i) in comments" :key="i">
             <v-list-item-icon>
               <v-list-item-avatar>
-                <v-img :src="comment.avatar"></v-img>
+                <v-img :src="comment.img"></v-img>
               </v-list-item-avatar>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="comment.text"></v-list-item-title>
+              <v-list-item-title v-text="comment.content"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -87,28 +99,31 @@
 
 <script>
 import 'video.js/dist/video-js.css';
-//import axios from '@/axios/axios-common.js';
+import axios from '@/axios/axios-common.js';
 
 import { videoPlayer } from 'vue-video-player';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 const VideoStore = 'VideoStore';
+const MemberStore = 'MemberStore';
 
 export default {
   components: {
     videoPlayer,
   },
   created() {
-    this.playerOptions.sources[0].src =
-      'https://i4a408.p.ssafy.io/video/asd.mp4';
-
-    //this.playerOptions.sources[0].src = this.video.src; 백엔드에서 가져올 경우 이렇게 수정
+    this.playerOptions.sources[0].src = this.video.boardVideoUrl;
+    //console.log(this.video.boardId);
+    this.reqComments(this.video.boardId);
+    this.getLike();
   },
   data() {
     return {
       usercomment: '',
+      color: '',
       member: {
-        like: false, //true랑 fasle 다르게 함.
+        follow: false, //true이면 icon이 빨간색, false면 회색
+        followId: '',
       },
       playerOptions: {
         // 처음에 음소거 설정 필수.
@@ -136,10 +151,15 @@ export default {
     player() {
       return this.$refs.videoPlayer.player;
     },
-    ...mapGetters(VideoStore, [{ video: 'getVideo', comments: 'getComments' }]),
+    ...mapGetters(VideoStore, { video: 'getVideo', comments: 'getComments' }),
+    ...mapGetters(MemberStore, {
+      memberid: 'getMemberId',
+      memberinfo: 'getMemberInfo',
+    }),
   },
   methods: {
     // listen event
+    ...mapActions(VideoStore, ['reqComments']),
     onPlayerPlay(player) {
       console.log('player play!', player);
     },
@@ -160,44 +180,71 @@ export default {
       // player.[methods]
     },
     getLike() {
-      // 좋아요 여부 확인.
-      // 백엔드에서 해당 부분 만들어줘야함.
-      // axios
-      //   .post('/likecheck', {
-      //     memberId: this.memberid,
-      //     videoId: this.video.no,
-      //   })
-      //   .then((response) => {
-      //     if (response.data.object != null) this.member.like = true;
-      //   })
-      //   .catch((exp) => alert(exp + '멤버정보 조회에 실패하였습니다.'));
+      //밴드 팔로우 여부 불러옴
+      axios
+        .get(
+          '/likecheck?boardId=' +
+            this.video.boardId +
+            '&memberId=' +
+            this.memberid
+        )
+        .then((response) => {
+          if (response.data.status) {
+            this.member.follow = true;
+            this.member.followId = response.data.object.boardId;
+          }
+        })
+        .catch((exp) => {
+          console.log(exp + '언팔로우중');
+          this.member.follow = false;
+        });
     },
     setLike() {
-      //좋아요 상태변화 (true <=> false 바꿔줌)
-      // 백엔드에서 해당 부분 만들어줘야함.
-      // axios
-      //   .put('/like', {
-      //     memberId: this.memberid,
-      //     bandId: this.$route.params.bandno,
-      //   })
-      //   .then((response) => {
-      //     if (response.data.status) {
-      //       this.member.like = !this.member.like;
-      //     }
-      //   })
-      //   .catch((exp) => alert(exp + '팔로우 상태 변화에 실패하였습니다.'));
+      //팔로우상태변화 (false => true 바꿔줌)
+      //팔로우시켜줌
+      console.log(this.video.boardId);
+      console.log(this.memberid);
+      axios
+        .post('/like', {
+          boardId: this.video.boardId,
+          memberId: this.memberid,
+        })
+        .then((response) => {
+          if (response.data.status) {
+            this.member.follow = true;
+            this.member.followId = response.data.object.likeId;
+          }
+        })
+        .catch((exp) => alert(exp + '팔로우 상태 변화에 실패하였습니다.'));
+    },
+    unLike() {
+      //팔로우상태변화 (true => false 바꿔줌)
+      //언팔로우시켜줌
+      axios
+        .delete('/like/likelist/' + this.member.followId)
+        .then((response) => {
+          if (response.data.status) {
+            this.member.follow = false;
+            this.member.followId = '';
+          }
+        })
+        .catch((exp) => alert(exp + '팔로우 상태 변화에 실패하였습니다.'));
+      console.log('팔로우상태 : 언팔로우');
     },
     onWrite() {
+      //댓글 등록.
+      axios
+        .post('/comment', {
+          commentId: null,
+          boardId: this.video.boardId,
+          memberId: this.memberid,
+          content: this.usercomment,
+        })
+        .then((response) => {
+          if (response.data.status) console.log('성공!');
+        })
+        .catch((exp) => alert(exp + '댓글 등록 실패.'));
       this.usercomment = '';
-      // axios
-      //   .post('/comment/'+this.video.videonum, {
-      //     comment: this.usercomment,
-      //     memberid: '', //userid도 얻어와야 할 듯.
-      //   })
-      //   .then((response) => {
-      //     if (response.data.status) consoe.log("성공!");
-      //   })
-      //   .catch((exp) => alert(exp + '멤버정보 조회에 실패하였습니다.'));
     },
   },
 };

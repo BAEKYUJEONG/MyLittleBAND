@@ -10,11 +10,7 @@
     <!-- 댓글 작성 -->
     <v-row class="mt-2"
       ><v-col cols="auto"
-        ><v-avatar>
-          <img
-            src="https://cdn.vuetifyjs.com/images/john.jpg"
-            alt="John"
-          /> </v-avatar
+        ><v-avatar> <v-img :src="getMemberInfo.img" alt="John" /> </v-avatar
       ></v-col>
       <v-col>
         <v-text-field
@@ -34,81 +30,157 @@
     <!-- 작성된 댓글 목록-->
     <v-row class="mt-2">
       <v-list shaped>
-        <v-list-item v-for="(comment, i) in getComments" :key="i">
+        <v-list-item v-for="comment in getComments" :key="comment.commentId">
           <v-list-item-icon>
             <v-list-item-avatar>
-              <v-img :src="comment.avatar"></v-img>
+              <v-img :src="comment.img"></v-img>
             </v-list-item-avatar>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="comment.text"></v-list-item-title>
+            <v-list-item-title  v-text="comment.content"></v-list-item-title>
           </v-list-item-content>
+          <v-list-item-action v-if="comment.memberId == getMemberId">
+            <v-btn icon color="blue" @click="openModify(comment)"><v-icon>mdi-pencil</v-icon></v-btn>
+          </v-list-item-action>
+          <v-list-item-action v-if="comment.memberId == getMemberId">
+            <v-btn icon color="red" @click="openDelete(comment.commentId)"><v-icon>mdi-minus</v-icon></v-btn>
+          </v-list-item-action>
         </v-list-item>
       </v-list>
     </v-row>
+
+    <!--댓글수정 모달창 -->
+    <v-dialog v-model="Dialog.modify" persistent max-width="700">
+      <v-card style="opacity: 1">
+        <v-card-title class="headline"> 댓글수정 </v-card-title>
+        <v-card-text> <v-text-field
+                  v-model="tmpComment.content"
+                  required
+                ></v-text-field></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="onModify()"> 수정 </v-btn>
+          <v-btn color="green darken-1" text @click="Dialog.modify = false">
+            닫기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- 댓글삭제 모달창 -->
+    <v-dialog v-model="Dialog.delete" persistent max-width="290">
+      <v-card style="opacity: 1">
+        <v-card-title class="headline"> 댓글삭제 </v-card-title>
+        <v-card-text>정말 삭제하시겠습니까?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="onDelete()"> 예 </v-btn>
+          <v-btn color="green darken-1" text @click="Dialog.delete = false">
+            아니오
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 const BandBoardStore = "BandBoardStore";
 const MemberStore = "MemberStore";
 
 export default {
-  data(){
+  data() {
     return {
       title: "",
       content: "",
       usercomment: "",
+      Dialog:{
+        modify : false,
+        delete : false,
+      },
+      tmpComment: {},
+      tmpNo : '',
     };
   },
-  created(){
+  created() {
     this.title = this.getBoard.title;
     this.content = this.getBoard.content;
+    this.reqComments(this.$route.params.boardno).then((res) =>
+      console.log(res.msg)
+    );
   },
   computed: {
-    ...mapGetters(BandBoardStore, ["getBoard","getComments"]),
-    ...mapGetters(MemberStore, ["getMemberId"]),
+    ...mapGetters(BandBoardStore, ["getBoard", "getComments"]),
+    ...mapGetters(MemberStore, ["getMemberId", "getMemberInfo"]),
   },
   methods: {
-    ...mapActions(BandBoardStore, ["reqComments","reqCreateComment","reqModifyComment"]),
+    ...mapActions(BandBoardStore, [
+      "reqComments",
+      "reqCreateComment",
+      "reqModifyComment",
+      "reqDeleteComment"
+    ]),
     //댓글 작성
     onWrite() {
-      this.reqCreateComment({ boardno: this.$route.params.boardno, content: this.usercomment, writer : this.getMemberId })
-      .then((response) => {
-        if(response.result)   alert(response.msg);
-        else                  alert(response.msg);
+      this.reqCreateComment({
+        boardno: this.$route.params.boardno,
+        content: this.usercomment,
+        memberId: this.getMemberId,
       })
-      .catch((error) => {
-        console.log(error);
-      })
+        .then((response) => {
+          if (response.result) {
+            alert(response.msg);
+            this.usercomment = "";
+            this.reqComments(this.$route.params.boardno);
+          } else alert(response.msg);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
+    openModify(val){
+      this.Dialog.modify = true;
+      this.tmpComment = val;
+    },
     //댓글 수정
-    onModify(no){
-      this.reqModifyComment({ commentno: no, content: this.usercomment})
-      .then((response) => {
-        if(response.result)   alert(response.msg);
-        else                  alert(response.msg);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    onModify() {
+      this.reqModifyComment({ commentno: this.tmpComment.commentId, content: this.tmpComment.content })
+        .then((response) => {
+          if (response.result) {
+            alert(response.msg);
+            this.usercomment = "";
+            this.reqComments(this.$route.params.boardno);
+          } else alert(response.msg);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        this.Dialog.modify = false;
     },
-
+    openDelete(val){
+      this.Dialog.delete = true;
+      this.tmpNo = val;
+    },
     //댓글 삭제
-    onDelete(no){
-      this.reqDeleteComment(no)
-      .then((response) => {
-        if(response.result)   alert(response.msg);
-        else                  alert(response.msg);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    },
+    onDelete() {
+      this.reqDeleteComment(this.tmpNo)
+        .then((response) => {
+          if (response.result) {
+            alert(response.msg);
+            this.usercomment = "";
+            this.reqComments(this.$route.params.boardno);
+          } else alert(response.msg);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
+        this.Dialog.delete = false;
+    },
   },
 };
 </script>

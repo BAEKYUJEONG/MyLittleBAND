@@ -144,6 +144,8 @@
     </v-row>
     <v-row class="ma-auto">
       <v-col cols="12" class="ma-auto">
+        <v-btn color="primary" class="mx-6" router-link :to="'/band/board/' + this.$route.params.bandno" >밴드게시판</v-btn>
+
         <v-btn color="primary" class="mx-6" @click="list()">돌아가기</v-btn>
       </v-col>
     </v-row>

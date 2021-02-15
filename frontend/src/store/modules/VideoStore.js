@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axios/axios-common';
 
 const VideoStore = {
   namespaced: true,
@@ -33,10 +33,11 @@ const VideoStore = {
     // 비디오 리스트 받아오기
     reqVideos(context) {
       return axios
-        .get('/videolist')
+        .get('/videoboard/list')
         .then((response) => {
           if (response.data.status) {
-            context.commit('setVideos', response.data);
+            context.commit('setVideos', response.data.object);
+            console.log('받아오기 성공!');
             return { result: true, msg: '비디오 목록 받아오기 성공' };
           } else {
             return {
@@ -53,10 +54,10 @@ const VideoStore = {
     // 비디오 받아오기
     reqVideo(context, videonum) {
       return axios
-        .get('/video/' + videonum)
+        .get('/videoboard/list/' + videonum)
         .then((response) => {
           if (response.data.status) {
-            context.commit('setVideo', response.data);
+            context.commit('setVideo', response.data.object);
           } else {
             return { result: false, msg: '비디오를 불러오는데 실패했습니다' };
           }
@@ -71,8 +72,9 @@ const VideoStore = {
       return axios
         .get('/comment/' + videonum)
         .then((response) => {
+          console.log(response);
           if (response.data.status) {
-            context.commit('setComments', response.data);
+            context.commit('setComments', response.data.object);
             return { result: true, msg: '댓글 목록 받아오기 성공' };
           } else {
             return {

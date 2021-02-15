@@ -40,7 +40,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="board in getBoards" :key="board.no" @click="onBoard(board.no)">
+                    <tr v-for="board in getBoards" :key="board.bandBoardId" @click="onBoard(board.bandBoardId)">
                       <td>{{ board.title }}</td>
                       <td>{{ board.writer }}</td>
                       <td>{{ board.date }}</td>
@@ -96,7 +96,7 @@ export default {
   },
   created(){
     this.reqBandInfo(this.$route.params.bandno);
-    this.reqBoards({ bandId : this.$route.params.bandno, page : this.page});
+    this.reqBoards(this.$route.params.bandno);
   }
 };
 </script>
