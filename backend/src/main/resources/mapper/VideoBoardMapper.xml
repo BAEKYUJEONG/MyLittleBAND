@@ -60,4 +60,44 @@
 			   order by boardView desc;
 	</select>
 	
+	<select id="videoboardrankinglike" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardView, 
+			   videoboard.boardLike,
+			   band.img 
+			   from videoboard,band 
+			   where videoboard.bandId=band.bandId
+			   order by boardLike desc;
+	</select>
+	
+	<select id="videoboardrankingrookie" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardView, 
+			   videoboard.boardLike,
+			   band.img 
+			   from videoboard,band 
+			   where videoboard.bandId=band.bandId and band.debut <![CDATA[<]]>TO_NUMBER(TO_CHAR(SYSDATE,'YYYY'))-5
+			   <!-- 현재 년도 기준 5년 전 데뷔 밴드까지 -->
+			   order by boardLike desc;
+	</select>
+	
+	<select id="videoboardrankingdaily" resultType="java.util.Map">
+		select v.boardId, 
+			   v.boardSubject, 
+			   v.boardThumbnail, 
+			   v.boardView, 
+			   v.boardLike,
+			   b.img 
+			   from videoboard v,band b
+			   where v.bandId=b.bandId and 
+			   <![CDATA[
+			   WHERE CAST(LOG_TIME AS CHARACTER VARYING) >= (#{fromDate}||'00:00:00') 
+			   AND CAST(LOG_TIME AS CHARACTER VARYING) <= ( #{toDate}||'23:59:59') 
+			   ]]>
+			   order by boardView desc;
+	</select>
 </mapper>

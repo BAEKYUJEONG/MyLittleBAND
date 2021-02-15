@@ -103,22 +103,79 @@ public class VideoBoardController {
 	      
 	}
 	
-//	@GetMapping(value = "/videoboard/ranking/view")
-//	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 랭킹을 보여준다.")
-//	public Object rankingvideo() {
-//		List<HashMap<String, String>> map
-////		if(map!=null) {
-////			service.countup(boardId);
-////			final BasicResponse result = new BasicResponse();
-////	        result.status = true;
-////	        result.data = "success";
-////	        result.object=map;
-////	        return new ResponseEntity<>(result, HttpStatus.OK);
-////	      
-////		}
-////		else {
-////			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-////		}
-//		
-//	}
+	@GetMapping(value = "/videoboard/ranking/view")
+	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 뷰 별 랭킹을 보여준다.")
+	public Object rankingvideoview(@RequestBody String boardId) {
+		List<HashMap<String, String>> map = service.videoboardrankingview();
+		if(map!=null) {
+			service.countup(boardId);
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	@GetMapping(value = "/videoboard/ranking/like")
+	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 좋아요 수 랭킹을 보여준다.")
+	public Object rankingvideolike(@RequestBody String boardId) {
+		List<HashMap<String, String>> map = service.videoboardrankingview();
+		if(map!=null) {
+			service.countup(boardId);
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	@GetMapping(value = "/videoboard/ranking/rookie")
+	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 신인 랭킹을 보여준다.")
+	public Object rankingvideorookie(@RequestBody String boardId) {
+		List<HashMap<String, String>> map = service.videoboardrankingview();
+		if(map!=null) {
+			service.countup(boardId);
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	@GetMapping(value = "/videoboard/ranking/daily")
+	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 일간 랭킹을 보여준다.")
+	public Object rankingvideodaily(@RequestBody String boardId) {
+		List<HashMap<String, String>> map = service.videoboardrankingview();
+		if(map!=null) {
+			service.countup(boardId);
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=map;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
 }

@@ -59,6 +59,21 @@ public class VideoBoardServiceImpl implements VideoBoardService{
 	public List<HashMap<String, String>> videoboardrankingview() {
 		return dao.videoboardrankingview();
 	}
+
+	@Override
+	public List<HashMap<String, String>> videoboardrankinglike() {
+		return dao.videoboardrankinglike();
+	}
+
+	@Override
+	public List<HashMap<String, String>> videoboardrankingrookie() {
+		return dao.videoboardrankingrookie();
+	}
+
+	@Override
+	public List<HashMap<String, String>> videoboardrankingdaily() {
+		return dao.videoboardrankingdaily();
+	}
 	
 	
 

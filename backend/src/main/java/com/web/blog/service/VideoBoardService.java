@@ -16,4 +16,7 @@ public interface VideoBoardService {
 	public void changevideo(String boardId, String boardSubject, String boardContent);
 	public void settime();
 	public List<HashMap<String, String>> videoboardrankingview();
+	public List<HashMap<String, String>> videoboardrankinglike();
+	public List<HashMap<String, String>> videoboardrankingrookie();
+	public List<HashMap<String, String>> videoboardrankingdaily();
 }
