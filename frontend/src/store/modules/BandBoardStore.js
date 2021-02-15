@@ -115,7 +115,7 @@ const BandBoardStore = {
         //댓글 리스트 받아오기.
         reqComments(context, boardno) {
             return axios
-                .get('/board/band/comment' + boardno)
+                .get('/bandcomment/' + boardno)
                 .then((response) => {
                     if (response.data.status) {
                         context.commit('setComments', response.data);
@@ -135,7 +135,7 @@ const BandBoardStore = {
         //댓글 작성하기
         reqCreateComment(context, info) {
             return axios
-                .post("/band/board/comment/" + info.boardno, {
+                .post("/bandcomment/" + info.boardno, {
                     content: info.content,
                     writer: info.memberId,
                 })
@@ -150,10 +150,10 @@ const BandBoardStore = {
 
         //댓글 수정하기
         reqModifyComment(context, info) {
+            let frm = new FormData();
+            frm.append("content", info.content);
             return axios
-                .put("/band/board/comment/" + info.commentno, {
-                    content: info.content,
-                })
+                .put("/bandcomment/" + info.commentno, frm)
                 .then((response) => {
                     if (response.data.status) return { result: true, msg: "댓글 수정이 완료되었습니다" };
                     else return { result: false, msg: "글 수정이 실패했습니다" };
@@ -166,7 +166,7 @@ const BandBoardStore = {
         //댓글 삭제하기
         reqDeleteComment(context, commentno) {
             return axios
-                .delete("/band/board/comment/" + commentno)
+                .delete("/bandcomment/" + commentno)
                 .then((response) => {
                     if (response.data.status) return { result: true, msg: "글 삭제가 완료되었습니다" };
                     else return { result: false, msg: "글 삭제가 실패했습니다" };
