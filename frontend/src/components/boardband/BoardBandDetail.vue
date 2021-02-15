@@ -48,14 +48,14 @@
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-4>
               <v-sheet>
-                {{ getBoard.writer }}
+                {{ writer }}
               </v-sheet>
             </v-flex>
             <v-flex col-2>
               <h2>조회수 :</h2>
             </v-flex>
             <v-flex col-1>
-              <v-sheet>{{ getBoard.views }}</v-sheet>
+              <v-sheet>{{ getBoard.view }}</v-sheet>
             </v-flex>
           </v-layout>
           <v-layout>
@@ -89,6 +89,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import axiosCommon from '../../axios/axios-common';
 import BoardBandComments from "../boardband/BoardBandComments";
 const BandBoardStore = "BandBoardStore";
 const MemberStore = "MemberStore";
@@ -97,7 +98,12 @@ export default {
     return {
       no: this.$route.params.boardno,
       dialog: false,
+      writer : '',
     };
+  },
+  created(){
+    this.reqBoard(this.no);
+    this.getWriter();
   },
   computed: {
     ...mapGetters(BandBoardStore, ["getBoard"]),
@@ -108,13 +114,19 @@ export default {
     // 글 삭제
     onRemove(no) {
       this.reqDeleteBoard(no).then((response) => {
-        if (response.result) alert(response.msg);
-
+        if (response.result) {
         alert(response.msg);
+        this.$router.push("/band/board/"+this.getBoard.bandId);
+        }
       });
       this.dialog = false;
     },
-    
+
+    //글쓴이 이름 가져오기
+    getWriter(){
+      axiosCommon.get("/member/"+this.getBoard.memberId)
+      .then((res) => this.writer = res.data.object.name );
+    },
   },
   components:{
       BoardBandComments

@@ -36,9 +36,9 @@ const BandBoardStore = {
     },
     actions: {
         // 밴드게시판 리스트 받아오기
-        reqBoards(context, info) {
+        reqBoards(context, bandno) {
             return axios
-                .get("/band/board?bandId=" + info.bandId + "&page=" + info.page)
+                .get("/bandboard/list/"+bandno)
                 .then((response) => {
                     if (response.data.status) {
                         context.commit("setBoards", response.data.object);
@@ -54,10 +54,10 @@ const BandBoardStore = {
         // 밴드게시판 글 받아오기
         reqBoard(context, boardno) {
             return axios
-                .get("/band/board?boardno=" + boardno)
+                .get("/bandboard/read/"+ boardno)
                 .then((response) => {
                     if (response.data.status) {
-                        context.commit("setBoard", response.data);
+                        context.commit("setBoard", response.data.object);
                     } else {
                         return { result: false, msg: "글을 불러오는데 실패했습니다" };
                     }
@@ -70,10 +70,10 @@ const BandBoardStore = {
         // 밴드게시판 글 생성하기
         reqCreateBoard(context, info) {
             return axios
-                .post("/band/board/" + info.bandId, {
+                .post("/bandboard/" + info.bandId, {
                     title: info.title,
                     content: info.content,
-                    writer: info.memberId,
+                    memberId: info.memberId,
                 })
                 .then((response) => {
                     if (response.data.status) return { result: true, msg: "글 작성이 완료되었습니다" };
@@ -85,12 +85,11 @@ const BandBoardStore = {
         },
         // 밴드게시판 글 수정하기
         reqModifyBoard(context, info) {
+            let frm = new FormData();
+            frm.append("content", info.content);
+            frm.append("title", info.title);
             return axios
-                .put("/band/board/" + info.boardno, {
-                    title: info.title,
-                    content: info.content,
-                    memberId : info.memberId,
-                })
+                .put("/bandboard/" + info.boardno, frm)
                 .then((response) => {
                     if (response.data.status) return { result: true, msg: "글 수정이 완료되었습니다" };
                     else return { result: false, msg: "글 수정이 실패했습니다" };
@@ -102,7 +101,7 @@ const BandBoardStore = {
         // 밴드게시판 글 삭제하기
         reqDeleteBoard(context, boardno) {
             return axios
-                .delete("/band/board/" + boardno)
+                .delete("/bandboard/" + boardno)
                 .then((response) => {
                     if (response.data.status) return { result: true, msg: "글 삭제가 완료되었습니다" };
                     else return { result: false, msg: "글 삭제가 실패했습니다" };
