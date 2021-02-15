@@ -20,7 +20,6 @@ const VideoStore = {
   },
   mutations: {
     setVideos(state, payload) {
-      console.log('test');
       state.videos = payload;
     },
     setVideo(state, payload) {
@@ -71,11 +70,11 @@ const VideoStore = {
     //댓글 리스트 받아오기.
     reqComments(context, videonum) {
       return axios
-        .get('/comment/list/' + videonum)
+        .get('/comment/' + videonum)
         .then((response) => {
           console.log(response);
           if (response.data.status) {
-            context.commit('setComments', response.data);
+            context.commit('setComments', response.data.object);
             return { result: true, msg: '댓글 목록 받아오기 성공' };
           } else {
             return {
