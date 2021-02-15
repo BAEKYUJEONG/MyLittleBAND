@@ -89,9 +89,7 @@ export default {
     };
   },
   created() {
-    this.reqRanking().then((response) => {
-      if (!response) console.log(this.getRanking[2]);
-    });
+    this.reqRanking();
   },
   computed: {
     ...mapGetters(RankingStore, ["getRanking"]),
