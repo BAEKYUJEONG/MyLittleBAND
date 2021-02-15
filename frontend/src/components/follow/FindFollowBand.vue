@@ -108,16 +108,19 @@
 
 <script>
 import axios from "../../axios/axios-common"
+import { mapGetters } from "vuex";
+const FollowStore = "FollowStore";
+const BandStore = "BandStore";
+
 export default {
 
   async created() {
-    await this.getFollowBand(); //팔로우중인 밴드
-    await this.getbandlist();   //내가 소속된 밴드
      this.getSuggestBand();//추천밴드리스트 가져오기
     //this.getFollownum();
   },
-  watch:{//route이동시에도 created함수를 호출할 수 있도록 함
-    '$route' : 'created'
+  computed: {
+    ...mapGetters(BandStore, [ "getBandList" ]),
+    ...mapGetters(FollowStore, [ "getFollowList" ]),
   },
   methods: {
     getSuggestBand() {
@@ -138,39 +141,22 @@ export default {
       here : for(let i = 0; i < this.tmplist.length; i++){
         //추천밴드목록까지 반복
 
-        for(let j=0; j< this.Bandin.length; j++){
+        for(let j=0; j< this.getBandList.length; j++){
           //소속밴드목록만큼 반복
-          if(this.tmplist[i].bandId == this.Bandin[j].bandId){
+          if(this.tmplist[i].bandId == this.getBandList[j].bandId){
             continue here;
           }
         }
 
-        for(let j=0; j< this.followBand.length; j++){
+        for(let j=0; j< this.getFollowList.length; j++){
           //팔로우중인 밴드목록만큼 반복
-          if(this.tmplist[i].bandId == this.followBand[j].bandId){
+          if(this.tmplist[i].bandId == this.getFollowList[j].bandId){
             continue here;
           }
         }
         //해당하는게 없으면 추천밴드에 입력
         this.bandlist.push(this.tmplist[i]);
       }
-    },
-    getFollowBand() {
-      //팔로우 중인 밴드리스트 가져오기
-      axios
-        .get("/followlist/" + this.$route.params.memberno)
-        .then((response) => {
-          if (response.data.data == "success")
-            this.followBand = response.data.object;
-        })
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
-    },
-    getbandlist() {
-      //소속된 밴드리스트 조회
-      axios
-        .get("/band-list/" + this.$route.params.memberno)
-        .then((response) => (this.Bandin = response.data.object))
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
     },
     getFollownum(){
         //밴드별 팔로우 수 조회
@@ -209,23 +195,8 @@ export default {
     return {
       msg: "",
       show: false,
-      followBand:[],
-      Bandin:[],
       tmplist:[],
-      bandlist: [
-        {
-          bandId: 1,
-          name: "잘한다밴드",
-          img: "",
-          intro : "저희는 홍대에 터를두고 생활하는 밴드입니다."
-        },
-        {
-          bandId: 2,
-          name: "더잘한다밴드",
-          img: require("../../assets/image/pepe.jpg"),
-          intro : "궁금하면 들어와서 영상부터 만나봐"
-        },
-      ],
+      bandlist: [],
     };
   },
 };
