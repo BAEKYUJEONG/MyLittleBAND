@@ -143,7 +143,7 @@
 
 <script>
 import axios from "../../axios/axios-common";
-import { mapActions } from "vuex"; //vuex사용
+import { mapActions, mapGetters } from "vuex"; //vuex사용
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
 export default {
   created() {
@@ -154,6 +154,7 @@ export default {
     //백엔드 연동 후 아래 주석 해제
     this.getbandlist();
   },
+
   methods: {
     ...mapActions(MemberStore, [
       //MemberStore 모듈 내 actions 사용
@@ -238,6 +239,8 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(MemberStore,[ {member : "getMemberInfo"}])
+,
     atEndOfList() {
       //밴드리스트의 끝을 반환하는 메소드
       return (

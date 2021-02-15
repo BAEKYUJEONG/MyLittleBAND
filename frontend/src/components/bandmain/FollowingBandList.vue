@@ -7,7 +7,7 @@
         </v-banner>
       </v-col>
     </v-row>
-    <v-row justify="center" v-if="followBand.length == 0">
+    <v-row justify="center" v-if="followBand == null">
       <v-col cols="6">
         <v-spacer />
         <v-alert
@@ -25,7 +25,7 @@
     </v-row>
   
     <v-row v-else >
-      <v-col v-for="band in followBand" :key="band.bandId" cols="2">
+      <v-col v-for="band in getFollowList" :key="band.bandId" cols="2">
         <v-tooltip bottom nudge-top="5">
           <template v-slot:activator="{ on, attrs }">
             <v-card style="border-radius: 50%" v-bind="attrs" v-on="on" @click="bandinfo(band.bandId)">
@@ -59,42 +59,32 @@
 </template>
 
 <script>
-import axiosCommon from "../../axios/axios-common";
+import { mapGetters,mapActions } from "vuex";
+const FollowStore = "FollowStore";
+
 export default {
+  data() {
+    return {
+      followBand : []
+    };
+  },
+  computed: {
+    ...mapGetters(FollowStore, [ "getFollowList"]),
+  },
   created() {
     //팔로우 중인 밴드 정보 가져오기
     this.getFollowBand();
   },
-  data() {
-    return {
-      followBand: [
-        {
-          bandid: 3,
-          name: "내이름은코난,밴드죠",
-          img: "",
-        },
-        {
-          bandid: 4,
-          name: "나보다네가더잘한다밴드",
-          img: require("../../assets/image/pepe.jpg"),
-        },
-      ],
-    };
-  },
   methods: {
+    ...mapActions(FollowStore,["reqFollowList"]),
+
     bandinfo(val) {
       //밴드소개페이지로 이동
       this.$router.push("/band/introduce/" + val);
     },
     getFollowBand() {
       //팔로우 중인 밴드리스트 가져오기
-      axiosCommon
-        .get("/followlist/" + this.$route.params.memberno)
-        .then((response) => {
-          if (response.data.data == "success")
-            this.followBand = response.data.object;
-        })
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+      this.reqFollowList(this.$route.params.memberno);
     },
   },
 };
