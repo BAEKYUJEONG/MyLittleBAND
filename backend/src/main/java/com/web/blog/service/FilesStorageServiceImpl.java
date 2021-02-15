@@ -28,37 +28,37 @@ public class FilesStorageServiceImpl implements FilesStorageService {
   }
 
   @Override
-  public void saveimage(MultipartFile file) {
+  public void saveimage(MultipartFile file, String timeurl) {
     try {
 //    	System.out.println(this.root.resolve(file.getOriginalFilename())); //.\HBD.jpg
-      Files.copy(file.getInputStream(), this.root.resolve("profile/"+file.getOriginalFilename()));
+      Files.copy(file.getInputStream(), this.root.resolve("profile/"+timeurl+file.getOriginalFilename()));
     } catch (Exception e) {
       throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
     }
   }
   
   @Override
-  public void savevideo(MultipartFile file) {
+  public void savevideo(MultipartFile file, String timeurl) {
     try {
-      Files.copy(file.getInputStream(), this.root.resolve("video/"+file.getOriginalFilename()));
+      Files.copy(file.getInputStream(), this.root.resolve("video/"+timeurl+file.getOriginalFilename()));
     } catch (Exception e) {
       throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
     }
   }
 
   @Override
-  public void savethumbnail(MultipartFile file) {
+  public void savethumbnail(MultipartFile file, String timeurl) {
 	  try {
-		  Files.copy(file.getInputStream(), this.root.resolve("thumbnail/"+file.getOriginalFilename()));
+		  Files.copy(file.getInputStream(), this.root.resolve("thumbnail/"+timeurl+file.getOriginalFilename()));
 	  } catch (Exception e) {
 		  throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 	  }
   }
   
   @Override
-  public void savebandimage(MultipartFile file) {
+  public void savebandimage(MultipartFile file, String timeurl) {
 	  try {
-		  Files.copy(file.getInputStream(), this.root.resolve("band/"+file.getOriginalFilename()));
+		  Files.copy(file.getInputStream(), this.root.resolve("band/"+timeurl+file.getOriginalFilename()));
 	  } catch (Exception e) {
 		  throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 	  }

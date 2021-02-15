@@ -15,13 +15,15 @@ public class VideoBoard {
 	private int boardView;
 	private int boardLike;
 	private String bandId;
+	private String img;
 	
 	public VideoBoard() {
 
 	}
 
+	
 	public VideoBoard(String boardId, String boardSubject, String boardContent, LocalDate boardDate,
-			String boardVideoUrl, String boardThumbnail, int boardView, int boardLike, String bandId) {
+			String boardVideoUrl, String boardThumbnail, int boardView, int boardLike, String bandId, String img) {
 		this.boardId = boardId;
 		this.boardSubject = boardSubject;
 		this.boardContent = boardContent;
@@ -31,7 +33,9 @@ public class VideoBoard {
 		this.boardView = boardView;
 		this.boardLike = boardLike;
 		this.bandId = bandId;
+		this.img = img;
 	}
+
 
 	public String getBoardId() {
 		return boardId;
@@ -104,6 +108,19 @@ public class VideoBoard {
 	public void setBandId(String bandId) {
 		this.bandId = bandId;
 	}
+
+
+	public String getImg() {
+		return img;
+	}
+
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+
+	
 	
 	
 }

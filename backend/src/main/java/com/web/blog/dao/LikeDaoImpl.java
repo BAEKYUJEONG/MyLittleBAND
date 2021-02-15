@@ -37,5 +37,21 @@ public class LikeDaoImpl implements LikeDao {
 		return mapper.likelist(memberId);
 	}
 
+	@Override
+	public HashMap<String, String> likecheck(String memberId, String boardId) {
+		return mapper.likecheck(memberId, boardId);
+	}
+
+	@Override
+	public void likeup(String boardId) {
+		mapper.likeup(boardId);
+	}
+
+	@Override
+	public void likedown(String likeId) {
+		mapper.likedown(likeId);
+	}
+
+
 	
 }

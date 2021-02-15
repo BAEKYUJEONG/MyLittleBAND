@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.blog.dto.Band;
+import com.web.blog.dto.BandInvite;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
 import com.web.blog.dto.VideoBoard;
@@ -110,6 +111,16 @@ public class BandDaoImpl implements BandDao {
 	@Override
 	public List<VideoBoard> videoofband(String bandId) {
 		return mapper.videoofband(bandId);
+	}
+
+	@Override
+	public List<HashMap<String, String>> searchband(String keyword) {
+		return mapper.searchband(keyword);
+	}
+
+	@Override
+	public void bandinvite(BandInvite req) {
+		mapper.bandinvite(req);
 	}
 
 	

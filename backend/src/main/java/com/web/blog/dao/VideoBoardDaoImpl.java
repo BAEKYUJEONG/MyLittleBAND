@@ -26,7 +26,7 @@ public class VideoBoardDaoImpl implements VideoBoardDao {
 	}
 
 	@Override
-	public VideoBoard readvideo(String boardId) {
+	public HashMap<String, String> readvideo(String boardId) {
 		return mapper.readvideo(boardId);
 	}
 
@@ -58,6 +58,11 @@ public class VideoBoardDaoImpl implements VideoBoardDao {
 	@Override
 	public List<HashMap<String, String>> videoboardrankingview() {
 		return mapper.videoboardrankingview();
+	}
+
+	@Override
+	public List<HashMap<String, String>> videoboardrankingpopular() {
+		return mapper.videoboardrankingpopular();
 	}
 
 }

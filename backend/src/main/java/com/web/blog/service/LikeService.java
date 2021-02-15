@@ -11,4 +11,7 @@ public interface LikeService {
 	public void unlike(String likeId);
 	public Like getlikeById(LikeReq req);
 	public List<HashMap<String, String>> likelist(String memberId);
+	public HashMap<String, String> likecheck(String memberId, String boardId);
+	public void likeup(String boardId);
+	public void likedown(String likeId);
 }

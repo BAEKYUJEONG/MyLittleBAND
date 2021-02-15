@@ -10,16 +10,20 @@ public class BandOpened {
 	private String name;
 	@ApiModelProperty(example = "안녕하세요")
 	private String intro;
+	private String genre;
+	private String color;
 	
 	
 	public BandOpened() {
 	}
 
 
-	public BandOpened(String img, String name, String intro) {
+	public BandOpened(String img, String name, String intro, String genre, String color) {
 		this.img = img;
 		this.name = name;
 		this.intro = intro;
+		this.genre = genre;
+		this.color = color;
 	}
 
 
@@ -51,6 +55,27 @@ public class BandOpened {
 	public void setIntro(String intro) {
 		this.intro = intro;
 	}
+
+
+	public String getGenre() {
+		return genre;
+	}
+
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+
+	public String getColor() {
+		return color;
+	}
+
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 
 	
 	
