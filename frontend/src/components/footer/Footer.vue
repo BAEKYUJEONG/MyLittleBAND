@@ -7,7 +7,7 @@
         color="white"
         text
         rounded
-        class="my-10 mx-10"
+        class="my-10 mx-10 member"
         :href="member.url"
       >
         {{ member.name }}
@@ -51,8 +51,7 @@ export default {
 </script>
 
 <style>
-.row,
-.col {
+.member {
   color: white;
   text-align: center;
 }

@@ -12,35 +12,60 @@
     </v-row>
 
     <!-- 랭킹 종목 -->
-    <v-col v-else v-for="r in getRanking" :key="r.title">
+    <v-col v-else v-for="(r, idx) in getRanking[0][0]" :key="r.title">
       <!-- 랭킹 제목(배너) -->
-      <v-banner class="my-10">
-        <strong>{{ r.rankname }}</strong>
-      </v-banner>
+      <v-sheet class="my-10 text-center display-1">
+        {{ r }}
+      </v-sheet>
 
       <!-- 랭킹 목록 -->
       <v-sheet class="mx-auto" elevation="8">
         <v-slide-group class="pa-4" show-arrows>
           <v-slide-item
-            v-for="n in r.items"
-            :key="n.no"
+            v-for="n in getRanking[idx.substr(1)]"
+            :key="n.boardId"
             v-slot="{ active }"
           >
             <v-card
               :color="active ? 'grey lighten-1' : ''"
               class="d-flex ma-4 flex-end flex-column"
-              height="300"
+              height="320"
               width="500"
-              @click="[active, getItem(n.no)]"
+              @click="[active]"
+              router-link
+              :to="'/video/' + n.boardId"
             >
-              <v-card-text class="text-end">
-                <v-icon size="25" class="mr-1">{{ icons.mdiEye }}</v-icon>
-                {{ n.view }}
-              </v-card-text>
-              <v-card-text class="text-end mt-auto">
-                <p>{{ n.title }}</p>
-                <p>{{ n.band }}</p>
-              </v-card-text>
+              <v-img
+                height="200"
+                :src="n.boardThumbnail"
+                >
+              </v-img>
+
+              <v-row>
+                <v-col cols="auto" class="ml-auto"
+                  ><v-card-title
+                    v-if="n.boardView != undefined"
+                    class="text-end mr-3"
+                    ><v-icon color="grey darken-3" class="mr-3">mdi-eye</v-icon
+                    >{{ n.boardView }}</v-card-title
+                  ><v-card-title
+                    v-else-if="n.boardLike != undefined"
+                    class="text-end mr-3"
+                    ><v-icon color="grey darken-3" class="mr-3"
+                      >mdi-heart</v-icon
+                    >{{ n.boardLike }}</v-card-title
+                  >
+                </v-col>
+
+                <v-col>
+                  <div class="text-end mb-1 mr-2">
+                    <v-card-text class="headline font-weight-black">{{
+                      n.boardSubject
+                    }}</v-card-text>
+                    <v-card-text class="subtitle-1">{{ n.bandId }}</v-card-text>
+                  </div>
+                </v-col>
+              </v-row>
             </v-card>
           </v-slide-item>
         </v-slide-group>
@@ -51,7 +76,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { mdiEye } from '@mdi/js';
+import { mdiEye } from "@mdi/js";
 
 const RankingStore = "RankingStore";
 
@@ -63,17 +88,22 @@ export default {
       },
     };
   },
+  created() {
+    this.reqRanking().then((response) => {
+      if (!response) console.log(this.getRanking[2]);
+    });
+  },
   computed: {
     ...mapGetters(RankingStore, ["getRanking"]),
   },
   methods: {
     ...mapActions(RankingStore, ["reqRanking"]),
-    // click item
-    getItem(no) {
-      alert(no);
-    }
   },
 };
 </script>
 
-<style></style>
+<style>
+.thumbnail-rank {
+  opacity: 0.8;
+}
+</style>
