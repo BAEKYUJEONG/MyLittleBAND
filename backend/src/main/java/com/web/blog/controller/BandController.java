@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.Band;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
 import com.web.blog.dto.Member;
+import com.web.blog.dto.VideoBoard;
 import com.web.blog.model.BasicResponse;
 import com.web.blog.service.BandService;
 import com.web.blog.service.MemberService;
@@ -216,4 +218,31 @@ public class BandController {
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/band/img/{bandId}")
+	@ApiOperation(value = "이미지수정")
+	public Object imgupdate(@RequestParam(required = true) final String img, @PathVariable String bandId) {
+		service.imgupdate(bandId, img);
+		final BasicResponse result = new BasicResponse();
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/videoboard/videolist/{bandId}")
+	@ApiOperation(value = "밴드의 영상게시물 목록", notes = "밴드의 영상게시물 목록을 보여준다.")
+	
+	public Object videoofband(@PathVariable String bandId) {
+		List<VideoBoard> list= service.videoofband(bandId);
+		if(list!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=list;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 }

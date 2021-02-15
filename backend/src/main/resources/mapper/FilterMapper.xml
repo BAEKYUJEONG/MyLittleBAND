@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.FilterMapper">
+	<select id="search" resultType="VideoBoard">
+		select * from videoboard where boardSubject like CONCAT('%',#{keyword},'%')
+	</select>
+	
+	<select id="filter" parameterType="String" resultType="VideoBoard">
+		select * from videoboard where bandId=(select bandId from band where genre=#{genre} and color=#{color})
+	</select>
+</mapper>

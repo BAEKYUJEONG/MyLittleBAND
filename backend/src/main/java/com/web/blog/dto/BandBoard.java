@@ -1,29 +1,44 @@
 package com.web.blog.dto;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class BandBoard {
-	private String id;
+	private String bandBoardId;
+	private String title;
 	private String content;
-	private String date;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate date;
 	private String view;
-	private String bandid;
+	private String bandId;
 	
 	public BandBoard() {
 	}
 
-	public BandBoard(String id, String content, String date, String view, String bandid) {
-		this.id = id;
+	public BandBoard(String bandBoardId, String title, String content, LocalDate date, String view, String bandId) {
+		this.bandBoardId = bandBoardId;
+		this.title = title;
 		this.content = content;
 		this.date = date;
 		this.view = view;
-		this.bandid = bandid;
+		this.bandId = bandId;
 	}
 
-	public String getId() {
-		return id;
+	public String getBandBoardId() {
+		return bandBoardId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setBandBoardId(String bandBoardId) {
+		this.bandBoardId = bandBoardId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getContent() {
@@ -34,11 +49,11 @@ public class BandBoard {
 		this.content = content;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -50,12 +65,12 @@ public class BandBoard {
 		this.view = view;
 	}
 
-	public String getBandid() {
-		return bandid;
+	public String getBandId() {
+		return bandId;
 	}
 
-	public void setBandid(String bandid) {
-		this.bandid = bandid;
+	public void setBandId(String bandId) {
+		this.bandId = bandId;
 	}
 	
 	

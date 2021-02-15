@@ -7,6 +7,7 @@ import java.util.List;
 import com.web.blog.dto.Band;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
+import com.web.blog.dto.VideoBoard;
 
 public interface BandMapper {
 	public Band getBandByName(String name);
@@ -26,4 +27,6 @@ public interface BandMapper {
 	public void delcrew(String bandId);
 	public void delfollow(String bandId);
 	public void delcalendar(String bandId);
+	public void imgupdate(String bandId, String img);
+	public List<VideoBoard> videoofband(String bandId);
 }

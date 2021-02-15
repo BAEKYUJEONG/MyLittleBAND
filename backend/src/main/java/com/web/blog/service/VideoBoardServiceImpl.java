@@ -1,5 +1,6 @@
 package com.web.blog.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,35 +8,58 @@ import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.VideoBoardDao;
 import com.web.blog.dto.VideoBoard;
+import com.web.blog.dto.VideoBoardReq;
 
 @Service
 public class VideoBoardServiceImpl implements VideoBoardService{
-	
 	@Autowired
 	VideoBoardDao dao;
 
 	@Override
-	public int insert(VideoBoard vboard) throws Exception {
-		return dao.insert(vboard);
+	public void writevideo(VideoBoardReq req) {
+		dao.writevideo(req);
 	}
 
 	@Override
-	public int update(VideoBoard vboard) throws Exception {
-		return dao.update(vboard);
+	public List<HashMap<String, String>> videoboardlist() {
+		return dao.videoboardlist();
 	}
 
 	@Override
-	public int delete(String boardId) throws Exception {
-		return dao.delete(boardId);
+	public VideoBoard readvideo(String boardId) {
+		return dao.readvideo(boardId);
 	}
 
 	@Override
-	public VideoBoard select(String boardId) throws Exception {
-		return dao.select(boardId);
+	public void countup(String boardId) {
+		dao.countup(boardId);
 	}
 
 	@Override
-	public List<VideoBoard> selectAll() throws Exception {
-		return dao.selectAll();
+	public void delvideo(String boardId) {
+		dao.delvideo(boardId);
 	}
+
+	@Override
+	public void dellike(String boardId) {
+		dao.dellike(boardId);
+	}
+
+	@Override
+	public void changevideo(String boardId, String boardSubject, String boardContent) {
+		dao.changevideo(boardId, boardSubject, boardContent);
+	}
+
+	@Override
+	public void settime() {
+		dao.settime();
+	}
+
+	@Override
+	public List<HashMap<String, String>> videoboardrankingview() {
+		return dao.videoboardrankingview();
+	}
+	
+	
+
 }

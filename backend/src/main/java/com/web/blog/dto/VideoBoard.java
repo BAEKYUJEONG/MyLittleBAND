@@ -1,10 +1,15 @@
 package com.web.blog.dto;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class VideoBoard {
 	private String boardId;
 	private String boardSubject;
 	private String boardContent;
-	private int boardDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate boardDate;
 	private String boardVideoUrl;
 	private String boardThumbnail;
 	private int boardView;
@@ -15,9 +20,8 @@ public class VideoBoard {
 
 	}
 
-	public VideoBoard(String boardId, String boardSubject, String boardContent, int boardDate, String boardVideoUrl,
-			String boardThumbnail, int boardView, int boardLike, String bandId) {
-		super();
+	public VideoBoard(String boardId, String boardSubject, String boardContent, LocalDate boardDate,
+			String boardVideoUrl, String boardThumbnail, int boardView, int boardLike, String bandId) {
 		this.boardId = boardId;
 		this.boardSubject = boardSubject;
 		this.boardContent = boardContent;
@@ -53,11 +57,11 @@ public class VideoBoard {
 		this.boardContent = boardContent;
 	}
 
-	public int getBoardDate() {
+	public LocalDate getBoardDate() {
 		return boardDate;
 	}
 
-	public void setBoardDate(int boardDate) {
+	public void setBoardDate(LocalDate boardDate) {
 		this.boardDate = boardDate;
 	}
 
@@ -100,5 +104,6 @@ public class VideoBoard {
 	public void setBandId(String bandId) {
 		this.bandId = bandId;
 	}
+	
 	
 }

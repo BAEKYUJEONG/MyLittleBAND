@@ -1,29 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.web.blog.mapper.VideoBoardMapper">	
-	<select id="selectAll" resultType="VideoBoard">
-		select * from videoboard
-	</select>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.VideoBoardMapper">
 	
-	<select id="select" resultType="VideoBoard">
-		select * from videoboard
-		where boardId = #{boradId}
-	</select>
-	
-	<insert id="insert" parameterType="VideoBoard">
-		insert into videoboard (boardId, boardSubject, boardContent, boardDate, boardVideoUrl, boardThumnail, bandId)
-		values (#{boardId}, #{boardSubject}, #{boardContent}, #{boardDate}, #{boardVideoUrl}, #{boardThumnail}, #{bandId})
+	<insert id="writevideo" parameterType="VideoBoardReq">
+		insert into videoboard values(null, #{boardSubject}, #{boardContent}, now(), #{boardVideoUrl}, #{boardThumbnail}, 0, 0, #{bandId})
 	</insert>
 	
-	<update id="update" parameterType="VideoBoard">
-		update videoboard
-		set boardSubject = #{boardSubject}, boardContent = #{boardContent}, boardThumbnail = #{boardThumbnail}
-		where boardId = #{boardId}
+	<select id="videoboardlist" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardContent, 
+			   videoboard.boardDate, 
+			   videoboard.boardVideoUrl, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardView, 
+			   videoboard.boardLike, 
+			   videoboard.bandId, 
+			   band.img 
+			   from videoboard,band 
+			   where videoboard.bandId=band.bandId;
+	</select>
+	
+	<select id="readvideo" resultType="VideoBoard">
+		select * from videoboard where boardId=#{boardId}
+	</select>
+	
+	<update id="countup">
+		update videoboard set boardView=(select boardView from videoboard where boardId=#{boardId})+1 where boardId=#{boardId};
 	</update>
 	
-	<delete id="delete" parameterType="String">
-		delete from videoboard
-		where boardId = #{boardId}
+	<delete id="delvideo">
+		delete from videoboard where boardId=#{boardId};
 	</delete>
+	
+	<delete id="dellike">
+		delete from likeboard where boardId=#{boardId};
+	</delete>
+	
+	<update id="changevideo">
+		update videoboard set boardSubject=#{boardSubject}, boardContent=#{boardContent} where boardId=#{boardId};
+	</update>
+	
+	<update id="settime">
+		set time_zone ='Asia/Seoul';
+	</update>
+	
+	<select id="videoboardrankingview" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardView, 
+			   videoboard.boardLike,
+			   band.img 
+			   from videoboard,band 
+			   where videoboard.bandId=band.bandId
+			   order by boardView desc;
+	</select>
+	
 </mapper>
