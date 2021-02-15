@@ -49,6 +49,17 @@
                 </template>
               </v-simple-table>
             </v-flex>
+            <v-flex text-right>
+          <v-btn
+            icon
+            color="primary"
+            large
+            @click="()=>{this.$router.go(-1)}"
+          >
+            <v-icon size="40">mdi-undo-variant</v-icon>
+          </v-btn>
+        </v-flex>
+        
             <!-- pagination -->
             <v-flex>
               <v-pagination
@@ -59,6 +70,7 @@
                 next-icon="mdi-menu-right"
               ></v-pagination>
             </v-flex>
+            
           </v-layout>
           </v-responsive>
         </v-flex>

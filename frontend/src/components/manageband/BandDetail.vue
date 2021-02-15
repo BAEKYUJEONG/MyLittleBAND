@@ -15,6 +15,15 @@
         <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
             <v-img
+              v-if="band.img == '' || band.img == null"
+              class="ma-auto mp-4"
+              height="300"
+              width="300"
+              style="border-radius: 50%"
+              src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
+            ></v-img>
+            <v-img
+              v-else
               class="ma-auto mp-4"
               height="300"
               width="300"
@@ -55,7 +64,7 @@
             v-for="member in members"
             :key="member.no"
             v-model="member.name"
-            :label="member.session"
+            :label="member.codeSession"
             readonly
             class="ma-auto pa-2"
           >
@@ -78,6 +87,17 @@
           <strong>공연영상</strong>
         </v-banner>
 
+        </v-col>
+    </v-row>
+    <v-row class="ma-auto px-10" justify="center">
+      <!-- 랭킹 영상이 없을 때 -->
+      <v-col cols="4" v-if="videolist.length == 0">
+        <v-alert align="center" type="warning">
+          랭킹 목록이 존재하지 않습니다.
+        </v-alert>
+      </v-col>
+
+      <v-col v-else>
         <!-- 목록 -->
         <v-sheet class="mx-auto" elevation="8">
           <v-slide-group class="pa-4" show-arrows>
@@ -123,7 +143,13 @@
       <v-col cols="12" v-else>
         <v-btn color="primary" class="mx-6" @click="upload()">영상업로드</v-btn>
 
-        <v-btn color="primary" class="mx-6" router-link :to="'/band/board/' + this.$route.params.bandno" >밴드게시판</v-btn>
+        <v-btn
+          color="primary"
+          class="mx-6"
+          router-link
+          :to="'/band/board/' + this.$route.params.bandno"
+          >밴드게시판</v-btn
+        >
 
         <!-- 밴드탈퇴 모달창 -->
         <v-dialog v-model="dialog" persistent max-width="290">
@@ -197,8 +223,7 @@ export default {
 
       band: {}, //밴드정보
       members: [], //소속멤버정보
-      videolist: [
-      ],
+      videolist: [],
     };
   },
   computed: {
@@ -212,7 +237,7 @@ export default {
 
     this.getBandinfo(); //밴드정보가져오기
     this.getMemberinfo(); //밴드소속 멤버정보 가져오기
-    this.getVideolist();//밴드의 비디오리스트 가져오기
+    this.getVideolist(); //밴드의 비디오리스트 가져오기
   },
   methods: {
     getBandinfo() {
@@ -238,7 +263,7 @@ export default {
     getVideolist() {
       //밴드의 비디오 리스트를 조회합니다.
       axios
-        .get("/videoboard/videolist/"+this.$route.params.bandno)
+        .get("/videoboard/videolist/" + this.$route.params.bandno)
         .then((response) => (this.videolist = response.data.object))
         .catch((exp) => alert(exp + "비디오리스트 조회에 실패하였습니다."));
     },
@@ -247,8 +272,8 @@ export default {
       for (let i = 0; i < this.members.length; i++) {
         if (this.members[i].memberId == this.memberId) {
           if (this.members[i].isChief == "1") this.isChief = "1";
-        this.crewId = this.members[i].crewId;
-        break;
+          this.crewId = this.members[i].crewId;
+          break;
         }
       }
     },
@@ -266,7 +291,7 @@ export default {
       if (value == "밴드정보수정") {
         this.$router.push("/band/modify/" + this.$route.params.bandno);
       } else if (value == "영상업로드") {
-        this.upload();
+        this.$router.push({name : 'videocreate'});
       } else if (value == "밴드게시판") {
         this.$router.push("/band/board/" + this.$route.params.bandno);
       } else if (value == "공연신청") {
@@ -283,15 +308,10 @@ export default {
           if (response.data.data == "success") {
             alert("탈퇴에 성공하였습니다.");
             this.dialog = false;
-            this.$router.push("/band/list/"+this.memberId);
+            this.$router.push("/band/list/" + this.memberId);
           }
         })
         .catch((exp) => alert(exp + "탈퇴에 실패하였습니다."));
-    },
-    upload() {
-      //영상업로드
-      console.log("영상업로드페이지로 이동");
-      //this.$router.push("/video/create/" + this.$route.params.bandno);
     },
   },
   components: {

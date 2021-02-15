@@ -71,6 +71,21 @@ const FollowStore = {
                     console.log(error);
                 })
         },
+
+        //팔로우수 확인하기
+        reqFollownum(context, bandId) {
+            return axios
+                .get("/follownum/" + bandId)
+                .then((response) => {
+                    if (response.data.status) return {
+                        result : true, msg:"팔로우수 조회 성공", follownum : response.data.object.follownum
+                    }
+                    else return { result: false, msg: "팔로우 수 조회 실패" };
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
     }
 }
 

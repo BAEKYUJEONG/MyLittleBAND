@@ -17,6 +17,28 @@
                 :class="{ 'on-hover': !hover }"
               >
                 <v-img
+                  v-if="member.img == null || member.img == ''"
+                  class="ma-auto mp-4"
+                  height="300"
+                  width="300"
+                  style="border-radius: 50%"
+                  src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
+                >
+                  <input
+                    ref="imageInput"
+                    accept="image/*"
+                    type="file"
+                    hidden
+                    @change="onChangeImages"
+                  />
+                  <v-card-text class="justify-center">
+                    <v-btn v-if="hover" @click="onClickImageUpload"
+                      >Edit
+                    </v-btn>
+                  </v-card-text>
+                </v-img>
+                <v-img
+                  v-else
                   class="ma-auto mp-4"
                   height="300"
                   width="300"
@@ -25,6 +47,7 @@
                 >
                   <input
                     ref="imageInput"
+                    accept="image/*"
                     type="file"
                     hidden
                     @change="onChangeImages"
@@ -224,7 +247,7 @@ export default {
       formData.append("file", this.member.imgdata); //이미지 정보전달
 
       axios
-        .post("/upload/member/"+this.$route.params.memberno, formData, {
+        .post("/upload/member/" + this.$route.params.memberno, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
@@ -239,8 +262,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(MemberStore,[ {member : "getMemberInfo"}])
-,
+    ...mapGetters(MemberStore, [{ member: "getMemberInfo" }]),
     atEndOfList() {
       //밴드리스트의 끝을 반환하는 메소드
       return (
