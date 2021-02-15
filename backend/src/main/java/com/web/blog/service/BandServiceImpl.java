@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.BandDao;
 import com.web.blog.dto.Band;
+import com.web.blog.dto.BandInvite;
 import com.web.blog.dto.BandOpened;
 import com.web.blog.dto.Crew;
 import com.web.blog.dto.VideoBoard;
@@ -110,6 +111,16 @@ public class BandServiceImpl implements BandService{
 	@Override
 	public List<VideoBoard> videoofband(String bandId) {
 		return dao.videoofband(bandId);
+	}
+
+	@Override
+	public List<HashMap<String, String>> searchband(String keyword) {
+		return dao.searchband(keyword);
+	}
+
+	@Override
+	public void bandinvite(BandInvite req) {
+		dao.bandinvite(req);
 	}
 
 }

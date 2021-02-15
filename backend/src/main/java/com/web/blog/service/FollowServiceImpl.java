@@ -39,6 +39,22 @@ public class FollowServiceImpl implements FollowService{
 	public HashMap<String, String> followcheck(String memberId, String bandId) {
 		return dao.followcheck(memberId, bandId);
 	}
+
+	@Override
+	public List<HashMap<String, String>> follownum(String bandId) {
+		return dao.follownum(bandId);
+	}
+
+	@Override
+	public void followup(String bandId) {
+		dao.followup(bandId);
+	}
+
+	@Override
+	public void followdown(String followId) {
+		System.out.println("?");
+		dao.followdown(followId);
+	}
 	
 	
 

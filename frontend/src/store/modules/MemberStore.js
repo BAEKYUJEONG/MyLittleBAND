@@ -116,7 +116,7 @@ const MemberStore = {
         .catch((error) => {
           console.log(error);
         });
-    },
+    },    
     // 이메일 인증 요청
     reqSignupValidation(context, email) {
       return axios

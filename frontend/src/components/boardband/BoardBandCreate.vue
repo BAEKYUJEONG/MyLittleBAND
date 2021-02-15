@@ -79,6 +79,7 @@ export default {
 
     onCreate(){
       this.reqCreateBoard({ 
+        img : "https://i4a408.p.ssafy.io/profile/LogoMini.png",
         bandId : this.$route.params.bandno,
         title: this.title, 
         content: this.content,

@@ -44,6 +44,7 @@ public class FollowController {
 	})
 	public Object addfollow(@RequestBody FollowReq req) {
 		service.addfollow(req);
+		service.followup(req.getBandId());
 		HashMap<String, String> follow=service.followcheck(req.getMemberId(), req.getBandId());
 		final BasicResponse result = new BasicResponse();
         result.status = true;
@@ -54,12 +55,13 @@ public class FollowController {
 	}
 	
 	@DeleteMapping(value = "/follow/followlist/{followId}")
-	@ApiOperation(value = "팔로우하기", notes = "팔로우 요청을 보낸다.")
+	@ApiOperation(value = "언팔로우하기", notes = "언팔로우 요청을 보낸다.")
 	@ApiResponses({
-		@ApiResponse(code= 200, message="팔로우 성공"),
+		@ApiResponse(code= 200, message="언팔로우 성공"),
 		@ApiResponse(code= 400, message="잘못된 접근"),
 	})
-	public Object addfollow(@PathVariable String followId) {
+	public Object unfollow(@PathVariable String followId) {
+		service.followdown(followId);
 		service.unfollow(followId);
 		final BasicResponse result = new BasicResponse();
         result.status = true;
@@ -109,5 +111,21 @@ public class FollowController {
 		}
 	}
 	
+	@GetMapping(value = "/follownum/{bandId}")
+	@ApiOperation(value = "팔로워 수 체크", notes = "팔로워 수 보여준다.")
+	public Object follownum(@PathVariable String bandId) {
+		List<HashMap<String, String>> follownum= service.follownum(bandId);
+		if(follownum!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=follownum;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
 	
 }

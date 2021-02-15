@@ -45,10 +45,10 @@
         >
         <v-col>
           <v-file-input
-            accept="video/*"
+            accept="video/mp4"
             v-model="videofiles"
             show-size
-            label="비디오 파일"
+            label="비디오 파일(mp4)"
           ></v-file-input>
           <p>File Name : {{ videofiles.name }}</p>
         </v-col>
@@ -148,28 +148,28 @@ export default {
 
       let fd = new FormData();
       let fd2 = new FormData();
-      fd.append('imgfiles', this.imgfiles);
-      fd2.append('videofiles', this.videofiles);
+      fd.append('file', this.imgfiles);
+      fd2.append('file', this.videofiles);
 
-      await axios
-        .post('/upload/thumbnail/' + this.select, fd, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+      await axios.post('/upload/thumbnail/' + this.select, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      /*
         .then((rec) => {
           console.log('suc');
           console.log(rec);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.log(e));*/
 
-      await axios
-        .post('/upload/video/' + this.select, fd2, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+      await axios.post('/upload/video/' + this.select, fd2, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      /*
         .then((rec) => {
           console.log('suc');
           console.log(rec);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.log(e));*/
 
       //DB에 등록하는 과정.
 
@@ -177,9 +177,6 @@ export default {
       const st2 = 'https://i4a408.p.ssafy.io/video/' + this.videofiles.name; //주소를 넣어줌.
       await axios
         .post('/videoboard/' + this.select, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
           bandId: this.select,
           boardContent: this.board.content,
           boardSubject: this.board.title,

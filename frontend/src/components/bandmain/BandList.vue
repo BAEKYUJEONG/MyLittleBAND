@@ -39,8 +39,8 @@
               <v-row class="px-10">
                 <v-col cols="3">
                   <!-- 밴드이미지가 없을 때 -->
-                  <v-img v-if="band.img == ''"
-                    src="../../assets/image/pepe.jpg"
+                  <v-img v-if="band.img == '' || band.img == null"
+                    src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
                     max-height="100"
                     max-width="100"
                     style="border-radius: 50%">

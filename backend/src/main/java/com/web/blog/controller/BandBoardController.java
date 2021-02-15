@@ -32,7 +32,6 @@ public class BandBoardController {
 	@PostMapping(value = "/bandboard/{bandId}")
 	@ApiOperation(value = "밴드게시글 작성", notes = "밴드게시글 작성 요청을 보낸다.")
 	public Object writebandboard(@RequestBody BandBoardReq req,@PathVariable String bandId) {
-		
 		req.setBandId(bandId);
 		service.settime();
 		service.writebandboard(req);
@@ -42,10 +41,10 @@ public class BandBoardController {
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/bandboard/list")
+	@GetMapping(value = "/bandboard/list/{bandId}")
 	@ApiOperation(value = "밴드게시글 리스트", notes = "밴드게시글 리스트를 보여준다.")
-	public Object bandboardlist() {
-		List<BandBoard> map= service.bandboardlist();
+	public Object bandboardlist(@PathVariable String bandId) {
+		List<BandBoard> map= service.bandboardlist(bandId);
 		
 		if(map!=null) {
 			final BasicResponse result = new BasicResponse();
@@ -60,7 +59,7 @@ public class BandBoardController {
 		}
 	}
 	
-	@GetMapping(value = "/bandboard/list/{bandboardId}")
+	@GetMapping(value = "/bandboard/read/{bandboardId}")
 	@ApiOperation(value = "밴드게시글 읽기", notes = "밴드게시글 내용을 보여준다.")
 	public Object readbandboard(@PathVariable String bandboardId) {
 		BandBoard map= service.readbandboard(bandboardId);

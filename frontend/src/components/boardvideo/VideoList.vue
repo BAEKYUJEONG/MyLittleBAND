@@ -93,9 +93,7 @@
                   <v-list>
                     <v-list-item class="grow">
                       <v-list-item-avatar color="grey darken-3">
-                        <v-img
-                          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                        ></v-img>
+                        <v-img :src="card.img"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content>
                         <v-list-item-title
@@ -105,15 +103,15 @@
                     </v-list-item>
                   </v-list>
                   <v-spacer></v-spacer>
-                  <v-btn icon @click="card.show = !card.show">
+                  <v-btn icon @click="card.shows = !card.shows">
                     <v-icon>{{
-                      card.show ? 'keyboard_arrow_down' : 'keyboard_arrow_up'
+                      card.shows ? 'keyboard_arrow_down' : 'keyboard_arrow_up'
                     }}</v-icon>
                   </v-btn>
                 </v-card-actions>
 
                 <v-slide-y-transition>
-                  <v-card-text v-show="card.show" v-text="card.boardContent">
+                  <v-card-text v-show="card.shows" v-text="card.boardContent">
                   </v-card-text>
                 </v-slide-y-transition>
               </v-card>
@@ -122,9 +120,7 @@
         </v-flex>
         <v-row align="center" justify="space-around">
           <v-col cols="auto" class="mb-4">
-            <v-btn block outlined color="blue" @click="onAdd">
-              글쓰기
-            </v-btn>
+            <v-btn block outlined color="blue" @click="onAdd"> 글쓰기 </v-btn>
           </v-col>
         </v-row>
       </v-layout>
@@ -143,6 +139,9 @@ const MemberStore = 'MemberStore'; //로그인 체크 용.
 export default {
   created() {
     this.reqVideos();
+  },
+  mounted() {
+    this.getbandlist();
   },
   data() {
     return {
@@ -166,51 +165,6 @@ export default {
         { name: '팝', group: '장르', flag: false, idx: 7 },
         { name: '재즈', group: '장르', flag: false, idx: 8 },
       ],
-
-      cards: [
-        {
-          title: '201215 싸피밴드',
-          src: require('@/assets/image/1.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피밴드의 공연입니다',
-        },
-        {
-          title: '191113 써니밴드',
-          src: require('@/assets/image/2.jpg'),
-          flex: 4,
-          show: false,
-          content: '써니밴드 공연영상',
-        },
-        {
-          title: '싸피홀 200303',
-          src: require('@/assets/image/3.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피홀에서의 공연',
-        },
-        {
-          title: '200903 전공밴드',
-          src: require('@/assets/image/4.jpg'),
-          flex: 4,
-          show: false,
-          content: '전공밴드 공연영상입니다.',
-        },
-        {
-          title: '19회 싸피데이 공연',
-          src: require('@/assets/image/5.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피데이 공연영상입니다.',
-        },
-        {
-          title: '27회 싸피 정기공연',
-          src: require('@/assets/image/6.jpg'),
-          flex: 4,
-          show: false,
-          content: '싸피...',
-        },
-      ],
     };
   },
   computed: {
@@ -226,11 +180,12 @@ export default {
     onEditing() {
       // 여긴 선택한 필터로 검색하는 곳.
 
-      // 각 속성에서 하나만 선택하게 못하고 있음... 일단 보류
+      // 필터에서 하나씩만 선택했다면,
 
       if (this.filter1 == 1 && this.filter2 == 1) {
         let st1, st2;
 
+        // 순서 맞춰 주는 곳.
         this.isEditing = !this.isEditing;
         let tmpFlag = false;
         for (let i = 1; i < 4; i++) {
@@ -263,8 +218,7 @@ export default {
         })
         .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
 
-      //this.$router.go(0); //자동 새로고침. 어쩌지..
-
+      //this.$router.go(0); //자동 새로고침. 쓰지는 않음.
       this.msg = '';
     },
     onVideo(videonum) {
@@ -280,6 +234,7 @@ export default {
       } else alert('로그인 해주세요!');
     },
     remove(item) {
+      //chip뒤에 달리는 close 옵션인데, 현재는 사용하지 않음.
       console.log(this.selectOption);
       const index = this.selectOption.indexOf(item.name);
       if (index >= 0) this.selectOption.splice(index, 1);
@@ -287,9 +242,8 @@ export default {
     onAdd() {
       if (this.islogin) {
         //로그인이 된 경우에만 글쓰기로 보냄.
-        this.getbandlist();
         console.log(this.bandlist.length);
-        if (this.bandlist.length == 0) {
+        if (this.bandlist.length > 0) {
           //가입한 밴드 리스트가 1개 이상일 경우에만,
           this.$router.push({ name: 'videocreate' });
         } else alert('밴드 가입 후 글쓰기 가능합니다!');
@@ -302,8 +256,9 @@ export default {
         .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
     },
     onItemClick(idx) {
-      console.log(this.filter1);
+      //console.log(this.filter1);
 
+      // 클릭시 속성에 맞게 boolean 값을 변경 하고. 카운팅 해줌.
       if (this.people[idx].group == '색깔') {
         if (!this.people[idx].flag) {
           this.filter1++;

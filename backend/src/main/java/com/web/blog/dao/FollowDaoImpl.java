@@ -41,6 +41,23 @@ public class FollowDaoImpl implements FollowDao {
 		return mapper.followcheck(memberId, bandId);
 	}
 
+	@Override
+	public List<HashMap<String, String>> follownum(String bandId) {
+		return mapper.follownum(bandId);
+	}
+
+	@Override
+	public void followup(String bandId) {
+		mapper.followup(bandId);
+	}
+
+	@Override
+	public void followdown(String followId) {
+		System.out.println("fdfd");
+		mapper.followdown(followId);
+		
+	}
+
 	
 
 	

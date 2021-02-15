@@ -15,6 +15,15 @@
         <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
             <v-img
+              v-if="band.img == '' || band.img == null"
+              class="ma-auto mp-4"
+              height="300"
+              width="300"
+              style="border-radius: 50%"
+              src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
+            ></v-img>
+            <v-img
+              v-else
               class="ma-auto mp-4"
               height="300"
               width="300"
@@ -57,7 +66,7 @@
             v-for="member in members"
             :key="member.no"
             v-model="member.name"
-            :label="member.session"
+            :label="member.codeSession"
             readonly
             class="ma-auto pa-2"
           >
@@ -80,6 +89,17 @@
           <strong>공연영상</strong>
         </v-banner>
 
+        </v-col>
+    </v-row>
+    <v-row class="ma-auto px-10" justify="center">
+      <!-- 랭킹 영상이 없을 때 -->
+      <v-col cols="4" v-if="videolist.length == 0">
+        <v-alert align="center" type="warning">
+          랭킹 목록이 존재하지 않습니다.
+        </v-alert>
+      </v-col>
+
+      <v-col v-else>
         <!-- 목록 -->
         <v-sheet class="mx-auto" elevation="8">
           <v-slide-group class="pa-4" show-arrows>
@@ -334,11 +354,6 @@ export default {
           }
         })
         .catch((exp) => alert(exp + '탈퇴에 실패하였습니다.'));
-    },
-    upload() {
-      //영상업로드
-      console.log('영상업로드페이지로 이동');
-      //this.$router.push("/video/create/" + this.$route.params.bandno);
     },
   },
   components: {

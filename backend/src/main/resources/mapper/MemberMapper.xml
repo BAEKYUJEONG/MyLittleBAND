@@ -38,7 +38,7 @@
   </select>
   
    <update id="update">
-      update member set email=#{m.email}, name=#{m.name}, phone=#{m.phone}, profile=#{m.profile} where memberId = #{memberId}
+      update member set name=#{name}, phone=#{phone}, profile=#{profile} where memberId = #{memberId}
   </update>
   	
   	<update id="imgupdate" parameterType="string">
@@ -54,7 +54,7 @@
   </select>
   
   <select id="findMemberById" resultType="java.util.Map">
-		select name, profile, phone, email from member where memberId=#{memebrId}
+		select name, profile, phone, email,img, manager, emailcheck from member where memberId=#{memebrId}
 	</select>
   
 	<!-- <insert id="signup" parameterType="Member">

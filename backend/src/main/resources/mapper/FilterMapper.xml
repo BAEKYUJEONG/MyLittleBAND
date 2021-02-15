@@ -9,6 +9,7 @@
 	</select>
 	
 	<select id="filter" parameterType="String" resultType="VideoBoard">
-		select * from videoboard where bandId=(select bandId from band where genre=#{genre} and color=#{color})
+		select * from videoboard where bandId in
+		(select bandId from band where genre=#{genre} and color=#{color});
 	</select>
 </mapper>
