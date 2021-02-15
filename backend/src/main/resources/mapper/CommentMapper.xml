@@ -7,35 +7,15 @@
 
 	<insert id="insert" parameterType="Comment">
 		insert into comment values (#{commentId}, #{boardId}, #{memberId}, #{content},
-		NOW(), NULL, NULL)
+		NOW(), NULL)
 	</insert>
 
-	<!-- 댓글이라서 하나의 댓글 detail 기능은 없어도 괜찮아보임 -->
-	<select id="selectDetail" parameterType="String" resultType="Comment">
-		select c.commentId, c.boardId, c.memberId, c.content, m.img
-		from comment c, member m
-		where commentId = #{commentId} and memberId in(select memberId from member where memberId=#{memberId})
+	<select id="selectList" parameterType="String" resultType="OtherComment">
+		select c.content, m.img
+		from comment c, member m where c.boardId = #{boardId} and m.memberId = c.memberId
 	</select>
 
-	<update id="update" parameterType="Comment">
-		update comment 
-		set update_time = NOW(), content = #{content}
-		where commentId = #{commentId}
-	</update>
-
-	<delete id="delete" parameterType="String">
-		delete from comment
-		where commentId = #{commentId}
-	</delete>
-
-	<select id="selectList" parameterType="Comment" resultType="Comment">
-		select c.commentId, c.boardId, c.memberId, c.content, m.img
-		from comment c, member m
-		where boardId = #{boardId} and memberId in(select memberId from member where memberId=#{memberId})
-		order by insert_time DESC
-	</select>
-
-	<select id="count" parameterType="Comment" resultType="int">
+	<select id="count" parameterType="String" resultType="int">
 		select count(*) from comment
 		where boardId = #{boardId}
 	</select>

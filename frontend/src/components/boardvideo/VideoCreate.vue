@@ -31,9 +31,10 @@
         >
         <v-col>
           <v-file-input
+            accept="image/*"
             v-model="imgfiles"
             show-size
-            label="File input"
+            label="이미지 파일"
           ></v-file-input>
           <p>File Name : {{ imgfiles.name }}</p>
         </v-col>
@@ -44,9 +45,10 @@
         >
         <v-col>
           <v-file-input
+            accept="video/*"
             v-model="videofiles"
             show-size
-            label="File input"
+            label="비디오 파일"
           ></v-file-input>
           <p>File Name : {{ videofiles.name }}</p>
         </v-col>
@@ -84,6 +86,10 @@
 <script>
 import axios from '@/axios/axios-common.js';
 
+import { mapGetters } from 'vuex';
+
+const MemberStore = 'MemberStore'; //로그인 체크 용.
+
 // 필요한 거
 // 썸네일
 // 영상 소스
@@ -94,6 +100,11 @@ import axios from '@/axios/axios-common.js';
 export default {
   created() {
     this.getbandlist();
+  },
+  computed: {
+    ...mapGetters(MemberStore, {
+      memberid: 'getMemberId',
+    }),
   },
   data() {
     return {
@@ -108,14 +119,14 @@ export default {
     };
   },
   methods: {
-    async upload() {
-      // 여기서 파일 업로드에 대한 요청 백으로 보냄.
-    },
     list() {
       this.$router.push('/video');
     },
     async create() {
       //공백이 존재하면 경고
+      //console.log(this.videofiles.size);
+      //console.log(this.videofiles.type); //타입을 알 수 있음.
+
       if (
         this.board.title == '' ||
         this.board.content == '' ||
@@ -127,16 +138,53 @@ export default {
         return;
       }
 
-      let fd = new FormData();
-      fd.append('imgfiles', this.imgfiles);
-      fd.append('videofiles', this.videofiles);
+      if (this.videofiles.size > 1e8 + 1e7) {
+        //byte 단위임.
+        alert('100MB 이하 영상만 가능합니다.');
+        return;
+      }
 
-      //이 부분은 백 보고 수정해야 할듯.
+      // 서버에 파일 업로드.
+
+      let fd = new FormData();
+      let fd2 = new FormData();
+      fd.append('imgfiles', this.imgfiles);
+      fd2.append('videofiles', this.videofiles);
+
       await axios
-        .post('/video', fd, {
+        .post('/upload/thumbnail/' + this.select, fd, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((rec) => {
+          console.log('suc');
+          console.log(rec);
+        })
+        .catch((e) => console.log(e));
+
+      await axios
+        .post('/upload/video/' + this.select, fd2, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((rec) => {
+          console.log('suc');
+          console.log(rec);
+        })
+        .catch((e) => console.log(e));
+
+      //DB에 등록하는 과정.
+
+      const st1 = 'https://i4a408.p.ssafy.io/thumbnail/' + this.imgfiles.name; // 주소를 넣어줌.
+      const st2 = 'https://i4a408.p.ssafy.io/video/' + this.videofiles.name; //주소를 넣어줌.
+      await axios
+        .post('/videoboard/' + this.select, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
+          bandId: this.select,
+          boardContent: this.board.content,
+          boardSubject: this.board.title,
+          boardThumbnail: st1,
+          boardVideoUrl: st2,
         })
         .then((response) => {
           console.log(response);
