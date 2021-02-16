@@ -21,10 +21,10 @@
       <v-row justify="center">
         <v-col cols="auto">
           <v-avatar>
-            <img :src="video.img" alt="John" />
+            <img :src="getVideo.img" alt="John" />
           </v-avatar>
         </v-col>
-        <strong class="black--text mt-6">{{ video.boardSubject }}</strong>
+        <strong class="black--text mt-6">{{ getVideo.boardSubject }}</strong>
         <v-spacer></v-spacer>
         <!-- 좋아요 버튼 -->
         <v-col cols="4" class="ma-auto">
@@ -47,11 +47,13 @@
             <span v-else>좋아요 취소</span>
           </v-tooltip>
         </v-col>
-        <strong class="black--text mt-6">{{ video.boardLike }}</strong>
+        <strong class="black--text mt-6">{{ getVideo.boardLike }}</strong>
       </v-row>
       <v-row
         ><v-col
-          ><p class="black--text text-left">{{ video.boardContent }}</p></v-col
+          ><p class="black--text text-left">
+            {{ getVideo.boardContent }}
+          </p></v-col
         ></v-row
       >
       <v-divider inset></v-divider>
@@ -59,9 +61,8 @@
 
       <!-- 댓글 작성 -->
       <v-row class="mt-2"
-        ><v-col cols="auto"
-          ><v-avatar>
-            <img :src="memberinfo.img" alt="video.boardId" /> </v-avatar
+        ><v-col cols="auto">
+          <v-avatar> <img :src="getMemberInfo.img" alt="John" /> </v-avatar
         ></v-col>
         <v-col>
           <v-text-field
@@ -81,7 +82,7 @@
       <!-- 작성된 댓글 목록-->
       <v-row class="mt-2">
         <v-list shaped>
-          <v-list-item v-for="(comment, i) in comments" :key="i">
+          <v-list-item v-for="(comment, i) in getComments" :key="i">
             <v-list-item-icon>
               <v-list-item-avatar>
                 <v-img :src="comment.img"></v-img>
@@ -102,7 +103,7 @@ import 'video.js/dist/video-js.css';
 import axios from '@/axios/axios-common.js';
 
 import { videoPlayer } from 'vue-video-player';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 const VideoStore = 'VideoStore';
 const MemberStore = 'MemberStore';
@@ -112,10 +113,13 @@ export default {
     videoPlayer,
   },
   created() {
-    this.playerOptions.sources[0].src = this.video.boardVideoUrl;
+    this.playerOptions.sources[0].src = this.getVideo.boardVideoUrl;
     //console.log(this.video.boardId);
-    this.reqComments(this.video.boardId);
+    this.reqComments(this.getVideo.boardId);
     this.getLike();
+    this.reqMemberInfo(this.getMemberId);
+
+    console.log(this.getMemberInfo);
   },
   data() {
     return {
@@ -151,15 +155,14 @@ export default {
     player() {
       return this.$refs.videoPlayer.player;
     },
-    ...mapGetters(VideoStore, { video: 'getVideo', comments: 'getComments' }),
-    ...mapGetters(MemberStore, {
-      memberid: 'getMemberId',
-      memberinfo: 'getMemberInfo',
-    }),
+    ...mapGetters(VideoStore, ['getVideo', 'getComments']),
+    ...mapGetters(MemberStore, ['getMemberId', 'getMemberInfo']),
   },
   methods: {
     // listen event
     ...mapActions(VideoStore, ['reqComments']),
+    ...mapActions(MemberStore, ['reqMemberInfo']),
+    ...mapMutations(VideoStore, ['setComments']),
     onPlayerPlay(player) {
       console.log('player play!', player);
     },
@@ -184,9 +187,9 @@ export default {
       axios
         .get(
           '/likecheck?boardId=' +
-            this.video.boardId +
+            this.getVideo.boardId +
             '&memberId=' +
-            this.memberid
+            this.getMemberId
         )
         .then((response) => {
           if (response.data.status) {
@@ -202,12 +205,12 @@ export default {
     setLike() {
       //팔로우상태변화 (false => true 바꿔줌)
       //팔로우시켜줌
-      console.log(this.video.boardId);
-      console.log(this.memberid);
+      console.log(this.getVideo.boardId);
+      console.log(this.getMemberId);
       axios
         .post('/like', {
-          boardId: this.video.boardId,
-          memberId: this.memberid,
+          boardId: this.getVideo.boardId,
+          memberId: this.getMemberId,
         })
         .then((response) => {
           if (response.data.status) {
@@ -236,12 +239,15 @@ export default {
       axios
         .post('/comment', {
           commentId: null,
-          boardId: this.video.boardId,
-          memberId: this.memberid,
+          boardId: this.getVideo.boardId,
+          memberId: this.getMemberId,
           content: this.usercomment,
         })
         .then((response) => {
-          if (response.data.status) console.log('성공!');
+          if (response.data.succes == 'success') {
+            console.log('성공!');
+            this.reqComments(this.getVideo.boardId);
+          }
         })
         .catch((exp) => alert(exp + '댓글 등록 실패.'));
       this.usercomment = '';

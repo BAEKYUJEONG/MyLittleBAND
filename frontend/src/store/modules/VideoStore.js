@@ -72,8 +72,8 @@ const VideoStore = {
       return axios
         .get('/comment/' + videonum)
         .then((response) => {
-          console.log(response);
-          if (response.data.status) {
+          if (response.data.succes == 'success') {
+            console.log(response);
             context.commit('setComments', response.data.object);
             return { result: true, msg: '댓글 목록 받아오기 성공' };
           } else {
