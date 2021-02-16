@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       codeSession: '',
-      sessions: ['보컬', '키보드', '드럼', '일렉기타', '베이스'],
+      sessions: ['보컬', '키보드', '드럼', '기타', '베이스'],
       email: '',
       bandNo: '',
       loginflag: false,

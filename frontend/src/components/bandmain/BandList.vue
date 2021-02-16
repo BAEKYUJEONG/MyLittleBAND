@@ -10,7 +10,7 @@
       </v-col>
        <v-col cols="8"></v-col>
       <v-col cols="2" class="ma-auto">
-        <v-btn @click="CreateBand()"> 밴드추가 </v-btn>
+        <v-btn @click="CreateBand()"> 밴드개설 </v-btn>
       </v-col>
     </v-row>
     
@@ -41,16 +41,16 @@
                   <!-- 밴드이미지가 없을 때 -->
                   <v-img v-if="band.img == '' || band.img == null"
                     src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
-                    max-height="100"
-                    max-width="100"
+                    height="100"
+                    width="100"
                     style="border-radius: 50%">
                   </v-img>
                    <!-- 밴드이미지가 있을 때 -->
                   <v-img
                     v-else
                     :src="band.img"
-                    max-height="100"
-                    max-width="100"
+                    height="100"
+                    width="100"
                     style="border-radius: 50%"
                   ></v-img>
                 </v-col>
@@ -82,7 +82,6 @@ const BandStore = "BandStore";
 export default {
   data() {
     return {
-      bandlist : []
     };
   },
   computed: {

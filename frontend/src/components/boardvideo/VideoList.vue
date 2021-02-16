@@ -149,7 +149,7 @@ export default {
       filter1: 1,
       filter2: 0,
       bandlist: [],
-      selectOption: ['빨강'],
+      selectOption: [],
       msg: '',
       isEditing: false,
       isUpdating: false,

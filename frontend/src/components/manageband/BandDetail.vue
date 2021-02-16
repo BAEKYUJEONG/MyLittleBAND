@@ -8,9 +8,9 @@
         </v-banner>
       </v-col>
     </v-row>
-    <v-row class="ma-auto pa-10" justify="center">
+    <v-row class="ma-auto pa-10" justify="center" align="center">
       <!-- 밴드 프로필 이미지-->
-      <v-col cols="3" class="ma-auto">
+      <v-col cols="3" class="ma-auto" >
         <v-spacer></v-spacer>
         <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
@@ -28,7 +28,6 @@
               height="300"
               width="300"
               style="border-radius: 50%"
-              contain
               :src="band.img"
             >
             </v-img>
@@ -58,7 +57,7 @@
           <v-card-title left
             >멤버구성
             <v-spacer></v-spacer>
-            <v-btn class="kakao-link" @click="memberInvite()" x-small>
+            <v-btn class="kakao-link" @click="memberInvite()" x-small v-if="isChief == 1">
               멤버초대
             </v-btn>
           </v-card-title>
@@ -91,11 +90,12 @@
 
         </v-col>
     </v-row>
+
     <v-row class="ma-auto px-10" justify="center">
       <!-- 랭킹 영상이 없을 때 -->
       <v-col cols="4" v-if="videolist.length == 0">
         <v-alert align="center" type="warning">
-          랭킹 목록이 존재하지 않습니다.
+          밴드영상 게시물이 존재하지 않습니다.
         </v-alert>
       </v-col>
 
@@ -127,9 +127,9 @@
 
     <v-divider></v-divider>
     <!-- 활성화버튼 -->
-    <v-row class="ma-auto pa-10">
+    <v-row class="ma-auto pa-10" justify="center">
       <!-- 밴드장일때 -->
-      <v-col cols="12" v-if="isChief == 1">
+      <v-col cols="auto" v-if="isChief == 1" >
         <v-btn
           v-for="c in chief"
           :key="c.text"
@@ -142,7 +142,7 @@
       </v-col>
 
       <!-- 밴드원일때 -->
-      <v-col cols="12" v-else>
+      <v-col cols="auto" v-else>
         <v-btn color="primary" class="mx-6" @click="upload()">영상업로드</v-btn>
 
         <v-btn
@@ -160,7 +160,7 @@
               color="error"
               v-bind="attrs"
               v-on="on"
-              class="white--text mx-10"
+              class="white--text mx-6"
             >
               밴드탈퇴
             </v-btn>
@@ -355,6 +355,9 @@ export default {
         })
         .catch((exp) => alert(exp + '탈퇴에 실패하였습니다.'));
     },
+    upload(){
+      this.$router.push({name : 'videocreate'});
+    }
   },
   components: {
     BandCalender,

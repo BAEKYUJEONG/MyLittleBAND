@@ -30,7 +30,7 @@
                 src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                max-height="200"
+                height="200"
                 max-width="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
@@ -41,8 +41,8 @@
                 :src="band.img"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                max-height="200"
-                max-width="200"
+                height="200"
+                width="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
               </v-img>

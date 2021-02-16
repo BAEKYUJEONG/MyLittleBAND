@@ -13,18 +13,46 @@
         </v-text-field>
 
         <v-file-input
-          class="mb-10"
+          class="mb-5"
           @change="onChangeImage()"
           v-model="band.imgdata"
           accept="image/*"
           type="file"
-          id="file"
           label="밴드 이미지 변경"
         />
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="auto">
         <v-btn class="mb-10" v-if="dialog.imgbtn" @click="submit()"
+        color="error"
           >프로필 이미지 변경하기</v-btn
         >
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="3">
+        <v-select
+          :items="genre"
+          label="밴드장르"
+          v-model="band.genre"
+          required
+          solo
+        ></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-select
+          :items="color"
+          v-model="band.color"
+          label="밴드색깔"
+          required
+          solo
 
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="6">
         <v-textarea
           v-model="band.intro"
           label="밴드소개"
@@ -124,7 +152,7 @@
 
     <!-- 버튼들 -->
     <v-row class="ma-auto">
-      <v-col cols="12" class="ma-auto">
+      <v-col cols="auto" class="ma-auto">
         <v-btn color="primary" class="mx-6" @click="modify()">수정하기</v-btn>
 
         <v-btn class="mx-6" @click="banddetail()">돌아가기</v-btn>
@@ -187,7 +215,17 @@ export default {
         imgdata: null, //null로 설정해줘야함
         imgurl: "",
       },
-      sessions: ["보컬", "키보드", "드럼", "일렉기타", "베이스"],
+      sessions: ["보컬", "키보드", "드럼", "기타", "베이스"],
+      color: [
+        "하양",
+        "빨강",
+        "주황",
+        "노랑",
+        "초록",
+        "파랑",
+        "검정",
+      ],
+      genre: ["팝", "락", "재즈"],
       members: [],
     };
   },
@@ -277,6 +315,8 @@ export default {
       let frm = new FormData();
       frm.append("name", this.band.name);
       frm.append("profile", this.band.intro);
+      frm.append("genre",this.band.genre);
+      frm.append("color",this.band.color);
       //밴드 정보 수정
       axiosCommon
         .put("/band/" + this.$route.params.bandno, frm)

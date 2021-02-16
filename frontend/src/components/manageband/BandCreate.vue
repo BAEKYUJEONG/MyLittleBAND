@@ -39,6 +39,18 @@
           label="밴드색깔"
           required
           solo
+
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="6">
+        <v-select
+          solo
+          label="밴드장 세션"
+          :items="sessions"
+          v-model="band.codeSession"
+          
         ></v-select>
       </v-col>
     </v-row>
@@ -57,7 +69,7 @@
     </v-row>
 
     <v-row class="ma-auto">
-      <v-col cols="12" class="ma-auto">
+      <v-col cols="auto" class="ma-auto">
         <v-btn color="primary" class="mx-6" @click="create()">밴드개설</v-btn>
 
         <v-btn color="error" class="mx-6" @click="bandlist()">돌아가기</v-btn>
@@ -81,7 +93,9 @@ export default {
         intro: "",
         color: "",
         genre: "",
+        codeSession : '',
       },
+      sessions: ["보컬", "키보드", "드럼", "기타", "베이스"],
       color: [
         "하양",
         "빨강",
@@ -105,8 +119,16 @@ export default {
         alert("공백이 존재합니다!");
         return;
       }
+      if(this.band.color == "" || this.band.genre == ""){
+        alert("장르 및 컬러를 선택해주세요 ");
+        return;
+      }
+      if (this.band.codeSession == ''){
+        alert("세션을 선택해주세요!");
+        return;
+      }
       this.reqCreateBand({memberId : this.getMemberId,
-           
+          codeSession : this.band.codeSession,
           name: this.band.name,
           intro: this.band.intro,
           genre: this.band.genre,
@@ -124,7 +146,7 @@ export default {
     },
     bandlist() {
       //밴드리스트 페이지로 이동
-      this.$router.push("/band/list/" + this.memberid);
+      this.$router.push("/band/list/" + this.getMemberId);
     },
   },
 };

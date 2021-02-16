@@ -34,8 +34,8 @@
                     <v-img
                       v-if="band.img == '' || band.img == null"
                       src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
-                      max-height="100"
-                      max-width="100"
+                      height="100"
+                      width="100"
                       style="border-radius: 50%"
                     >
                     </v-img>
@@ -43,8 +43,8 @@
                     <v-img
                       v-else
                       :src="band.img"
-                      max-height="100"
-                      max-width="100"
+                      height="100"
+                      width="100"
                       style="border-radius: 50%"
                     ></v-img>
                   </v-col>
@@ -173,18 +173,6 @@ export default {
         .then((response) => {
           if (response.data.status) {
             this.bandlist = response.data.object;
-
-            for (let i = 0; i < this.bandlist.length; i++) {
-              axios
-                .get("/follownum/" + this.bandlist[i].bandId)
-                .then((res) => {
-                  if (res.data.status) {
-                    this.bandlist[i].follownum = res.data.object[0].follownum;
-                    console.log(this.bandlist[i]);
-                  }
-                })
-                .catch((exp) => alert(exp + "조회에 실패하였습니다."));
-            }
           } else {
             alert("해당하는 검색 결과가 없습니다.");
           }

@@ -12,10 +12,11 @@
                 v-on="on"
                 height="300"
                 width="300"
-                id="rounded-card"
+                id="rounded-card" 
                 :elevation="hover ? 8 : 1"
                 :class="{ 'on-hover': !hover }"
               >
+              <!-- 프로필 이미지가 없을 때 -->
                 <v-img
                   v-if="member.img == null || member.img == ''"
                   class="ma-auto mp-4"
@@ -31,12 +32,14 @@
                     hidden
                     @change="onChangeImages"
                   />
-                  <v-card-text class="justify-center">
+                  <v-card-text class="justify-center" >
                     <v-btn v-if="hover" @click="onClickImageUpload"
                       >Edit
                     </v-btn>
                   </v-card-text>
                 </v-img>
+
+                <!-- 프로필 이미지가 있을 때 -->
                 <v-img
                   v-else
                   class="ma-auto mp-4"
@@ -52,7 +55,7 @@
                     hidden
                     @change="onChangeImages"
                   />
-                  <v-card-text class="justify-center">
+                  <v-card-text class="justify-center" >
                     <v-btn v-if="hover" @click="onClickImageUpload"
                       >Edit
                     </v-btn>
@@ -130,8 +133,8 @@
     </v-row>
 
     <!-- 회원정보 수정 버튼 -->
-    <v-row class="ma-auto">
-      <v-col cols="12" class="ma-auto">
+    <v-row class="ma-auto" justify="center">
+      <v-col cols="auto" class="ma-auto">
         <v-btn color="primary" class="mx-6" @click="modify()"
           >회원정보수정</v-btn
         >
