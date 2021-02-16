@@ -1,7 +1,7 @@
 <template>
-  <v-container class="my-3">
+  <v-card elevation="5" class="my-10">
     <!-- 위쪽 banner -->
-    <v-banner single-line
+    <v-banner single-line class="ma-5"
       ><!--@click:icon="reqShow">-->
       <v-icon size="45">{{ icons.mdiAlarm }}</v-icon>
       <strong class="ml-10">오늘의 공연</strong>
@@ -16,15 +16,9 @@
 
     <!-- 오늘 공연 일정을 보여주는 Timeline -->
     <!-- 공연 일정이 없을 때 -->
-    <v-row v-if="getTimeline.length === 0">
-      <v-spacer />
-      <v-col class="py-10" cols="3"
-        ><v-alert align="center">
-          예약 된 공연이 존재하지 않습니다
-        </v-alert></v-col
-      >
-      <v-spacer />
-    </v-row>
+    <template v-if="getTimeline.length === 0">
+        <v-img src="@/assets/image/notShowMsg.png" width="60%" class="mx-auto" />
+    </template>
 
     <!-- 공연 일정 존재 시 -->
     <v-timeline v-else class="my-5">
@@ -45,7 +39,7 @@
         </v-card>
       </v-timeline-item>
     </v-timeline>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
