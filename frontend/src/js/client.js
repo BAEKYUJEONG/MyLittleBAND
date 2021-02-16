@@ -1,6 +1,6 @@
 //connecting to our signaling server
 
-var conn = new WebSocket('ws://i4a408.p.ssafy.io:8080/socket');
+var conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
 
 //const localVideo = document.getElementById("localVideo");
 //const remoteVideo = document.getElementById("remoteVideo");
@@ -69,7 +69,7 @@ function initialize() {
 export async function broadcast2() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
+      audio: true,
       video: true,
     });
     console.log('Received local stream');

@@ -285,7 +285,7 @@ export default {
 
       // bandid 필요함. memberid도 필요함.
       let url =
-        'http://localhost:3000/bandinvite?bandno=' + this.$route.params.bandno;
+        'https://i4a408.p.ssafy.io/bandinvite?bandno=' + this.$route.params.bandno;
       let descr = this.band.name + ' 밴드에 가입하세요.';
       console.log(url);
       window.Kakao.Link.createDefaultButton({
