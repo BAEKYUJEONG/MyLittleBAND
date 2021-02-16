@@ -1,5 +1,5 @@
 <template>
-  <v-col>
+  <v-toolbar-items v-if="mode == 'wide'">
     <v-btn
       v-for="link in links"
       :key="link.text"
@@ -9,7 +9,14 @@
     >
       {{ link.text }}
     </v-btn>
-  </v-col>
+  </v-toolbar-items>
+  <v-list v-else>
+    <v-list-item v-for="link in links" :key="link.text">
+      <v-btn text @click.native="click(link.text)">
+        {{ link.text }}
+      </v-btn>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script>
@@ -30,6 +37,7 @@ export default {
       },
     ],
   }),
+  props: ["mode"],
   computed: {
     ...mapGetters(MemberStore, {
       //MemberStore 모듈 내 getters 사용
@@ -45,7 +53,7 @@ export default {
       //클릭이벤트로 페이지 이동
       if (value == "로그아웃") {
         this.Logout(); //로그아웃
-        this.$router.push({name:'main'});
+        this.$router.push({ name: "main" });
       } else if (value == "마이페이지") {
         //마이페이지로 이동
         this.$router.push("/member/" + this.memberid);

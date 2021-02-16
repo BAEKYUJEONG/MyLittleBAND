@@ -6,7 +6,7 @@
     style="background-color: #feeeb0"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn text v-bind="attrs" v-on="on" class="white--text mx-10"> 로그인 </v-btn>
+      <v-btn text v-bind="attrs" v-on="on" :class="clr" class="mx-3">로그인</v-btn>
     </template>
     <v-card>
       <v-card-title>
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-//import { Login } from "../../store/modules/MemberStore";
 import { mapActions, mapGetters } from 'vuex' //vuex사용
 const MemberStore = 'MemberStore' //MemberStore 모듈 사용
 
@@ -68,6 +67,7 @@ export default {
       },
     };
   },
+  props: ["clr"],
   computed:{
     ...mapGetters(MemberStore,{//MemberStore 모듈 내 getters 사용
       memberid : 'getMemberId',//memberid 변수에 getMemberId 리턴값 저장

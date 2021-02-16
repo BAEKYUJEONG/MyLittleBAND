@@ -1,43 +1,67 @@
 <template>
-  <v-app-bar app color="#231E1A" flat extended>
-    <v-row class="my-auto">
-      <v-spacer></v-spacer>
-
-      <!-- 공지사항, 영상게시판 -->
-      <v-col class="my-auto"
-        ><v-row
-          ><v-col
-            ><v-btn
-              v-for="link in links"
-              :key="link.text"
-              text
-              router-link
-              :to="link.path"
-              class="white--text"
-            >
-              {{ link.text }}
-            </v-btn></v-col
-          ></v-row
-        ></v-col
+  <v-toolbar app elevation color="#231E1A" width="100%" height="100">
+    <v-toolbar-items class="hidden-md-and-down mx-auto">
+      <v-btn
+        v-for="menu in menus"
+        :key="menu.text"
+        text
+        router-link
+        :to="menu.path"
+        class="white--text mx-3"
       >
+        {{ menu.text }}
+      </v-btn>
 
-      <!-- Logo -->
-      <v-col
-        ><router-link to="/"><v-avatar tile width="350px" height="75px">
-          <v-img src="@/assets/image/logo.png" /> </v-avatar
-      ></router-link></v-col>
+      <router-link to="/">
+        <v-img
+          max-height="250"
+          max-width="350"
+          src="@/assets/image/logo.png"
+          class="my-3"
+      /></router-link>
 
-      <!-- Login, NotLogin -->
-      <v-col class="my-auto ml-auto">
-        <v-row>
-          <Logined v-if="islogin" />
-          <NotLogined v-else />
-        </v-row>
-      </v-col>
+      <Logined mode="wide" v-if="islogin" />
+      <NotLogined mode="wide" v-else />
+    </v-toolbar-items>
+
+    <v-row class="hidden-lg-and-up">
+      <router-link to="/">
+        <v-img
+          max-height="250"
+          max-width="350"
+          src="@/assets/image/logo.png"
+          class="my-3"
+      /></router-link>
 
       <v-spacer></v-spacer>
+
+      <v-toolbar-items>
+        <v-menu>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn dark icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item v-for="(menu, i) in menus" :key="i">
+              <v-btn
+                :key="menu.text"
+                text
+                router-link
+                :to="menu.path"
+              >
+                {{ menu.text }}
+              </v-btn>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <Logined mode="narrow" v-if="islogin" />
+          <NotLogined mode="narrow" v-else />
+        </v-menu>
+      </v-toolbar-items>
     </v-row>
-  </v-app-bar>
+  </v-toolbar>
 </template>
 
 <script>
@@ -49,7 +73,7 @@ const MemberStore = "MemberStore"; //MemberStore 모듈 사용
 
 export default {
   data: () => ({
-    links: [
+    menus: [
       {
         text: "공지사항",
         path: "/notice",
@@ -61,11 +85,16 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters(MemberStore, { 
+    ...mapGetters(MemberStore, {
       //MemberStore 모듈 내 getters 사용
       islogin: "getIsLogined", //islogin 변수에 getIsLogined 리턴값 저장
       manager: "getManager", //manager 변수에 getManager 리턴값 저장
     }),
+  },
+  methods: {
+    menuItems() {
+      return this.menu;
+    },
   },
   components: {
     Logined,
