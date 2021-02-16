@@ -140,7 +140,8 @@ export default {
       }
 
       // websocket 생성.
-      conn = new WebSocket("ws://localhost:8080/socket");
+      //conn = new WebSocket("ws://localhost:8080/socket");
+      conn = new WebSocket("ws://i4a408.p.ssafy.io/api/socket");
 
       //연결이 성공하면 initialize() 실행.
       conn.onopen = function () {
