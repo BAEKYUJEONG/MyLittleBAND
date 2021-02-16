@@ -37,7 +37,7 @@
           <v-list-item-icon>
             <v-list-item-avatar>
               <v-img v-if="comment.img == '' || comment.img == null" src="https://i4a408.p.ssafy.io/profile/LogoMini.png" />
-              <v-img v-else :src="comment.img"></v-img>
+              <v-img :src="comment.img"></v-img>
             </v-list-item-avatar>
           </v-list-item-icon>
           <v-list-item-content>
@@ -52,7 +52,7 @@
         </v-list-item>
       </v-list>
     </v-row>
-
+    
     <!--댓글수정 모달창 -->
     <v-dialog v-model="Dialog.modify" persistent max-width="700">
       <v-card style="opacity: 1">
@@ -115,6 +115,7 @@ export default {
     this.reqComments(this.$route.params.boardno).then((res) =>
       console.log(res.msg)
     );
+    this.reqMemberInfo(this.getMemberId);
   },
   computed: {
     ...mapGetters(BandBoardStore, ["getBoard", "getComments"]),
@@ -127,6 +128,7 @@ export default {
       "reqModifyComment",
       "reqDeleteComment"
     ]),
+    ...mapActions(MemberStore,["reqMemberInfo"]),
     //댓글 작성
     onWrite() {
       this.reqCreateComment({

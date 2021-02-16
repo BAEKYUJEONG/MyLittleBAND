@@ -9,20 +9,21 @@
           border="left"
           v-if="!loginflag"
         >
-          <div>로그인 후 이용이 가능합니다.</div>
+          <div>로그인 후 초대 링크를 다시 클릭 해 주세요!</div>
         </v-alert>
 
         <v-alert type="success" outlined text border="left" v-else>
           <v-col class="ml-14" cols="4">
             <v-select
               outlined
+              label="세션정보"
               :items="sessions"
               v-model="codeSession"
             ></v-select>
           </v-col>
           <div class="title">버튼을 누르면 밴드 가입이 완료됩니다.</div>
           <div class="mt-10">
-            <v-btn rounded @click="onInviteBand()" color="warning">가입</v-btn>
+            <v-btn rounded @click.once="onInviteBand()" color="warning">가입</v-btn>
           </div>
         </v-alert>
       </v-col>
@@ -64,7 +65,8 @@ export default {
         const size = this.bandlist.length;
         for (var i = 0; i < size; i++) {
           if (this.bandlist[i].memberId == this.getMemberId) {
-            alert('중복된 밴드에는 가입할 수 없습니다.');
+            alert('이미 가입되어있는 밴드입니다.');
+            this.$router.push("/band/list/"+this.getMemberId);
             return;
           }
         }
@@ -75,7 +77,10 @@ export default {
             codeSession: this.codeSession,
           })
           .then((response) => {
-            if (response.data.status) console.log('성공!');
+            if (response.data.status){ 
+              alert("밴드에 가입되었습니다!");
+              this.$router.push("/band/list/"+this.getMemberId);
+            }
           })
           .catch((exp) => alert(exp + '멤버정보 조회에 실패하였습니다.'));
       }

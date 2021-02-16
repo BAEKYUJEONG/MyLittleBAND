@@ -71,16 +71,21 @@ const MemberStore = {
         .then((response) => {
           //성공 시 변수 재설정
           if (response.data.data === "success") {
-            console.log("성공");
+            //emailcheck가 0이면 리턴
+            if (response.data.object.emailcheck == '0' || response.data.object.emailcheck == null) {
+              alert("이메일 인증 후 진행해주세요");
+              return;
+            }
+            else {
+              console.log("성공");
+              //토큰생성 및 저장
+              let token = response.data["access-token"];
+              localStorage.setItem("access-token", token); //로컬스토리지에 토큰저장
 
-            //토큰생성 및 저장
-            let token = response.data["access-token"];
-            localStorage.setItem("access-token", token); //로컬스토리지에 토큰저장
-
-            context.commit("setIsLogined", true); //로그인 상태 true로 변환
-            context.commit("setMemberId", response.data.object.memberId); //memberid 저장
-            context.commit("setManager", response.data.object.manager); //관리자 여부저장
-            this.reqMemberInfo(response.data.object.memberId);
+              context.commit("setIsLogined", true); //로그인 상태 true로 변환
+              context.commit("setMemberId", response.data.object.memberId); //memberid 저장
+              context.commit("setManager", response.data.object.manager); //관리자 여부저장
+            }
           } else {
             console.log("실패");
           }
@@ -116,7 +121,7 @@ const MemberStore = {
         .catch((error) => {
           console.log(error);
         });
-    },    
+    },
     // 이메일 인증 요청
     reqSignupValidation(context, email) {
       return axios
@@ -171,7 +176,7 @@ const MemberStore = {
         });
     },
     // 비밀번호 찾기
-    reqFindPw(context, info){
+    reqFindPw(context, info) {
       return axios
         .post("/member/pw", {
           email: info.email,
@@ -200,7 +205,7 @@ const MemberStore = {
         .get("/member/" + no)
         .then((response) => {
           if (response.data.status) {
-            context.commit("setMemberInfo", response.data.object); 
+            context.commit("setMemberInfo", response.data.object);
             return { result: true, msg: "회원정보조회 성공" };
           }
           return { result: false, msg: "회원정보가 존재하지 않습니다" };
@@ -208,7 +213,7 @@ const MemberStore = {
         .catch((error) => {
           console.log(error);
         });
-      
+
     }
   },
 };

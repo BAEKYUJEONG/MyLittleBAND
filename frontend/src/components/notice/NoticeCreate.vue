@@ -72,8 +72,11 @@ export default {
     onCreate(){
       this.reqCreateNotice({ title: this.title, content: this.content })
       .then((response) => {
-        if(response.data.result)  alert(response.data.msg);
-        else                      alert(response.data.msg);  
+        if(response.result){
+          alert(response.msg);
+          this.$router.push("/notice");
+        }  
+        else                      alert(response.msg);  
       })
       .catch((error) => {
         console.log(error);
