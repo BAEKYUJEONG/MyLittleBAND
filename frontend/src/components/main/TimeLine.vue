@@ -16,7 +16,7 @@
 
     <!-- 오늘 공연 일정을 보여주는 Timeline -->
     <!-- 공연 일정이 없을 때 -->
-    <v-row v-if="0 === 0">
+    <v-row v-if="getTimeline.length === 0">
       <v-spacer />
       <v-col class="py-10" cols="3"
         ><v-alert align="center">
@@ -28,10 +28,10 @@
 
     <!-- 공연 일정 존재 시 -->
     <v-timeline v-else class="my-5">
-      <v-timeline-item v-for="data in sampleData" :key="data.time" large>
+      <v-timeline-item v-for="data in getTimeline" :key="data.time" large>
         <template v-slot:icon size="64">
           <v-avatar size="62">
-            <img src="http://i.pravatar.cc/128" />
+            <v-img :src="data.img" />
           </v-avatar>
         </template>
         <template v-slot:opposite>
@@ -39,9 +39,9 @@
         </template>
         <v-card class="elevation-2">
           <v-card-title class="headline">
-            {{ data.band }}
+            {{ data.title }}
           </v-card-title>
-          <v-card-text>{{ data.intro }}</v-card-text>
+          <v-card-text>{{ data.bandId }}</v-card-text>
         </v-card>
       </v-timeline-item>
     </v-timeline>
@@ -67,6 +67,9 @@ export default {
         },
       ],
     };
+  },
+  created() {
+    this.reqTimeline();
   },
   computed: {
     ...mapGetters(timelineStore, ["getTimeline"]),
