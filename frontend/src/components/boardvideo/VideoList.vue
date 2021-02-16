@@ -157,13 +157,17 @@ export default {
       people: [
         { header: '컬러' },
         { name: '빨강', group: '색깔', flag: true, idx: 1 },
-        { name: '보라', group: '색깔', flag: false, idx: 2 },
+        { name: '주황', group: '색깔', flag: false, idx: 2 },
         { name: '노랑', group: '색깔', flag: false, idx: 3 },
+        { name: '초록', group: '색깔', flag: false, idx: 4 },
+        { name: '파랑', group: '색깔', flag: false, idx: 5 },
+        { name: '검정', group: '색깔', flag: false, idx: 6 },
+        { name: '하양', group: '색깔', flag: false, idx: 7 },
         { divider: true },
         { header: '장르' },
-        { name: '락', group: '장르', flag: false, idx: 6 },
-        { name: '팝', group: '장르', flag: false, idx: 7 },
-        { name: '재즈', group: '장르', flag: false, idx: 8 },
+        { name: '락', group: '장르', flag: false, idx: 10 },
+        { name: '팝', group: '장르', flag: false, idx: 11 },
+        { name: '재즈', group: '장르', flag: false, idx: 12 },
       ],
     };
   },
@@ -188,7 +192,7 @@ export default {
         // 순서 맞춰 주는 곳.
         this.isEditing = !this.isEditing;
         let tmpFlag = false;
-        for (let i = 1; i < 4; i++) {
+        for (let i = 1; i < 8; i++) {
           if (this.selectOption[0] == this.people[i].name) {
             st1 = this.selectOption[0];
             st2 = this.selectOption[1];
@@ -201,9 +205,16 @@ export default {
           st2 = this.selectOption[0];
         }
 
+        //formData를 통해 전송.
+        let frm = new FormData();
+        frm.append('color', st1);
+        frm.append('genre', st2);
+
         axios
-          .post('/filter', { genre: st2, color: st1 })
-          .then((response) => this.setVideos(response.data.object))
+          .post('/filter', frm)
+          .then((response) => {
+            this.setVideos(response.data.object);
+          })
           .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
         // 여기서 axios를 이용한 검색 처리.(필터는 select에 있음)
       } else alert('속성을 각각 하나씩 선택해 주세요!');
