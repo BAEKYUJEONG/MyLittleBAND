@@ -37,8 +37,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="notice in getNotices" :key="notice.no" @click="onNotice(notice.no)">
-                      <td>{{ notice.title }}</td>
+                    <tr v-for="notice in getNotices" :key="notice.noticeId" @click="onNotice(notice.noticeId)">
+                      <td>{{ notice.noticeTitle }}</td>
                       <td>{{ notice.date }}</td>
                     </tr>
                   </tbody>
@@ -53,6 +53,7 @@
                 color="grey"
                 prev-icon="mdi-menu-left"
                 next-icon="mdi-menu-right"
+                @change="console.log(page)"
               ></v-pagination>
             </v-flex>
           </v-layout>
@@ -71,12 +72,15 @@ const MemberStore = "MemberStore";
 export default {
   data() {
     return {
-      page: 1,
+      page: "",
     }
   },
   computed: {
     ...mapGetters(NoticeStore, ["getNotices"]),
     ...mapGetters(MemberStore, { manager: "getManager"}),
+  },
+  created(){
+    this.reqNotices();
   },
   methods: {
     ...mapActions(NoticeStore, ["reqNotices", "reqNotice"]),

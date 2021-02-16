@@ -54,9 +54,9 @@ const ExampleStore = {
   },
   actions: {
     // 공지사항 리스트 받아오기
-    reqNotices(context, page){
+    reqNotices(context){
         return axios
-        .get("/notice?page=" + page)
+        .get("/notice/list")
         .then((response) => {
             if(response.data.status){
                 context.commit("setNotices", response.data.object);
@@ -88,8 +88,8 @@ const ExampleStore = {
     reqCreateNotice(context, info){
         return axios
         .post("/notice", {
-            title: info.title,
-            content: info.content
+            noticeTitle: info.title,
+            noticeContent: info.content
         })
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 작성이 완료되었습니다" };
@@ -103,8 +103,8 @@ const ExampleStore = {
     reqModifyNotice(context, info) {
         return axios
         .put("/notice/"+info.no, {
-            title: info.title,
-            content: info.content,
+            noticeTitle: info.title,
+            noticeContent: info.content,
         })
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 수정이 완료되었습니다" };
@@ -115,9 +115,9 @@ const ExampleStore = {
         })
     },
     // 공지사항 글 삭제하기
-    reqDeleteNotice(context, info) {
+    reqDeleteNotice(context, no) {
         return axios
-        .delete("/notice/"+info.no)
+        .delete("/notice/"+no)
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 삭제가 완료되었습니다" };
             else                        return { result: false, msg: "글 삭제가 실패했습니다" };
