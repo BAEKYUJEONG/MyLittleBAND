@@ -112,10 +112,8 @@ export default {
   created() {
     this.title = this.getBoard.title;
     this.content = this.getBoard.content;
-    this.reqComments(this.$route.params.boardno).then((res) =>
-      console.log(res.msg)
-    );
     this.reqMemberInfo(this.getMemberId);
+    this.reqComments(this.$route.params.boardno);
   },
   computed: {
     ...mapGetters(BandBoardStore, ["getBoard", "getComments"]),

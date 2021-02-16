@@ -7,7 +7,7 @@
         </v-banner>
       </v-col>
     </v-row>
-    <v-row justify="center" v-if="followBand == null">
+    <v-row justify="center" v-if="getFollowList.length == 0">
       <v-col cols="6">
         <v-spacer />
         <v-alert
@@ -28,14 +28,18 @@
       <v-col v-for="band in getFollowList" :key="band.bandId" cols="2">
         <v-tooltip bottom nudge-top="5">
           <template v-slot:activator="{ on, attrs }">
-            <v-card style="border-radius: 50%" v-bind="attrs" v-on="on" @click="bandinfo(band.bandId)">
+            <v-card style="border-radius: 50%" 
+            height="200"
+                width="200"
+            v-bind="attrs" v-on="on" @click="bandinfo(band.bandId)">
               <!-- 밴드이미지가 없을 때 -->
               <v-img
                 v-if="band.img == '' || band.img == null"
                 src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                max-height="200px"
+                height="200"
+                width="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
               </v-img>
@@ -45,7 +49,8 @@
                 :src="band.img"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                max-height="200px"
+                width="200"
+                height="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
               </v-img>
@@ -65,7 +70,6 @@ const FollowStore = "FollowStore";
 export default {
   data() {
     return {
-      followBand : []
     };
   },
   computed: {

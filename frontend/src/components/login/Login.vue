@@ -37,7 +37,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-btn color="blue" @click="onSubmit">로그인</v-btn>
+              <v-btn color="success" @click="onSubmit">로그인</v-btn>
             </v-col>
           </v-row>
         </v-container>

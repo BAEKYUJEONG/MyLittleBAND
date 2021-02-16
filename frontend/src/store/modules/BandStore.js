@@ -64,7 +64,8 @@ const BandStore = {
                     name: info.name,
                     intro: info.intro,
                     genre: info.genre,
-                    color: info.color
+                    color: info.color,
+                    codeSession : info.codeSession
                 })
                 .then((response) => {
                     if (response.data.status) {
