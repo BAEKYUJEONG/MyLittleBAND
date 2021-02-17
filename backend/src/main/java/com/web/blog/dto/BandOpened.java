@@ -12,19 +12,25 @@ public class BandOpened {
 	private String intro;
 	private String genre;
 	private String color;
+	private String codeSession;
 	
 	
 	public BandOpened() {
 	}
 
 
-	public BandOpened(String img, String name, String intro, String genre, String color) {
+	
+
+	public BandOpened(String img, String name, String intro, String genre, String color, String codeSession) {
 		this.img = img;
 		this.name = name;
 		this.intro = intro;
 		this.genre = genre;
 		this.color = color;
+		this.codeSession = codeSession;
 	}
+
+
 
 
 	public String getImg() {
@@ -76,6 +82,20 @@ public class BandOpened {
 		this.color = color;
 	}
 
+
+
+
+	public String getCodeSession() {
+		return codeSession;
+	}
+
+
+
+
+	public void setCodeSession(String codeSession) {
+		this.codeSession = codeSession;
+	}
+	
 
 	
 	

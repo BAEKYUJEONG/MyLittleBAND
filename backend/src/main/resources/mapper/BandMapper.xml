@@ -14,11 +14,11 @@
 	</insert>
 	
 	<insert id="addcrew" parameterType="String">
-		insert into crew values(null, #{memberId}, #{bandId}, 1, null)
+		insert into crew values(null, #{memberId}, #{bandId}, 1, #{codeSession})
 	</insert>
 	
 	<select id="bandinfo" resultType="java.util.Map">
-		select img, name, intro from band where bandId=#{bandId}
+		select img, name, intro, genre, color from band where bandId=#{bandId}
 	</select>
 	
 	<select id="bandmember" resultType="java.util.Map">
@@ -54,7 +54,7 @@
 	</select>
 	
 	<update id="changeinfo">
-		update band set name=#{name}, intro=#{intro} where bandId=#{bandId}
+		update band set name=#{name}, intro=#{intro}, genre=#{genre}, color=#{color} where bandId=#{bandId}
 	</update>
 	
 	<delete id="delband">
@@ -81,7 +81,7 @@
 	</select>
   	
   	<select id="searchband" parameterType="String" resultType="java.util.Map">
-		select bandId, name, intro, img from band where name like CONCAT('%',#{keyword},'%')
+		select bandId, name, intro, img, follownum from band where name like CONCAT('%',#{keyword},'%')
 	</select>
 	
 	<insert id="bandinvite" parameterType="BandInvite">

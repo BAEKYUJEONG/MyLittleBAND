@@ -29,8 +29,8 @@ public class BandServiceImpl implements BandService{
 	}
 
 	@Override
-	public void addcrew(String memberId, String bandId) {
-		dao.addcrew(memberId, bandId);
+	public void addcrew(String memberId, String bandId, String codeSession) {
+		dao.addcrew(memberId, bandId, codeSession);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class BandServiceImpl implements BandService{
 	}
 
 	@Override
-	public void changeinfo(String bandId, String name, String intro) {
-		dao.changeinfo(bandId, name, intro);		
+	public void changeinfo(String bandId, String name, String intro, String genre, String color) {
+		dao.changeinfo(bandId, name, intro, genre, color);		
 	}
 
 	@Override
