@@ -7,13 +7,13 @@
         color="white"
         text
         rounded
-        class="my-10 mx-10 member"
+        class="my-10 member"
         :href="member.url"
       >
         {{ member.name }}
       </v-btn>
       <v-col class="lighten-2 py-4 text-center white--text" cols="12">
-        {{ new Date().getFullYear() }} — <strong>Team A408</strong>
+        {{ new Date().getFullYear() }} — <strong>Copyright Team A408 All rights reserved.</strong>
       </v-col>
     </v-row>
   </v-footer>
