@@ -112,14 +112,15 @@ const MemberStore = {
           pw: info.pw,
         })
         .then((response) => {
-          if (response.data.data === "success") {
-            return "success";
-          } else {
-            return "fail";
+          if (response.status === 200 && response.data.status==="success") {
+            return true;
           }
         })
         .catch((error) => {
-          console.log(error);
+          // 이메일 중복
+          if(error.response.status===409){
+            return false;
+          }
         });
     },
     // 이메일 인증 요청
