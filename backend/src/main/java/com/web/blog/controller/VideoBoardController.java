@@ -116,8 +116,8 @@ public class VideoBoardController {
 	@ApiOperation(value = "영상게시글 랭킹 읽기", notes = "영상게시글 랭킹을 보여준다.")
 	public Object rankingvideo() {
 		HashMap<String, String> h1 = new HashMap<>();
-		h1.put("t1", "주간뷰랭킹");
-		h1.put("t2", "주간인기급상승랭킹");
+		h1.put("t1", "조회수");
+		h1.put("t2", "급상승");
 		List<HashMap<String, String>> title=new ArrayList<>();
 		title.add(h1);
 		List<HashMap<String, String>> map=service.videoboardrankingview();

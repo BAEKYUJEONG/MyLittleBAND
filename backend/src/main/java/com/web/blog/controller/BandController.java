@@ -65,7 +65,7 @@ public class BandController {
 			Band b= service.getBandByName(req.getName());
 //			System.out.println(memberId);
 //			System.out.println(b.getBandId());
-			service.addcrew(memberId, b.getBandId());
+			service.addcrew(memberId, b.getBandId(),req.getCodeSession());
 			final BasicResponse result = new BasicResponse();
 	        result.status = true;
 	        result.data = "success";
@@ -201,8 +201,8 @@ public class BandController {
 	
 	@PutMapping(value = "/band/{bandId}")
 	@ApiOperation(value = "밴드정보 수정", notes = "밴드정보 수정요청을 보낸다.")
-	public Object changeinfo(@PathVariable String bandId, String name, String profile) {
-		service.changeinfo(bandId, name, profile);
+	public Object changeinfo(@PathVariable String bandId, String name, String profile, String genre, String color) {
+		service.changeinfo(bandId, name, profile, genre, color);
 		final BasicResponse result = new BasicResponse();
         result.status = true;
         result.data = "success";

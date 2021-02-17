@@ -44,7 +44,7 @@ public class BandBoardController {
 	@GetMapping(value = "/bandboard/list/{bandId}")
 	@ApiOperation(value = "밴드게시글 리스트", notes = "밴드게시글 리스트를 보여준다.")
 	public Object bandboardlist(@PathVariable String bandId) {
-		List<BandBoard> map= service.bandboardlist(bandId);
+		List<HashMap<String, String>> map= service.bandboardlist(bandId);
 		
 		if(map!=null) {
 			final BasicResponse result = new BasicResponse();
