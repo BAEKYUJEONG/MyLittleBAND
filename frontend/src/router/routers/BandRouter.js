@@ -7,6 +7,7 @@ import BandModify from '../../components/manageband/BandModify';
 import ReserveStage from '../../components/manageband/ReserveStage';
 import FindFollowBand from '../../components/follow/FindFollowBand';
 import AfterBandInvite from '../../components/manageband/AfterBandInvite';
+import BandBroadCast from '../../components/manageband/BandBroadCast';
 
 // ExampleRouter 정의 부분
 const bandRoute = [
@@ -64,6 +65,13 @@ const bandRoute = [
     path: '/bandinvite',
     name: 'afterbandinvite',
     component: AfterBandInvite,
+    props: true,
+  },
+  {
+    // 밴드방송 페이지
+    path: '/bandbroadcast',
+    name: 'bandbroadcast',
+    component: BandBroadCast,
     props: true,
   },
 ];

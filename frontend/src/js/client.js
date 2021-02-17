@@ -1,10 +1,10 @@
 //connecting to our signaling server
 
-var conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
+let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
+//let conn = new WebSocket('ws://localhost:8080/socket');
 
 //const localVideo = document.getElementById("localVideo");
 //const remoteVideo = document.getElementById("remoteVideo");
-let localStream;
 let remoteStream;
 
 conn.onopen = async function() {
@@ -14,15 +14,13 @@ conn.onopen = async function() {
 
 conn.onmessage = function(msg) {
   console.log('Got message', msg.data);
-  var content = JSON.parse(msg.data);
-  var data = content.data;
+  let content = JSON.parse(msg.data);
+  let data = content.data;
+  let idx = content.idx;
   switch (content.event) {
     // when somebody wants to call us
     case 'offer':
-      handleOffer(data);
-      break;
-    case 'answer':
-      handleAnswer(data);
+      handleOffer(data, idx);
       break;
     // when a remote peer sends an ice candidate to us
     case 'candidate':
@@ -40,16 +38,28 @@ function send(message) {
 let peerConnection;
 
 function initialize() {
-  //var configuration = null;
-
   peerConnection = new RTCPeerConnection({
     configuration: {
-      offerToReceiveAudio: true,
-      offerToReceiveVideo: true,
+      offerToReceiveAudio: false,
+      offerToReceiveVideo: false,
     },
-    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+    iceServers: [
+      {
+        urls: 'stun:stun.l.google.com:19302',
+      },
+      {
+        urls: 'turn:192.158.29.39:3478?transport=udp',
+        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        username: '28224511:1379330808',
+      },
+      {
+        urls: 'turn:192.158.29.39:3478?transport=tcp',
+        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        username: '28224511:1379330808',
+      },
+    ],
   });
-  console.log(peerConnection);
+  //console.log(peerConnection);
   // Setup ice handling
   peerConnection.onicecandidate = function(event) {
     if (event.candidate) {
@@ -66,46 +76,11 @@ function initialize() {
   };
 }
 
-export async function broadcast2() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: true,
-    });
-    console.log('Received local stream');
-    //localVideo.srcObject = stream;
-    localStream = stream;
-    console.log(stream);
-  } catch (e) {
-    alert(`getUserMedia() error: ${e.name}`);
-  }
-
-  peerConnection.addStream(localStream);
-
-  return localStream;
-}
-
 export function watch() {
   return remoteStream;
 }
 
-export function createOffer() {
-  peerConnection.createOffer(
-    function(offer) {
-      send({
-        event: 'offer',
-        data: offer,
-      });
-      peerConnection.setLocalDescription(offer);
-    },
-    function(error) {
-      console.log(error);
-      alert('Error creating an offer');
-    }
-  );
-}
-
-function handleOffer(offer) {
+function handleOffer(offer, idx) {
   peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
 
   // create and send an answer to an offer
@@ -115,6 +90,7 @@ function handleOffer(offer) {
       send({
         event: 'answer',
         data: answer,
+        idx: idx,
       });
     },
     function(error) {
@@ -126,9 +102,4 @@ function handleOffer(offer) {
 
 function handleCandidate(candidate) {
   peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-}
-
-function handleAnswer(answer) {
-  peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-  console.log('connection established successfully!!');
 }
