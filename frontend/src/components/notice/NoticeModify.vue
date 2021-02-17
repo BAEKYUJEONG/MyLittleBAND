@@ -13,8 +13,7 @@
             icon
             color="blue"
             large
-            router-link
-            :to="'/notice/modify/' + this.$route.params.noticeno"
+            @click="onModify()"
           >
             <v-icon>mdi-check</v-icon>
           </v-btn>
@@ -77,8 +76,8 @@ export default {
   created(){
     if(this.getManager === false)  this.$router.go("/*");
     console.log()
-    this.title = this.getNotice.title;
-    this.content = this.getNotice.content;
+    this.title = this.getNotice.noticeTitle;
+    this.content = this.getNotice.noticeContent;
   },
   computed: {
     ...mapGetters(NoticeStore, ["getNotice"]),
@@ -88,9 +87,12 @@ export default {
     ...mapActions(NoticeStore, ["reqModifyNotice"]),
     //공지사항 내용 수정
     onModify() {
-      this.reqModifyNotice({ no: this.$route.params.noticeno, title: this.getNotice.title, content: this.getNotice.content })
+      this.reqModifyNotice({ no: this.$route.params.noticeno, title: this.title, content: this.content })
       .then((response) => {
-        if(response.result)   alert(response.msg);
+        if(response.result){  
+          alert(response.msg);
+          this.$router.push("/notice/"+this.$route.params.noticeno)
+          } 
         else                  alert(response.msg);
       })
       .catch((error) => {

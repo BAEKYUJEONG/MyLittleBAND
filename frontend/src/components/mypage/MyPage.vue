@@ -12,12 +12,37 @@
                 v-on="on"
                 height="300"
                 width="300"
-                id="rounded-card"
+                id="rounded-card" 
                 :elevation="hover ? 8 : 1"
                 :class="{ 'on-hover': !hover }"
               >
+              <!-- 프로필 이미지가 없을 때 -->
                 <v-img
-                  class="ma-auto mp-4"
+                  v-if="member.img == null || member.img == ''"
+                  class="ma-auto mp-4 align-center"
+                  height="300"
+                  width="300"
+                  style="border-radius: 50%"
+                  src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
+                >
+                  <input
+                    ref="imageInput"
+                    accept="image/*"
+                    type="file"
+                    hidden
+                    @change="onChangeImages"
+                  />
+                  <v-card-text>
+                    <v-btn v-if="hover" @click="onClickImageUpload"
+                      >Edit
+                    </v-btn>
+                  </v-card-text>
+                </v-img>
+
+                <!-- 프로필 이미지가 있을 때 -->
+                <v-img
+                  v-else
+                  class="ma-auto mp-4 align-center "
                   height="300"
                   width="300"
                   style="border-radius: 50%"
@@ -25,11 +50,12 @@
                 >
                   <input
                     ref="imageInput"
+                    accept="image/*"
                     type="file"
                     hidden
                     @change="onChangeImages"
                   />
-                  <v-card-text class="justify-center">
+                  <v-card-text class="justify-center" >
                     <v-btn v-if="hover" @click="onClickImageUpload"
                       >Edit
                     </v-btn>
@@ -107,8 +133,8 @@
     </v-row>
 
     <!-- 회원정보 수정 버튼 -->
-    <v-row class="ma-auto">
-      <v-col cols="12" class="ma-auto">
+    <v-row class="ma-auto" justify="center">
+      <v-col cols="auto" class="ma-auto">
         <v-btn color="primary" class="mx-6" @click="modify()"
           >회원정보수정</v-btn
         >
@@ -143,7 +169,7 @@
 
 <script>
 import axios from "../../axios/axios-common";
-import { mapActions } from "vuex"; //vuex사용
+import { mapActions, mapGetters } from "vuex"; //vuex사용
 const MemberStore = "MemberStore"; //MemberStore 모듈 사용
 export default {
   created() {
@@ -154,6 +180,7 @@ export default {
     //백엔드 연동 후 아래 주석 해제
     this.getbandlist();
   },
+
   methods: {
     ...mapActions(MemberStore, [
       //MemberStore 모듈 내 actions 사용
@@ -223,7 +250,7 @@ export default {
       formData.append("file", this.member.imgdata); //이미지 정보전달
 
       axios
-        .post("/upload/member/"+this.$route.params.memberno, formData, {
+        .post("/upload/member/" + this.$route.params.memberno, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
@@ -238,6 +265,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(MemberStore, [{ member: "getMemberInfo" }]),
     atEndOfList() {
       //밴드리스트의 끝을 반환하는 메소드
       return (

@@ -282,6 +282,7 @@ export default {
     ...mapGetters(CalenderStore, ["getEvents", "getSelectedEvent"]),
   },
   mounted() {
+    this.setToday();
     this.reqEvents(this.$route.params.bandno);
     this.$refs.calendar.checkChange();
   },
@@ -297,7 +298,7 @@ export default {
       return event.color;
     },
     setToday() {
-      this.focus = "";
+      this.focus = new Date();
     },
     prev() {
       this.$refs.calendar.prev();
@@ -409,4 +410,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.v-calendar .v-event {
+  margin-left: 0.25em;
+}  
+</style>

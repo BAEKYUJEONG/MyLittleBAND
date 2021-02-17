@@ -79,12 +79,14 @@ export default {
 
     onCreate(){
       this.reqCreateBoard({ 
+        img : "https://i4a408.p.ssafy.io/profile/LogoMini.png",
+        bandId : this.$route.params.bandno,
         title: this.title, 
         content: this.content,
-        writer : this.memberid})
+        memberId : this.memberid})
       .then((response) => {
-        if(response.data.result)  alert(response.data.msg);
-        else                      alert(response.data.msg);  
+        if(response.result)  {alert(response.msg); this.$router.push("/band/board/"+this.$route.params.bandno)}
+        else                      alert(response.msg);  
       })
       .catch((error) => {
         console.log(error);

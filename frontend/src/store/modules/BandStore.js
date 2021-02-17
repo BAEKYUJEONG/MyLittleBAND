@@ -6,7 +6,7 @@ const BandStore = {
         BandList: [], //유저의 소속 밴드 리스트
         MamberList: [],  //밴드의 멤버리스트
         VideoList: [],//밴드의 비디오리스트
-        BandInfo: [], //밴드 정보
+        BandInfo: {}, //밴드 정보
     },
     getters: {
         //밴드리스트 반환
@@ -64,13 +64,14 @@ const BandStore = {
                     name: info.name,
                     intro: info.intro,
                     genre: info.genre,
-                    color: info.color
+                    color: info.color,
+                    codeSession : info.codeSession
                 })
                 .then((response) => {
                     if (response.data.status) {
                         return { result: true, msg: "밴드개설 성공" };
                     }
-                    else return { result: false, msg: "밴드 개설에 실패했습니다" };
+                    else return { result: false, msg: "이미 존재하는 밴드명입니다" };
                 })
                 .catch((error) => console.log(error));
         },

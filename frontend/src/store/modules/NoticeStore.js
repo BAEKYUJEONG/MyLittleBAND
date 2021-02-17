@@ -2,7 +2,8 @@ import axios from "../../axios/axios-common";
 
 const ExampleStore = {
   namespaced: true,
-  state: {
+    state: {
+      listnum : 0,
     notices: [  // 백엔드에서 페이지 번호당 10개씩 묶어 줄 예정
       { no: 10, title: "나작밴 운영정책 변경", date: "2021-02-08" },
       { no: 9, title: "개인정보 처리방침 개정안내", date: "2021-02-06" },
@@ -46,20 +47,38 @@ const ExampleStore = {
   },
   getters: {
     getNotices(state) { return state.notices; },
-    getNotice(state) { return state.notice; },
+      getNotice(state) { return state.notice; },
+      getListnum(state) { return state.listnum; },
   },
   mutations: {
     setNotices(state, payload) { state.notices = payload; },
     setNotice(state, payload) { state.notice = payload; },
+    setListnum(state, payload) { state.listnum = payload; },
   },
   actions: {
     // 공지사항 리스트 받아오기
-    reqNotices(context, page){
+    reqNotices(context,no){
         return axios
-        .get("/notice?page=" + page)
+        .get("/notice/listpage/"+no)
         .then((response) => {
             if(response.data.status){
                 context.commit("setNotices", response.data.object);
+                return { result: true, msg: "글 목록 받아오기 성공" };
+            } else {
+                return { result: false, msg: "글 목록을 불러오는데 실패했습니다" };
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+      },
+      // 공지사항 리스트개수 받아오기
+    reqListnum(context){
+        return axios
+        .get("/notice/list")
+        .then((response) => {
+            if (response.data.status) {
+                context.commit("setListnum", response.data.object);
                 return { result: true, msg: "글 목록 받아오기 성공" };
             } else {
                 return { result: false, msg: "글 목록을 불러오는데 실패했습니다" };
@@ -85,11 +104,12 @@ const ExampleStore = {
         })
     },
     // 공지사항 글 생성하기
-    reqCreateNotice(context, info){
+      reqCreateNotice(context, info) {
+          console.log(info);
         return axios
         .post("/notice", {
-            title: info.title,
-            content: info.content
+            noticeTitle: info.title,
+            noticeContent: info.content
         })
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 작성이 완료되었습니다" };
@@ -103,8 +123,8 @@ const ExampleStore = {
     reqModifyNotice(context, info) {
         return axios
         .put("/notice/"+info.no, {
-            title: info.title,
-            content: info.content,
+            noticeTitle: info.title,
+            noticeContent: info.content,
         })
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 수정이 완료되었습니다" };
@@ -115,9 +135,9 @@ const ExampleStore = {
         })
     },
     // 공지사항 글 삭제하기
-    reqDeleteNotice(context, info) {
+    reqDeleteNotice(context, no) {
         return axios
-        .delete("/notice/"+info.no)
+        .delete("/notice/"+no)
         .then((response) => {
             if(response.data.status)    return { result: true, msg: "글 삭제가 완료되었습니다" };
             else                        return { result: false, msg: "글 삭제가 실패했습니다" };

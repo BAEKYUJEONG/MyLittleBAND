@@ -64,20 +64,26 @@ public class MemberController {
 	@ApiOperation(value = "회원가입", notes = "성공 시 회원가입 완료")
 	@ApiResponses({
 		@ApiResponse(code= 200, message="회원가입 성공"),
-		@ApiResponse(code= 400, message="잘못된 접근"),
+		@ApiResponse(code= 409, message="이미 가입된 회원"),
 	})
 	public Object signup(@RequestBody signupReq req) {
 		Member check=service.getUserByEmail(req.getEmail());
+		final BasicResponse result = new BasicResponse();
+		HttpStatus code = null;
+		
 		if(check==null) {
 			service.signup(req);
-			final BasicResponse result = new BasicResponse();
 	        result.status = true;
 	        result.data = "success";
-	        return new ResponseEntity<>(result, HttpStatus.OK);
+	        code = HttpStatus.OK;
 		}
-		else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		else {	
+	        result.status = false;
+	        result.data = "exist email";
+			code = HttpStatus.CONFLICT;
 		}
+		
+		return new ResponseEntity<>(result, code);
 	}
 	
 	/**

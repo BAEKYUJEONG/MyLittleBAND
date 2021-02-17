@@ -16,6 +16,8 @@ public class BandShow {
 	private String img;
 	private String bandId;
 	
+	private Band band;
+	
 	public BandShow() {
 	}
 
@@ -30,6 +32,14 @@ public class BandShow {
 		this.bandId = bandId;
 	}
 
+	public Band getBand() {
+		return band;
+	}
+
+	public void setBand(Band band) {
+		this.band = band;
+	}
+	
 	public String getShowId() {
 		return showId;
 	}
@@ -61,7 +71,6 @@ public class BandShow {
 	public void setTime(LocalTime time) {
 		this.time = time;
 	}
-
 
 	public String getShowContent() {
 		return showContent;
