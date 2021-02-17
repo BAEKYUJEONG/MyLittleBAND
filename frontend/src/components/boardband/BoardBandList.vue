@@ -41,7 +41,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="board in getBoards" :key="board.bandBoardId" @click="onBoard(board.bandBoardId)">
+                    <tr v-for="board in getBoards" :key="board.bandboardId" @click="onBoard(board.bandboardId)">
                       <td>{{ board.title }}</td>
                       <td>{{ board.name }}</td>
                       <td>{{ board.date }}</td>

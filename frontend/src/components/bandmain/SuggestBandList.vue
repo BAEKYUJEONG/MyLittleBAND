@@ -22,6 +22,8 @@
               style="border-radius: 50%"
               v-bind="attrs"
               v-on="on"
+              height="200"
+                width="200"
               @click="bandinfo(band.bandId)"
             >
               <!-- 밴드이미지가 없을 때 -->
@@ -31,7 +33,7 @@
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200"
-                max-width="200"
+                width="200"
               >
                 <v-card-title v-text="band.name"></v-card-title>
               </v-img>

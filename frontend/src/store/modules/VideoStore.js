@@ -28,6 +28,7 @@ const VideoStore = {
     setComments(state, payload) {
       state.comments = payload;
     },
+    setCommentsInit(state) { state.comments = [];}
   },
   actions: {
     // 비디오 리스트 받아오기
@@ -88,6 +89,12 @@ const VideoStore = {
         });
     },
   },
+  
+  //댓글 리스트 초기화
+  reqCommentInit(context) {
+    return context.commit('setCommentsInit');
+     
+}
 };
 
 export default VideoStore;

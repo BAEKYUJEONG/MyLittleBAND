@@ -33,7 +33,7 @@ const BandBoardStore = {
         setBoards(state, payload) { state.boards = payload; },
         setBoard(state, payload) { state.board = payload; },
         setComments(state, payload) { state.comments = payload; },
-        setCommentsInit(state) { state.comments = {};}
+        setCommentsInit(state) { state.comments = [];}
     },
     actions: {
         // 밴드게시판 리스트 받아오기
@@ -176,6 +176,7 @@ const BandBoardStore = {
                 })
         },
 
+        //댓글 리스트 초기화
         reqCommentInit(context) {
             return context.commit('setCommentsInit');
              

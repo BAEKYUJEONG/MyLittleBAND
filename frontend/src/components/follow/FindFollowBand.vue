@@ -68,14 +68,14 @@
                 <v-card-actions>
                   <v-btn color="orange lighten-2" text> 밴드소개 </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn icon @click="show = !show">
+                  <v-btn icon @click="band.show = !band.show">
                     <v-icon>{{
-                      show ? "mdi-chevron-up" : "mdi-chevron-down"
+                      band.show ? "mdi-chevron-up" : "mdi-chevron-down"
                     }}</v-icon>
                   </v-btn>
                 </v-card-actions>
                 <v-expand-transition>
-                  <div v-show="show">
+                  <div v-show="band.show">
                     <v-divider></v-divider>
                     <v-card-text> {{ band.intro }} </v-card-text>
                   </div>
@@ -91,7 +91,7 @@
       </v-row>
       <!-- 검색초기화, 돌아가기 버튼 -->
       <v-row justify="center">
-        <v-col cols="4">
+        <v-col cols="auto">
           <v-btn
             class="mx-6"
             color="primary"
@@ -192,7 +192,6 @@ export default {
   data() {
     return {
       msg: "",
-      show: false,
       tmplist: [],
       bandlist: [],
     };

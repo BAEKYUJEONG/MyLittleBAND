@@ -16,7 +16,7 @@
         <v-card height="300" width="300" id="rounded-card" class="ma-auto">
           <v-layout column align-center justify-center>
             <v-img
-              v-if="band.img == ''"
+              v-if="band.img == '' || band.img == null"
               class="ma-auto mp-4"
               height="300"
               width="300"
@@ -61,7 +61,7 @@
             <v-btn icon :color="color" v-bind="attrs" v-on="on">
               <v-icon
                 v-if="member.follow"
-                size="100"
+                size="120"
                 @click="unFollow()"
                 color="red"
                 >mdi-heart</v-icon
