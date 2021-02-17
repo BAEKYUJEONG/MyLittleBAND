@@ -13,7 +13,7 @@ import com.web.blog.dto.VideoBoard;
 public interface BandService {
 	public Band getBandByName(String name);
 	public void opened(BandOpened req);
-	public void addcrew(String memberId, String bandId);
+	public void addcrew(String memberId, String bandId, String codeSession);
 	public HashMap<String, String> bandinfo(String bandId);
 	public List<HashMap<String, String>> bandmember(String bandId);
 	public Crew getCrewById(String crewId);
@@ -23,7 +23,7 @@ public interface BandService {
 	public void withdrawband(String crewId);
 	public void changesession(String crewId, String session);
 	public List<HashMap<String, String>> memberofband(String memberId);
-	public void changeinfo(String bandId, String name, String intro);
+	public void changeinfo(String bandId, String name, String intro, String genre, String color);
 	public void delband(String bandId);
 	public void delcrew(String bandId);
 	public void delfollow(String bandId);

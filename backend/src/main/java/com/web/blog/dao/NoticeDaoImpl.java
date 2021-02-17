@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.web.blog.dto.Notice;
+import com.web.blog.dto.NoticeReq;
 import com.web.blog.mapper.NoticeMapper;
 
 @Repository
@@ -15,43 +16,34 @@ public class NoticeDaoImpl implements NoticeDao{
 	NoticeMapper mapper;
 
 	@Override
-	public int count() throws Exception {
-		return mapper.count();
+	public void writenotice(NoticeReq req) {
+		mapper.writenotice(req);
 	}
 
 	@Override
-	public List<Notice> searchAll(Map map) throws Exception {
-		return mapper.selectAll(map);
+	public Notice readnotice(String noticeId) {
+		return mapper.readnotice(noticeId);
 	}
 
 	@Override
-	public Notice retrieve(int noticeId) throws Exception {
-		return mapper.selectId(noticeId);
+	public void updatenotice(NoticeReq req, String noticeId) {
+		mapper.updatenotice(req, noticeId);
 	}
 
 	@Override
-	public List<Notice> searchTitle(Map map) throws Exception {
-		return mapper.selectTitle(map);
+	public void deletenotice(String noticeId) {
+		mapper.deletenotice(noticeId);
 	}
 
 	@Override
-	public List<Notice> searchContent(Map map) throws Exception {
-		return mapper.selectContent(map);
+	public int noticelist() {
+		return mapper.noticelist();
 	}
 
 	@Override
-	public int regist(Notice notice) throws Exception {
-		return mapper.insert(notice);
+	public List<Notice> noticelistpage(int page) {
+		return mapper.noticelistpage(page);
 	}
 
-	@Override
-	public int modify(Notice notice) throws Exception {
-		return mapper.update(notice);
-	}
-
-	@Override
-	public int delete(int noticeId) throws Exception {
-		return mapper.delete(noticeId);
-	}
 
 }

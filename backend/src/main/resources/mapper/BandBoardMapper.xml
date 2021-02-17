@@ -9,13 +9,18 @@
 		insert into bandboard values(null, #{title}, #{content}, now(), 0, #{memberId}, #{bandId})
 	</insert>
 	
-	<select id="bandboardlist" resultType="BandBoard">
-		select * from bandboard where bandId=#{bandId}
+	<select id="bandboardlist" resultType="java.util.Map">
+	select distinct bandboard.*,member.name 
+		from bandboard, member,band 
+		where member.memberId=bandboard.memberId and bandboard.bandId=#{bandId} 
+		order by bandboardId desc;
 	</select>
 	
 	
 	<select id="readbandboard" resultType="BandBoard">
-		select * from bandboard where bandboardId=#{bandboardId}
+		select distinct bandboard.*,member.name 
+		from bandboard, member 
+		where member.memberId=bandboard.memberId and bandboard.bandboardId=#{bandboardId};
 	</select>
 	
 	<update id="countup">

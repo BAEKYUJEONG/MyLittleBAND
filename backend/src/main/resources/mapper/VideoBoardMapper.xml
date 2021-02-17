@@ -54,7 +54,8 @@
 			   videoboard.boardSubject, 
 			   videoboard.boardThumbnail, 
 			   videoboard.boardView, 
-			   band.bandId 
+			   band.bandId,
+			   band.name 
 			   from videoboard,band
 			   where videoboard.bandId=band.bandId and (boardDate>curdate()-7)
 			   order by boardView desc
@@ -66,7 +67,8 @@
 			   videoboard.boardSubject, 
 			   videoboard.boardThumbnail, 
 			   videoboard.boardLike, 
-			   band.bandId 
+			   band.bandId,
+			   band.name 
 			   from videoboard,band
 			   where videoboard.bandId=band.bandId and (boardDate>curdate()-7)
 			   order by (boardView+boardLike*10) desc

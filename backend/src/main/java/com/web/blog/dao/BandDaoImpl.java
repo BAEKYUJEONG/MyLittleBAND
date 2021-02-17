@@ -29,8 +29,8 @@ public class BandDaoImpl implements BandDao {
 	}
 
 	@Override
-	public void addcrew(String memberId, String bandId) {
-		mapper.addcrew(memberId, bandId);
+	public void addcrew(String memberId, String bandId, String codeSession) {
+		mapper.addcrew(memberId, bandId, codeSession);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class BandDaoImpl implements BandDao {
 	}
 
 	@Override
-	public void changeinfo(String bandId, String name, String intro) {
-		mapper.changeinfo(bandId, name, intro);
+	public void changeinfo(String bandId, String name, String intro, String genre, String color) {
+		mapper.changeinfo(bandId, name, intro, genre, color);
 	}
 
 	@Override
