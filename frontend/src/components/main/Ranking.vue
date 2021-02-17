@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <v-card elevation="5" class="my-10">
     <!-- 랭킹이 존재하지 않음 -->
-    <v-row v-if="getRanking.length === 0">
+    <v-row v-if="getRanking.length <= 1">
       <v-spacer />
       <v-col class="py-10" cols="3"
         ><v-alert align="center">
@@ -14,12 +14,12 @@
     <!-- 랭킹 종목 -->
     <v-col v-else v-for="(r, idx) in getRanking[0][0]" :key="r.title">
       <!-- 랭킹 제목(배너) -->
-      <v-sheet class="my-10 text-center display-1">
-        {{ r }}
+      <v-sheet class="my-10 ml-15 display-1">
+        <v-icon :color="icons[Number(idx.substr(1))-1][1]" size="40" class="mr-3">{{ icons[Number(idx.substr(1))-1][0] }}</v-icon>{{ r }}
       </v-sheet>
 
       <!-- 랭킹 목록 -->
-      <v-sheet class="mx-auto" elevation="8">
+      <v-sheet class="mx-10" elevation="8">
         <v-slide-group class="pa-4" show-arrows>
           <v-slide-item
             v-for="n in getRanking[idx.substr(1)]"
@@ -62,7 +62,7 @@
                     <v-card-text class="headline font-weight-black">{{
                       n.boardSubject
                     }}</v-card-text>
-                    <v-card-text class="subtitle-1">{{ n.bandId }}</v-card-text>
+                    <v-card-text class="subtitle-1">{{ n.name }}</v-card-text>
                   </div>
                 </v-col>
               </v-row>
@@ -71,21 +71,21 @@
         </v-slide-group>
       </v-sheet>
     </v-col>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { mdiEye } from "@mdi/js";
 
 const RankingStore = "RankingStore";
 
 export default {
   data() {
     return {
-      icons: {
-        mdiEye,
-      },
+      icons: [
+        ["mdi-eye", "blue-grey darken-1" ],
+        ["mdi-fire", "red" ],
+      ],
     };
   },
   created() {
