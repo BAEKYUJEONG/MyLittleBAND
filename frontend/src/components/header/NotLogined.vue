@@ -1,10 +1,10 @@
 <template>
-  <v-toolbar-items v-if="mode == 'wide'">
+  <span v-if="mode == 'wide'">
     <Login clr="white--text"/>
     <v-btn text @click="signup()" class="white--text mx-3">
       회원가입
     </v-btn>
-  </v-toolbar-items>
+  </span>
   <v-list v-else>
     <v-list-item><Login clr="black--text" /></v-list-item>
     <v-list-item>

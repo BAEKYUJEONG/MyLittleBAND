@@ -1,45 +1,51 @@
 <template>
-  <v-card elevation="5" class="my-10">
-    <!-- 위쪽 banner -->
-    <v-banner single-line class="ma-5"
-      ><!--@click:icon="reqShow">-->
-      <v-icon size="45">{{ icons.mdiAlarm }}</v-icon>
-      <strong class="ml-10">오늘의 공연</strong>
+  <v-container class="my-20">
+    <v-card elevation="5" class="my-10">
+      <!-- 위쪽 banner -->
+      <v-banner single-line class="ma-5"
+        ><!--@click:icon="reqShow">-->
+        <v-icon size="45">{{ icons.mdiAlarm }}</v-icon>
+        <strong class="ml-10">오늘의 공연</strong>
 
-      <!-- 전체 보기 -->
-      <template v-slot:actions>
-        <v-btn color="primary" text router-link :to="links[0].path">
-          {{ links[0].text }}
-        </v-btn>
+        <!-- 전체 보기 -->
+        <template v-slot:actions>
+          <v-btn color="primary" text router-link :to="links[0].path">
+            {{ links[0].text }}
+          </v-btn>
+        </template>
+      </v-banner>
+
+      <!-- 오늘 공연 일정을 보여주는 Timeline -->
+      <!-- 공연 일정이 없을 때 -->
+      <template v-if="getTimeline.length === 0">
+        <v-img
+          src="@/assets/image/notShowMsg.png"
+          width="60%"
+          class="mx-auto"
+        />
       </template>
-    </v-banner>
 
-    <!-- 오늘 공연 일정을 보여주는 Timeline -->
-    <!-- 공연 일정이 없을 때 -->
-    <template v-if="getTimeline.length === 0">
-        <v-img src="@/assets/image/notShowMsg.png" width="60%" class="mx-auto" />
-    </template>
-
-    <!-- 공연 일정 존재 시 -->
-    <v-timeline v-else class="my-5">
-      <v-timeline-item v-for="data in getTimeline" :key="data.time" large>
-        <template v-slot:icon size="64">
-          <v-avatar size="62">
-            <v-img :src="data.img" />
-          </v-avatar>
-        </template>
-        <template v-slot:opposite>
-          <span>{{ data.time }}</span>
-        </template>
-        <v-card class="elevation-2">
-          <v-card-title class="headline">
-            {{ data.title }}
-          </v-card-title>
-          <v-card-text>{{ data.bandId }}</v-card-text>
-        </v-card>
-      </v-timeline-item>
-    </v-timeline>
-  </v-card>
+      <!-- 공연 일정 존재 시 -->
+      <v-timeline v-else class="my-5">
+        <v-timeline-item v-for="data in getTimeline" :key="data.time" large>
+          <template v-slot:icon size="64">
+            <v-avatar size="62">
+              <v-img :src="data.img" />
+            </v-avatar>
+          </template>
+          <template v-slot:opposite>
+            <span>{{ data.time }}</span>
+          </template>
+          <v-card class="elevation-2">
+            <v-card-title class="headline">
+              {{ data.title }}
+            </v-card-title>
+            <v-card-text>{{ data.bandId }}</v-card-text>
+          </v-card>
+        </v-timeline-item>
+      </v-timeline>
+    </v-card>
+  </v-container>
 </template>
 
 <script>

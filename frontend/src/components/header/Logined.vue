@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar-items v-if="mode == 'wide'">
+  <span v-if="mode == 'wide'">
     <v-btn
       v-for="link in links"
       :key="link.text"
@@ -9,7 +9,7 @@
     >
       {{ link.text }}
     </v-btn>
-  </v-toolbar-items>
+  </span>
   <v-list v-else>
     <v-list-item v-for="link in links" :key="link.text">
       <v-btn text @click.native="click(link.text)">

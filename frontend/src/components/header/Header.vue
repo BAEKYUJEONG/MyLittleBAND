@@ -1,6 +1,6 @@
 <template>
-  <v-toolbar app elevation color="#231E1A" width="100%" height="100">
-    <v-toolbar-items class="hidden-md-and-down mx-auto">
+  <v-app-bar color="#231E1A" height="100" max-height="100">
+    <v-app-bar-nav-icon class="hidden-md-and-down mx-auto">
       <v-btn
         v-for="menu in menus"
         :key="menu.text"
@@ -14,15 +14,16 @@
 
       <router-link to="/">
         <v-img
-          max-height="250"
+          max-height="150"
           max-width="350"
+          contain
           src="@/assets/image/logo.png"
-          class="my-3"
+          class="ma-3"
       /></router-link>
 
       <Logined mode="wide" v-if="islogin" />
       <NotLogined mode="wide" v-else />
-    </v-toolbar-items>
+    </v-app-bar-nav-icon>
 
     <v-row class="hidden-lg-and-up">
       <router-link to="/">
@@ -61,7 +62,7 @@
         </v-menu>
       </v-toolbar-items>
     </v-row>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>
@@ -103,7 +104,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .v-btn__content {
   font-family: "Noto Sans KR", sans-serif;
   font-size: 17px;
