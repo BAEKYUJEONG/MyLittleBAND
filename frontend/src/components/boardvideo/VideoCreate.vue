@@ -122,7 +122,7 @@ export default {
     list() {
       this.$router.push('/video');
     },
-    async create() {
+    create() {
       //공백이 존재하면 경고
       //console.log(this.videofiles.size);
       //console.log(this.videofiles.type); //타입을 알 수 있음.
@@ -151,46 +151,43 @@ export default {
       fd.append('file', this.imgfiles);
       fd2.append('file', this.videofiles);
 
-      await axios.post('/upload/thumbnail/' + this.select, fd, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      /*
+      let fileImg, fileVideo;
+      axios
+        .post('/upload/thumbnail/' + this.select, fd, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
         .then((rec) => {
           console.log('suc');
           console.log(rec);
+          fileImg = rec.data;
+          axios
+            .post('/upload/video/' + this.select, fd2, {
+              headers: { 'Content-Type': 'multipart/form-data' },
+            })
+            .then((rec2) => {
+              fileVideo = rec2.data;
+              axios
+                .post('/videoboard/' + this.select, {
+                  bandId: this.select,
+                  boardContent: this.board.content,
+                  boardSubject: this.board.title,
+                  boardThumbnail: fileImg,
+                  boardVideoUrl: fileVideo,
+                })
+                .then((response) => {
+                  console.log(response);
+                  alert('업로드 하였습니다!');
+                  this.$router.push('/video');
+                })
+                .catch(function() {
+                  console.log('실패');
+                });
+            })
+            .catch((e1) => console.log(e1));
         })
-        .catch((e) => console.log(e));*/
-
-      await axios.post('/upload/video/' + this.select, fd2, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      /*
-        .then((rec) => {
-          console.log('suc');
-          console.log(rec);
-        })
-        .catch((e) => console.log(e));*/
+        .catch((e2) => console.log(e2));
 
       //DB에 등록하는 과정.
-
-      const st1 = 'https://i4a408.p.ssafy.io/thumbnail/' + this.imgfiles.name; // 주소를 넣어줌.
-      const st2 = 'https://i4a408.p.ssafy.io/video/' + this.videofiles.name; //주소를 넣어줌.
-      await axios
-        .post('/videoboard/' + this.select, {
-          bandId: this.select,
-          boardContent: this.board.content,
-          boardSubject: this.board.title,
-          boardThumbnail: st1,
-          boardVideoUrl: st2,
-        })
-        .then((response) => {
-          console.log(response);
-          alert('업로드 하였습니다!');
-          this.$router.push('/video');
-        })
-        .catch(function() {
-          console.log('실패');
-        });
     },
     getbandlist() {
       axios

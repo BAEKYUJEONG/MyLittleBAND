@@ -2,9 +2,9 @@
   <!-- 동작에 따른 이벤트 처리가 가능한듯..? -->
   <v-main>
     <v-container>
-      <v-row
-        ><v-spacer /><v-col align="center">
-          <video-player
+      <v-row justify="center" class="pt-4 pl-6"
+        ><v-col cols="auto">
+          <video-player 
             class="video-player-box"
             ref="videoPlayer"
             :options="playerOptions"
@@ -14,10 +14,10 @@
             @pause="onPlayerPause($event)"
             @statechanged="playerStateChanged($event)"
             @ready="playerReadied"
+            responsive: true
           >
           </video-player> </v-col
-        ><v-spacer
-      /></v-row>
+        ></v-row>
       <v-row justify="center">
         <v-col cols="auto">
           <v-avatar>
@@ -27,7 +27,7 @@
         <strong class="black--text mt-6">{{ getVideo.boardSubject }}</strong>
         <v-spacer></v-spacer>
         <!-- 좋아요 버튼 -->
-        <v-col cols="4" class="ma-auto">
+        <v-col cols="1" class="ma-auto">
           <v-tooltip bottom nudge-bottom="20">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon :color="color" v-bind="attrs" v-on="on">
@@ -38,7 +38,7 @@
                   color="red"
                   >mdi-heart</v-icon
                 >
-                <v-icon v-else size="80" @click="setLike()" color="gray"
+                <v-icon v-else size="60" @click="setLike()" color="gray"
                   >mdi-heart</v-icon
                 >
               </v-btn>
@@ -57,10 +57,10 @@
         ></v-row
       >
       <v-divider inset></v-divider>
-      <h3 class="display-2 mt-4">댓글</h3>
+      <h3 class="display-2 mt-8">댓글</h3>
 
       <!-- 댓글 작성 -->
-      <v-row class="mt-2"
+      <v-row class="mt-4"
         ><v-col cols="auto">
           <v-avatar> <img :src="getMemberInfo.img" alt="John" /> </v-avatar
         ></v-col>
@@ -115,6 +115,7 @@ export default {
   created() {
     this.playerOptions.sources[0].src = this.getVideo.boardVideoUrl;
     //console.log(this.video.boardId);
+    
     this.reqComments(this.getVideo.boardId);
     this.getLike();
     this.reqMemberInfo(this.getMemberId);
@@ -135,7 +136,8 @@ export default {
         language: 'en',
         // 배속
         playbackRates: [0.7, 1.0, 1.5, 2.0],
-
+        width:"1120px",
+        height:"630px",
         // 영상의 타입과 영상 주소. src를 바꿔주면 됨.
         sources: [
           {

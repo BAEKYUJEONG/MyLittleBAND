@@ -19,7 +19,7 @@
               <!-- 프로필 이미지가 없을 때 -->
                 <v-img
                   v-if="member.img == null || member.img == ''"
-                  class="ma-auto mp-4"
+                  class="ma-auto mp-4 align-center"
                   height="300"
                   width="300"
                   style="border-radius: 50%"
@@ -32,7 +32,7 @@
                     hidden
                     @change="onChangeImages"
                   />
-                  <v-card-text class="justify-center" >
+                  <v-card-text>
                     <v-btn v-if="hover" @click="onClickImageUpload"
                       >Edit
                     </v-btn>
@@ -42,7 +42,7 @@
                 <!-- 프로필 이미지가 있을 때 -->
                 <v-img
                   v-else
-                  class="ma-auto mp-4"
+                  class="ma-auto mp-4 align-center "
                   height="300"
                   width="300"
                   style="border-radius: 50%"
