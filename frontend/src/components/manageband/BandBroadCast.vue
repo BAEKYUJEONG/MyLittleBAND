@@ -15,12 +15,12 @@
 import * as caller from '@/js/newbroadcast.js';
 
 export default {
-  // mounted() {
-  //   initializeSocket();
-  // },
+  mounted() {
+    caller.flag = true;
+  },
   methods: {
     onClickTest() {
-      caller.broadcast2().then(function(result) {
+      caller.broadcast2().then(function (result) {
         const localVideo = document.getElementById('localVideo');
         localVideo.srcObject = result;
       });
