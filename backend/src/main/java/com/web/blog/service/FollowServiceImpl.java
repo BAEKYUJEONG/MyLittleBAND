@@ -55,6 +55,11 @@ public class FollowServiceImpl implements FollowService{
 		System.out.println("?");
 		dao.followdown(followId);
 	}
+
+	@Override
+	public List<HashMap<String, String>> followrecommend(String memberId) {
+		return dao.followrecommend(memberId);
+	}
 	
 	
 

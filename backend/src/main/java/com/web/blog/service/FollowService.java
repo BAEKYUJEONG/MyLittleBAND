@@ -15,4 +15,5 @@ public interface FollowService {
 	public List<HashMap<String, String>> follownum(String bandId);
 	public void followup(String bandId);
 	public void followdown(String followId);
+	public List<HashMap<String, String>> followrecommend(String memberId);
 }
