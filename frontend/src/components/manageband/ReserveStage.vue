@@ -172,7 +172,7 @@
       <v-card style="opacity: 1">
         <v-card-title class="headline"> 공연정보수정 </v-card-title>
         <v-card-subtitle>
-          {{ TmpShow.date + "  " + TmpShow.time }}
+          {{ TmpShow.date + '  ' + TmpShow.time }}
         </v-card-subtitle>
         <v-card-text>
           <v-container>
@@ -233,13 +233,20 @@
     </v-dialog>
 
     <v-row justify="center" class="ma-10">
-      <v-btn color="primary" @click="moveDetail()">돌아가기</v-btn>
+      <v-btn
+        color="primary"
+        class="mx-6"
+        @click="moveBroadcast()"
+        :disabled="isBroadcast"
+        >공연하기</v-btn
+      >
+      <v-btn color="primary" class="mx-6" @click="moveDetail()">돌아가기</v-btn>
     </v-row>
   </v-main>
 </template>
 
 <script>
-import axiosCommon from "../../axios/axios-common";
+import axiosCommon from '../../axios/axios-common';
 
 export default {
   created() {
@@ -252,23 +259,24 @@ export default {
     getBandReserve() {
       //밴드의 공연신청목록 가져오기
       axiosCommon
-        .get("/show/" + this.$route.params.bandno)
+        .get('/show/' + this.$route.params.bandno)
         .then((response) => {
           if (response.data.status) {
             this.bandreserve = response.data.object; //bandreserve 목록에 저장
           }
         })
         .catch((exp) => {
-          console.log(exp + "조회에 실패하였습니다.");
+          console.log(exp + '조회에 실패하였습니다.');
         });
     },
     getDayReserve() {
       //특정 날짜의 공연목록 가져오기
       //console.log(this.date);
-      axiosCommon.get("/show/list/" + this.date).then((response) => {
+      axiosCommon.get('/show/list/' + this.date).then((response) => {
         if (response.data.status) {
           this.temptimetable = response.data.object;
           this.checkReserve();
+          this.checkBroadcast();
         }
       });
     },
@@ -297,13 +305,13 @@ export default {
     OpenReserve(time) {
       this.TmpShow = time;
       this.Dialog.reserve = true;
-      this.title = "";
-      this.showContent = "";
+      this.title = '';
+      this.showContent = '';
     },
     reserve() {
       //공연신청하기
       axiosCommon
-        .post("/show", {
+        .post('/show', {
           date: this.date,
           bandId: this.$route.params.bandno,
           time: this.TmpShow.time,
@@ -311,18 +319,18 @@ export default {
           showContent: this.showContent,
         })
         .then((response) => {
-          if (response.data.data == "success") {
-            alert("신청 성공!");
+          if (response.data.data == 'success') {
+            alert('신청 성공!');
             this.getBandReserve(); //목록 갱신
             this.getDayReserve();
-            this.title = "";
-            this.showContent = "";
+            this.title = '';
+            this.showContent = '';
           } else {
-            alert("이미 선택된 시간입니다");
+            alert('이미 선택된 시간입니다');
           }
         })
         .catch((exp) => {
-          console.log(exp + "신청에 실패하였습니다.");
+          console.log(exp + '신청에 실패하였습니다.');
         });
       this.Dialog.reserve = false; //창닫아주기
     },
@@ -337,16 +345,16 @@ export default {
       frm.append("showContent", this.TmpShow.showContent);
 
       axiosCommon
-        .put("/show/" + this.TmpShow.showId, frm)
+        .put('/show/' + this.TmpShow.showId, frm)
         .then((response) => {
           if (response.data.status) {
-            alert("수정 성공!");
+            alert('수정 성공!');
             this.getBandReserve(); //목록 갱신
             this.getDayReserve();
           }
         })
         .catch((exp) => {
-          console.log(exp + "수정에 실패하였습니다.");
+          console.log(exp + '수정에 실패하였습니다.');
         });
       this.Dialog.modify = false;
     },
@@ -357,31 +365,51 @@ export default {
     cancle() {
       //공연취소하기
       axiosCommon
-        .delete("/show/" + this.TmpShow.showId)
+        .delete('/show/' + this.TmpShow.showId)
         .then((response) => {
-          if (response.data.data == "success") {
-            alert("취소 성공!");
+          if (response.data.data == 'success') {
+            alert('취소 성공!');
             //신청중인 공연 목록 다시 가져오기
             this.getBandReserve(); //목록 갱신
             this.getDayReserve();
           }
         })
         .catch((exp) => {
-          console.log(exp + "신청에 실패하였습니다.");
+          console.log(exp + '신청에 실패하였습니다.');
         });
       this.Dialog.cancle = false; //창닫아주기
     },
+
     moveDetail() {
       //밴드상세 페이지로 이동
-      this.$router.push("/band/detail/" + this.$route.params.bandno);
+      this.$router.push('/band/detail/' + this.$route.params.bandno);
+    },
+    checkBroadcast() {
+      //공연할 수 있는지 확인하기.
+      const nowTime = new Date().toTimeString().substr(0, 5); //HH-MM
+      const nowHour = nowTime.substr(0, 2);
+      for (let i = 0; i < this.temptimetable.length; i++) {
+        console.log(this.temptimetable.length);
+        let _bandId = this.temptimetable[i].bandId;
+        let val = this.temptimetable[i].time.substr(0, 5); //DB에서 가져온 시간표에서 시간추출
+        let valHour = val.substr(0, 2);
+        if (_bandId == this.$route.params.bandno && nowHour == valHour) {
+          this.isBroadcast = false;
+        }
+      }
+    },
+    moveBroadcast() {
+      //공연 페이지로 이동.
+      this.$router.push('/bandbroadcast');
     },
   },
   data() {
     return {
+      isBroadcast: true,
       date: new Date().toISOString().substr(0, 10), //오늘날짜
       TmpShow: {},
-      title: "", //신청공연제목
-      showContent: "", //공연내용
+      title: '', //신청공연제목
+      showContent: '', //공연내용
       Dialog: {
         reserve: false, //공연신청 dialog
         modify: false, //공연수정 dialog
@@ -389,80 +417,80 @@ export default {
       },
       modelConfig: {
         //달령게서 날짜 지정할때 정하는 타입
-        type: "string",
-        mask: "YYYY-MM-DD",
+        type: 'string',
+        mask: 'YYYY-MM-DD',
       },
       bandreserve: [
         {
           showId: 1,
-          date: "2021-03-01",
-          time: "10:00",
-          title: "1공연",
-          showContent: "공연내용",
+          date: '2021-03-01',
+          time: '10:00',
+          title: '1공연',
+          showContent: '공연내용',
         },
         {
           showId: 2,
-          date: "2021-03-01",
-          time: "11:00",
-          title: "2공연",
-          showContent: "공연내용",
+          date: '2021-03-01',
+          time: '11:00',
+          title: '2공연',
+          showContent: '공연내용',
         },
         {
           showId: 4,
-          date: "2021-04-06",
-          time: "14:00",
-          title: "4공연",
-          showContent: "공연내용",
+          date: '2021-04-06',
+          time: '14:00',
+          title: '4공연',
+          showContent: '공연내용',
         },
       ],
       temptimetable: [], //공연이 있는지 없는지 판별
       timetable: [
         {
-          time: "10:00",
+          time: '10:00',
           pos: true,
         },
         {
-          time: "11:00",
+          time: '11:00',
           pos: true,
         },
         {
-          time: "12:00",
+          time: '12:00',
           pos: false,
         },
         {
-          time: "13:00",
+          time: '13:00',
           pos: true,
         },
         {
-          time: "14:00",
+          time: '14:00',
           pos: false,
         },
         {
-          time: "15:00",
+          time: '15:00',
           pos: false,
         },
         {
-          time: "16:00",
+          time: '16:00',
           pos: true,
         },
         {
-          time: "17:00",
+          time: '17:00',
           pos: true,
         },
         {
-          time: "18:00",
+          time: '18:00',
           pos: true,
         },
         {
-          time: "19:00",
+          time: '19:00',
           pos: true,
         },
         {
-          time: "20:00",
+          time: '20:00',
           pos: true,
         },
         {
-          time: "21:00",
+          time: '21:00',
           pos: true,
         },
       ],
@@ -471,5 +499,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

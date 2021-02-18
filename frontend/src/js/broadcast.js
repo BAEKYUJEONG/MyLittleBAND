@@ -28,7 +28,7 @@ conn.onmessage = function(msg) {
       break;
     // when a remote peer sends an ice candidate to us
     case 'candidate':
-      //handleCandidate(data);
+      handleCandidate(data, idx);
       break;
     default:
       break;
@@ -117,9 +117,9 @@ export function createOffer() {
   }
 }
 
-// function handleCandidate(candidate) {
-//   peerConnections[idx].addIceCandidate(new RTCIceCandidate(candidate));
-// }
+function handleCandidate(candidate, idx) {
+  peerConnections[idx].addIceCandidate(new RTCIceCandidate(candidate));
+}
 
 function handleAnswer(answer, idx) {
   console.log(idx);

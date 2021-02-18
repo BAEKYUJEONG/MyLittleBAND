@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import * as caller from '@/js/broadcast.js';
+import * as caller from '@/js/newbroadcast.js';
 
 export default {
   methods: {
     onClickOffer() {
-      caller.createOffer();
+      //caller.createOffer();
     },
     onClickTest() {
       caller.broadcast2().then(function(result) {
