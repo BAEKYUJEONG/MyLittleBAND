@@ -1,5 +1,7 @@
 <template>
   <v-container>
+      <v-card class="pa-10" color="rgba(200, 200, 200, 0.5)">
+
     <v-row>
       <v-col cols="2">
         <v-banner>
@@ -26,13 +28,13 @@
         ></v-text-field>
       </v-col>
       <v-col cols="auto">
-        <v-btn block outlined color="blue" @click="onWrite()"> 등록 </v-btn>
+        <v-btn block color="info" @click="onWrite()"> 등록 </v-btn>
       </v-col>
     </v-row>
 
     <!-- 작성된 댓글 목록-->
     <v-row class="mt-2">
-      <v-list shaped>
+      <v-list shaped color="rgba(255, 255, 255, 0)">
         <v-list-item v-for="comment in getComments" :key="comment.commentId">
           <v-list-item-icon>
             <v-list-item-avatar>
@@ -85,7 +87,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+      </v-card>
   </v-container>
 </template>
 

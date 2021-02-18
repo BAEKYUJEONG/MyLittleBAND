@@ -4,25 +4,26 @@
       <v-col cols="4">
         <v-alert
           color="pink darken-1"
-          outlined
-          text
+          icon="warning"
           border="left"
           v-if="!loginflag"
         >
           <div>로그인 후 초대 링크를 다시 클릭 해 주세요!</div>
         </v-alert>
 
-        <v-alert type="success" outlined text border="left" v-else>
+        <v-alert type="success" border="left" v-else>
           <v-col class="ml-14" cols="4">
             <v-select
-              outlined
+              dense
+              solo-inverted
               label="세션정보"
               :items="sessions"
               v-model="codeSession"
             ></v-select>
           </v-col>
-          <div class="title">버튼을 누르면 밴드 가입이 완료됩니다.</div>
-          <div class="mt-10">
+          <div class="title">세션을 선택하시고</div>
+          <div class="title">가입을 누르면 밴드 가입이 완료됩니다.</div>
+          <div class="mt-7">
             <v-btn rounded @click.once="onInviteBand()" color="warning">가입</v-btn>
           </div>
         </v-alert>

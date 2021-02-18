@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout col-8 offset-2 column>
         <!-- title -->
         <v-flex text-center class="ma-10">
@@ -10,17 +11,18 @@
         <!-- icons - modify, delete -->
         <v-flex text-right v-if="manager=='1'">
           <v-btn
+          class="mx-7"
             icon
             color="blue"
             large
             router-link
             :to="'/notice/modify/' + no"
           >
-            <v-icon>mdi-pencil</v-icon>
+            <v-icon size="40">mdi-pencil</v-icon>
           </v-btn>
 
           <v-btn icon color="red" large @click="dialog=true">
-            <v-icon>mdi-minus</v-icon>
+            <v-icon size="50">mdi-minus</v-icon>
           </v-btn>
         </v-flex>
 
@@ -47,16 +49,15 @@
             <v-flex col-2 text-right><h2>제목</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-sheet>
-                {{ getNotice.noticeTitle }}
-              </v-sheet>
+              <v-text-field  solo v-model="getNotice.noticeTitle" readonly>
+              </v-text-field>
             </v-flex>
           </v-layout>
           <v-layout>
             <v-flex col-2 text-right><h2>내용</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-textarea auto-grow disabled :value="getNotice.noticeContent" />
+              <v-textarea auto-grow style="margin: 20px auto" solo readonly :value="getNotice.noticeContent" />
             </v-flex>
           </v-layout>
         </v-flex>
@@ -69,10 +70,11 @@
             large
             router-link :to="{name: 'noticelist'}"
           >
-            <v-icon size="40">mdi-undo-variant</v-icon>
+            <v-icon size="50">mdi-undo-variant</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
+      </v-card>
     </v-container>
   </v-main>
 </template>

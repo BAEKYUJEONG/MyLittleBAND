@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout col-8 offset-2 column>
         <!-- title -->
         <v-flex text-center class="ma-10">
@@ -47,26 +48,32 @@
             <v-flex col-2 text-right><h2>작성자</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-4>
-              <v-sheet>
-                {{ writer }}
-              </v-sheet>
+              <v-text-field solo readonly :value="writer">
+              </v-text-field>
             </v-flex>
-            <v-flex col-2>
-              <h2>조회수 :</h2>
+            <v-flex col-2 >
+              <h2 >조회수 : </h2>
             </v-flex>
-            <v-flex col-1>
-              <v-sheet>{{ getBoard.view }}</v-sheet>
+            <v-flex col-1 >
+              <v-text-field solo readonly :value="getBoard.view"></v-text-field>
             </v-flex>
           </v-layout>
           <v-layout>
             <v-flex col-2 text-right><h2>내용</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-textarea outlined auto-grow readonly :value="getBoard.content" />
+              <v-textarea solo auto-grow readonly :value="getBoard.content" />
             </v-flex>
           </v-layout>
         </v-flex>
+      </v-layout>
+      </v-card>
+    </v-container>
+    
         <BoardBandComments></BoardBandComments>
+    
+    <v-container>
+      <v-layout>
         <!-- icon - return -->
         <v-flex text-right>
           <v-btn

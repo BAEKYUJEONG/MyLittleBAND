@@ -96,11 +96,7 @@
           <v-btn
             class="mx-6"
             color="primary"
-            @click="
-              () => {
-                this.$router.go(0);
-              }
-            "
+            @click="getSuggestBand()"
             >검색초기화</v-btn
           >
           <v-btn class="mx-6" @click="ToBandList()"
@@ -118,14 +114,16 @@ import axios from "../../axios/axios-common";
 import { mapGetters } from "vuex";
 const FollowStore = "FollowStore";
 const BandStore = "BandStore";
+const MemberStore = "MemberStore";
+
 
 export default {
-  async created() {
+  created() {
     this.getSuggestBand(); //추천밴드리스트 가져오기
-    //this.getFollownum();
   },
   computed: {
     ...mapGetters(BandStore, ["getBandList"]),
+    ...mapGetters(MemberStore,["getMemberId"]),
     ...mapGetters(FollowStore, ["getFollowList"]),
   },
   methods: {
@@ -134,40 +132,18 @@ export default {
       //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
       //그중에서 이미 팔로우 중인 밴드는 제외하기
       axios
-        .get("/followlist/1")
+        .get("/follow/"+this.getMemberId)
         .then((response) => {
           if (response.data.status) {
-            this.tmplist = response.data.object;
-            this.makeSuggestBand();
+            this.bandlist = response.data.object;
           }
         })
         .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
     },
-    makeSuggestBand() {
-      here: for (let i = 0; i < this.tmplist.length; i++) {
-        //추천밴드목록까지 반복
-
-        for (let j = 0; j < this.getBandList.length; j++) {
-          //소속밴드목록만큼 반복
-          if (this.tmplist[i].bandId == this.getBandList[j].bandId) {
-            continue here;
-          }
-        }
-
-        for (let j = 0; j < this.getFollowList.length; j++) {
-          //팔로우중인 밴드목록만큼 반복
-          if (this.tmplist[i].bandId == this.getFollowList[j].bandId) {
-            continue here;
-          }
-        }
-        //해당하는게 없으면 추천밴드에 입력
-        this.bandlist.push(this.tmplist[i]);
-      }
-    },
     onSearch() {
       //만약 빈칸이면 초기 밴드정보 호출
       if (this.msg == "") {
-        this.$router.go(0);
+        this.getSuggestBand();
         return;
       }
       axios
@@ -180,6 +156,8 @@ export default {
           }
         })
         .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+
+        this.msg= "";
     },
     BandDetail(val) {
       //밴드상세페이지로 이동
@@ -194,7 +172,6 @@ export default {
   data() {
     return {
       msg: "",
-      tmplist: [],
       bandlist: [],
     };
   },

@@ -2,6 +2,7 @@
   <v-app-bar color="#231E1A" height="100" max-height="100">
     <v-app-bar-nav-icon class="hidden-md-and-down mx-auto">
       <v-btn
+        style="font-size : 20px;"
         v-for="menu in menus"
         :key="menu.text"
         text
@@ -47,6 +48,7 @@
           <v-list>
             <v-list-item v-for="(menu, i) in menus" :key="i">
               <v-btn
+                style="font-size : 20px;"
                 :key="menu.text"
                 text
                 router-link
@@ -105,8 +107,5 @@ export default {
 </script>
 
 <style scoped>
-.v-btn__content {
-  font-family: "Noto Sans KR", sans-serif;
-  font-size: 17px;
-}
+
 </style>

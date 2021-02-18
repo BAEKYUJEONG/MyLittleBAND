@@ -3,7 +3,8 @@ import axios from "../../axios/axios-common";
 const ExampleStore = {
   namespaced: true,
     state: {
-      listnum : 0,
+        listnum: 0,
+        page : 1,
     notices: [  // 백엔드에서 페이지 번호당 10개씩 묶어 줄 예정
       { no: 10, title: "나작밴 운영정책 변경", date: "2021-02-08" },
       { no: 9, title: "개인정보 처리방침 개정안내", date: "2021-02-06" },
@@ -49,12 +50,15 @@ const ExampleStore = {
     getNotices(state) { return state.notices; },
       getNotice(state) { return state.notice; },
       getListnum(state) { return state.listnum; },
+      getPage(state) { return state.page;},
   },
   mutations: {
     setNotices(state, payload) { state.notices = payload; },
     setNotice(state, payload) { state.notice = payload; },
-    setListnum(state, payload) { state.listnum = payload; },
-  },
+      setListnum(state, payload) { state.listnum = payload; },
+      setPage(state, payload) { state.page = payload;},
+    },
+  
   actions: {
     // 공지사항 리스트 받아오기
     reqNotices(context,no){
@@ -145,6 +149,9 @@ const ExampleStore = {
         .catch((error) => {
             console.log(error);
         })
+      },
+      reqPage(context, no) {
+          return context.commit('setPage', no);
     }
   },
 };

@@ -1,6 +1,7 @@
 <template>
   <v-main>
     <v-container grid-list-xs>
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.8)">
       <v-row justify="space-around">
         <!-- 필터 영역 -->
         <v-col cols="6" align="center">
@@ -8,8 +9,8 @@
             v-model="selectOption"
             :disabled="isUpdating"
             :items="people"
-            filled
             chips
+            filled
             color="blue lighten-2"
             label="필터"
             item-text="name"
@@ -70,7 +71,13 @@
           ></v-text-field>
         </v-col>
       </v-row>
-
+      <v-row justify="end">
+        <v-col cols="6" align="center">
+          <v-btn color="info" style="font-weight:bold;" @click="reqVideos()" >검색초기화</v-btn>
+        </v-col>
+      </v-row>
+      </v-card>
+      
       <!-- 비디오 리스트 영역 -->
       <v-layout justify-center column wrap>
         <v-flex xs12 sm9>
@@ -100,7 +107,7 @@
                         <v-list-item-title
                           v-text="card.boardSubject"
                           class="text-truncate"
-                          style="width: 11rem"
+                          style="width: 22rem"
                         ></v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -123,7 +130,7 @@
         </v-flex>
         <v-row align="center" justify="space-around">
           <v-col cols="auto" class="mb-4">
-            <v-btn block outlined color="blue" @click="onAdd"> 글쓰기 </v-btn>
+            <v-btn block color="info" @click="onAdd"> 글쓰기 </v-btn>
           </v-col>
         </v-row>
       </v-layout>
