@@ -1,14 +1,13 @@
 //connecting to our signaling server
 
-//let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
-let conn = new WebSocket('ws://localhost:8080/socket');
+let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
+//let conn = new WebSocket('ws://localhost:8080/socket');
+const num = Math.floor(Math.random() * 1234567);
 
-//const localVideo = document.getElementById("localVideo");
-//const remoteVideo = document.getElementById("remoteVideo");
 let remoteStream;
-let index;
 conn.onopen = async function() {
   console.log('Connected to the signaling server');
+  console.log('num : ' + num);
   initialize();
 };
 
@@ -17,8 +16,9 @@ conn.onmessage = function(msg) {
   let content = JSON.parse(msg.data);
   let data = content.data;
   let idx = content.idx;
+  let type = content.type;
+  if (idx != num || type == 'callee') return;
   switch (content.event) {
-    // when somebody wants to call us
     case 'offer':
       handleOffer(data, idx);
       break;
@@ -37,7 +37,21 @@ function send(message) {
 
 let peerConnection;
 
+// 접속하면 신호 보냄.
 function initialize() {
+  send({
+    event: 'watcher',
+    data: { event: 'watcher' },
+    idx: num,
+    type: 'callee',
+  });
+}
+
+export function watch() {
+  return remoteStream;
+}
+
+function handleOffer(offer) {
   peerConnection = new RTCPeerConnection({
     configuration: {
       offerToReceiveAudio: false,
@@ -59,14 +73,14 @@ function initialize() {
       },
     ],
   });
-  //console.log(peerConnection);
   // Setup ice handling
   peerConnection.onicecandidate = function(event) {
     if (event.candidate) {
       send({
         event: 'candidate',
         data: event.candidate,
-        idx: index,
+        idx: num,
+        type: 'callee',
       });
     }
   };
@@ -75,15 +89,8 @@ function initialize() {
     console.log('test');
     remoteStream = event.stream;
   };
-}
 
-export function watch() {
-  return remoteStream;
-}
-
-function handleOffer(offer, idx) {
   peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-  index = idx;
   // create and send an answer to an offer
   peerConnection.createAnswer(
     function(answer) {
@@ -91,12 +98,13 @@ function handleOffer(offer, idx) {
       send({
         event: 'answer',
         data: answer,
-        idx: idx,
+        idx: num,
+        type: 'callee',
       });
     },
     function(error) {
       console.log(error);
-      alert('Error creating an answer');
+      //alert('Error creating an answer');
     }
   );
 }
@@ -104,3 +112,8 @@ function handleOffer(offer, idx) {
 function handleCandidate(candidate) {
   peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
 }
+
+window.onunload = window.onbeforeunload = () => {
+  conn.close();
+  peerConnection.close();
+};

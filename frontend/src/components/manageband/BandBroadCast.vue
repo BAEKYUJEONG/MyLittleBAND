@@ -6,20 +6,19 @@
         <v-btn class="mx-3" id="testButton" @click="onClickTest"
           >broadcast</v-btn
         >
-        <v-btn class="mx-3" id="viewButton" @click="onClickOffer">offer</v-btn>
       </div> </v-col
     ><v-spacer />
   </v-row>
 </template>
 
 <script>
-import * as caller from '@/js/broadcast.js';
+import * as caller from '@/js/newbroadcast.js';
 
 export default {
+  // mounted() {
+  //   initializeSocket();
+  // },
   methods: {
-    onClickOffer() {
-      caller.createOffer();
-    },
     onClickTest() {
       caller.broadcast2().then(function(result) {
         const localVideo = document.getElementById('localVideo');
