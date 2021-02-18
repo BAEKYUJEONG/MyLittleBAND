@@ -80,13 +80,18 @@ const MemberStore = {
             context.commit("setManager", response.data.object.manager); //관리자 여부저장
 
             return { result: true, msg: member.email + "님 환영합니다", color: "success" };
+          } else {
+            return { result : false, msg: "로그인에 실패하였습니다.", color: "warning" };
           }
         })
         .catch((error) => {
           if (error.response.status === 401) {
-            if(error.response.data.data==="email")      return { result: false, msg: "이메일 인증 후 진행해주세요", color: "warning" };
-            else if(error.response.data.data==="fail")  return { result: false, msg: "아이디나 비밀번호가 틀립니다", color: "warning" };
-          } else console.log(error);
+            if (error.response.data.data === "email") return { result: false, msg: "이메일 인증 후 진행해주세요", color: "warning" };
+            else if (error.response.data.data === "fail") return { result: false, msg: "아이디나 비밀번호가 틀립니다", color: "warning" };
+          } else {
+            console.log(error);
+            return { result: false, msg: "아이디나 비밀번호가 틀립니다", color: "warning" };
+          }
         });
     },
     // 로그아웃

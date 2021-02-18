@@ -86,6 +86,9 @@
         </v-sheet>
       </v-col>
     </v-card>
+     <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
   </v-container>
 </template>
 
@@ -99,6 +102,9 @@ const MemberStore = 'MemberStore';
 export default {
   data() {
     return {
+      snackbar : false,
+      msg : '',
+      color : '',
       icons: [
         ['mdi-eye', 'blue-grey darken-1'],
         ['mdi-fire', 'red'],
@@ -127,7 +133,10 @@ export default {
             console.log(error);
           });
       } else {
-        alert('로그인후 이용해주세요');
+        this.msg = "로그인 후 이용해주세요";
+        this.color = "error";
+        this.snackbar = true;
+        
       }
     },
   },

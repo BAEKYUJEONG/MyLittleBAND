@@ -251,7 +251,7 @@ export default {
             this.member.followId = response.data.object.likeId;
           }
         })
-        .catch((exp) => alert(exp + '팔로우 상태 변화에 실패하였습니다.'));
+        .catch((exp) => console.log(exp + '팔로우 상태 변화에 실패하였습니다.'));
     },
     unLike() {
       //팔로우상태변화 (true => false 바꿔줌)
@@ -265,7 +265,7 @@ export default {
             this.member.followId = '';
           }
         })
-        .catch((exp) => alert(exp + '팔로우 상태 변화에 실패하였습니다.'));
+        .catch((exp) => console.log(exp + '팔로우 상태 변화에 실패하였습니다.'));
       console.log('팔로우상태 : 언팔로우');
     },
     onWrite() {
@@ -283,7 +283,7 @@ export default {
             this.reqComments(this.getVideo.boardId);
           }
         })
-        .catch((exp) => alert(exp + '댓글 등록 실패.'));
+        .catch((exp) => console.log(exp + '댓글 등록 실패.'));
       this.usercomment = '';
     },
   },

@@ -105,6 +105,9 @@
         </v-col>
       </v-row>
       </v-card>
+      <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ snackmsg }}
+      </v-snackbar>
     </v-container>
   </v-main>
 </template>
@@ -134,7 +137,7 @@ export default {
             this.bandlist = response.data.object;
           }
         })
-        .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
+        .catch((exp) => console.log(exp + "추천밴드목록 조회 실패"));
     },
     onSearch() {
       //만약 빈칸이면 초기 밴드정보 호출
@@ -148,10 +151,12 @@ export default {
           if (response.data.status) {
             this.bandlist = response.data.object;
           } else {
-            alert("해당하는 검색 결과가 없습니다.");
+            this.msg = "해당하는 검색 결과가 없습니다.";
+        this.color = "warning";
+        this.snackbar = true;
           }
         })
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+        .catch((exp) => console.log(exp + "조회에 실패하였습니다."));
 
         this.msg= "";
     },
@@ -169,6 +174,9 @@ export default {
     return {
       msg: "",
       bandlist: [],
+      snackbar : false,
+      snackmsg : '',
+      color : '',
     };
   },
 };

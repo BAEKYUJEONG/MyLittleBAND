@@ -86,6 +86,9 @@
           </v-btn>
         </v-flex>
       </v-layout>
+      <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
     </v-container>
   </v-main>
 </template>
@@ -102,6 +105,9 @@ export default {
       no: this.$route.params.boardno,
       dialog: false,
       writer : '',
+      snackbar : false,
+      msg : '',
+      color : '',
     };
   },
   created(){
@@ -118,7 +124,9 @@ export default {
     onRemove(no) {
       this.reqDeleteBoard(no).then((response) => {
         if (response.result) {
-        alert(response.msg);
+        this.msg = "삭제되었습니다.";
+        this.color = "success";
+        this.snackbar = true;
         this.$router.push("/band/board/"+this.getBoard.bandId);
         }
       });
