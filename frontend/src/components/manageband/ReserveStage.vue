@@ -250,6 +250,7 @@ import axiosCommon from '../../axios/axios-common';
 
 export default {
   created() {
+    console.log(new Date());
     //오늘의 신청목록 가져오기
     this.getDayReserve(this.date);
     //밴드의 공연신청목록 가져오기
@@ -389,7 +390,6 @@ export default {
       const nowTime = new Date().toTimeString().substr(0, 5); //HH-MM
       const nowHour = nowTime.substr(0, 2);
       for (let i = 0; i < this.temptimetable.length; i++) {
-        console.log(this.temptimetable.length);
         let _bandId = this.temptimetable[i].bandId;
         let val = this.temptimetable[i].time.substr(0, 5); //DB에서 가져온 시간표에서 시간추출
         let valHour = val.substr(0, 2);
@@ -420,29 +420,7 @@ export default {
         type: 'string',
         mask: 'YYYY-MM-DD',
       },
-      bandreserve: [
-        {
-          showId: 1,
-          date: '2021-03-01',
-          time: '10:00',
-          title: '1공연',
-          showContent: '공연내용',
-        },
-        {
-          showId: 2,
-          date: '2021-03-01',
-          time: '11:00',
-          title: '2공연',
-          showContent: '공연내용',
-        },
-        {
-          showId: 4,
-          date: '2021-04-06',
-          time: '14:00',
-          title: '4공연',
-          showContent: '공연내용',
-        },
-      ],
+      bandreserve: [],
       temptimetable: [], //공연이 있는지 없는지 판별
       timetable: [
         {

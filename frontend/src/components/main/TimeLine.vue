@@ -69,11 +69,26 @@
                   >
                     {{ data.title }}
                   </v-card-title>
+                  <v-card-actions>
                   <v-card-text
                     style="font-size: 17px; font-weight: bold"
                     class="text-truncate"
-                    >{{ data.name }}</v-card-text
+                    >{{ data.name }}
+                    
+                    </v-card-text
                   >
+                    <v-btn icon @click="data.shows = !data.shows">
+                    <v-icon>
+                      {{
+                      data.shows ? "mdi-chevron-down" : "mdi-chevron-up"
+                    }}</v-icon></v-btn>
+                  </v-card-actions>
+                  <v-expand-transition>
+                  <div v-show="!data.shows">
+                    <v-divider></v-divider>
+                    <v-card-text> {{ data.showContent }} </v-card-text>
+                  </div>
+                </v-expand-transition>
                 </v-card>
               </v-timeline-item>
             </v-responsive>

@@ -112,8 +112,6 @@
 <script>
 import axios from "../../axios/axios-common";
 import { mapGetters } from "vuex";
-const FollowStore = "FollowStore";
-const BandStore = "BandStore";
 const MemberStore = "MemberStore";
 
 
@@ -122,9 +120,7 @@ export default {
     this.getSuggestBand(); //추천밴드리스트 가져오기
   },
   computed: {
-    ...mapGetters(BandStore, ["getBandList"]),
     ...mapGetters(MemberStore,["getMemberId"]),
-    ...mapGetters(FollowStore, ["getFollowList"]),
   },
   methods: {
     getSuggestBand() {
