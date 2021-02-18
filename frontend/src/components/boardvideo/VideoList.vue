@@ -90,43 +90,53 @@
               :key="idx"
               v-bind="{ [`xs4`]: true }"
             >
-              <v-card class="mx-10 my-10">
-                <v-img
-                  :src="card.boardThumbnail"
-                  height="200px"
-                  @click="onVideo(card.boardId)"
-                  style="cursor: pointer"
-                >
-                </v-img>
+              <v-tooltip bottom nudge-top="5">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-card class="mx-10 my-10" v-bind="attrs" v-on="on">
+                    <v-img
+                      :src="card.boardThumbnail"
+                      height="200px"
+                      @click="onVideo(card.boardId)"
+                      style="cursor: pointer"
+                    >
+                    </v-img>
 
-                <v-card-actions>
-                  <v-list>
-                    <v-list-item class="grow">
-                      <v-list-item-avatar color="grey darken-3">
-                        <v-img :src="card.img"></v-img>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title
-                          v-text="card.boardSubject"
-                          class="text-truncate"
-                          style="width: 11rem"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                  <v-spacer></v-spacer>
-                  <v-btn icon @click="card.shows = !card.shows">
-                    <v-icon>{{
-                      card.shows ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
-                    }}</v-icon>
-                  </v-btn>
-                </v-card-actions>
+                    <v-card-actions>
+                      <v-list>
+                        <v-list-item class="grow">
+                          <v-list-item-avatar color="grey darken-3">
+                            <v-img :src="card.img"></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title
+                              v-text="card.boardSubject"
+                              class="text-truncate"
+                              style="width: 11rem"
+                            ></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                      <v-spacer></v-spacer>
+                      <v-btn icon @click="card.shows = !card.shows">
+                        <v-icon>{{
+                          card.shows
+                            ? 'keyboard_arrow_up'
+                            : 'keyboard_arrow_down'
+                        }}</v-icon>
+                      </v-btn>
+                    </v-card-actions>
 
-                <v-slide-y-transition>
-                  <v-card-text v-show="card.shows" v-text="card.boardContent">
-                  </v-card-text>
-                </v-slide-y-transition>
-              </v-card>
+                    <v-slide-y-transition>
+                      <v-card-text
+                        v-show="card.shows"
+                        v-text="card.boardContent"
+                      >
+                      </v-card-text>
+                    </v-slide-y-transition>
+                  </v-card>
+                </template>
+                <span>{{ card.boardSubject }}</span>
+              </v-tooltip>
             </v-flex>
           </v-layout>
         </v-flex>
