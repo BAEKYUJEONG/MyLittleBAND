@@ -96,6 +96,25 @@
           </v-list>
         </v-row>
       </v-card>
+
+      <!-- 뒤로가기 -->
+      <v-layout>
+        <v-flex text-right>
+           <v-btn
+            icon
+            color="primary"
+            large
+            class="ma-10"
+            @click="
+              () => {
+                this.$router.go(-1);
+              }
+            "
+          >
+            <v-icon size="80">mdi-undo-variant</v-icon>
+           </v-btn>
+        </v-flex>
+      </v-layout>
     </v-container>
   </v-main>
 </template>
@@ -203,7 +222,7 @@ export default {
           if (response.data.status) {
             this.like = this.getVideo.boardLike;
             this.member.follow = true;
-            this.member.followId = response.data.object.boardId;
+            this.member.followId = response.data.object.likeId;
           }
         })
         .catch((exp) => {

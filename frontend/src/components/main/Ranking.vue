@@ -26,7 +26,8 @@
 
         <!-- 랭킹 목록 -->
         <v-sheet class="mx-10" elevation="8" color="rgba(240, 240, 240, 1)">
-          <v-slide-group class="pa-4" show-arrows>
+          <v-slide-group class="pa-4"
+          next-icon="mdi-chevron-right"  prev-icon="mdi-chevron-left" show-arrows>
             <v-slide-item
               v-for="n in getRanking[idx.substr(1)]"
               :key="n.boardId"
@@ -60,7 +61,7 @@
                         style="width: 20rem"
                         >{{ n.boardSubject }}</v-card-text
                       >
-                      <v-card-text class="subtitle-1 text-truncate">{{
+                      <v-card-text style="font-size:17px;font-weight:bold;" class=" text-truncate">{{
                         n.name
                       }}</v-card-text>
                     </div>
@@ -113,7 +114,7 @@ export default {
           console.log(error);
         })
       } else {
-        alert("로그인 해라")
+        alert("로그인후 이용해주세요")
       }
     }
   },
@@ -121,6 +122,7 @@ export default {
 </script>
 
 <style scoped>
+
 #bg {
   background-color: rgba(255, 255, 255, 0.5);
 }

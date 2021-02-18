@@ -6,13 +6,14 @@
       text
       @click.native="click(link.text)"
       class="white--text"
+      style="font-size : 20px;"
     >
       {{ link.text }}
     </v-btn>
   </span>
   <v-list v-else>
     <v-list-item v-for="link in links" :key="link.text">
-      <v-btn text @click.native="click(link.text)">
+      <v-btn text style="font-size : 20px;" @click.native="click(link.text)">
         {{ link.text }}
       </v-btn>
     </v-list-item>
@@ -66,4 +67,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+
+</style>

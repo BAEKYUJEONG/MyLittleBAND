@@ -1,12 +1,13 @@
 <template>
   <v-main>
-    <v-container fill-height>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout column>
         <v-flex>
           <!-- id find layout -->
           <v-layout row fill-height align-center class="ma-5">
-            <v-flex col>
-              <v-sheet>아이디 찾기</v-sheet>
+            <v-flex col text-center>
+              <v-sheet color="rgba(255, 255, 255, 0)"><strong>아이디 찾기</strong></v-sheet>
             </v-flex>
             <v-flex col>
               <v-form ref="id_form" v-model="idvalid" lazy-validation>
@@ -91,8 +92,8 @@
         <v-flex>
           <!-- password find layout -->
           <v-layout row fill-height align-center class="ma-1">
-            <v-flex col>
-              <v-sheet>비밀번호 찾기</v-sheet>
+            <v-flex col text-center>
+              <v-sheet color="rgba(255, 255, 255, 0)"><strong>비밀번호 찾기</strong></v-sheet>
             </v-flex>
             <v-flex col>
               <v-form ref="pw_form" v-model="pwvalid" lazy-validation>
@@ -183,6 +184,7 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      </v-card>
     </v-container>
   </v-main>
 </template>

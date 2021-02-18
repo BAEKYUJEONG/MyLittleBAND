@@ -322,9 +322,6 @@ export default {
     },
     memberInvite() {
       // 밴드 멤버 초대
-      // 영현이의 도움이 필요
-
-      // bandid 필요함. memberid도 필요함.
       let url =
         "https://i4a408.p.ssafy.io/bandinvite?bandno=" +
         this.$route.params.bandno;

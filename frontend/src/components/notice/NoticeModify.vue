@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout col-8 offset-2 column>
         <!-- title -->
         <v-flex text-center class="ma-10">
@@ -10,12 +11,13 @@
         <!-- icons - modify, delete -->
         <v-flex text-right>
           <v-btn
+          class="mx-7"
             icon
             color="blue"
             large
             @click="onModify()"
           >
-            <v-icon>mdi-check</v-icon>
+            <v-icon size="50">mdi-check</v-icon>
           </v-btn>
 
           <v-btn
@@ -38,7 +40,7 @@
             <v-flex col-2 text-right><h2>제목</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-text-field solo style="margin: 20px auto" v-model="title">
+              <v-text-field solo v-model="title">
             </v-text-field>
             </v-flex>
           </v-layout>
@@ -56,6 +58,7 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      </v-card>
     </v-container>
   </v-main>
 </template>
