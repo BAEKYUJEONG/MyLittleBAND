@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container class="mb-10">
+    <v-container class="my-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <!-- 배너 -->
       <v-row justify="center">
         <v-col cols="6">
@@ -14,10 +15,10 @@
         <v-col cols="4">
           <v-text-field
             v-model="msg"
-            label="밴드명"
-            placeholder="원하는 밴드명을 입력하세요."
+            label="원하는 밴드명을 입력하세요."
             append-outer-icon="mdi-magnify"
             clearable
+            @keypress.enter="onSearch()"
             @click:append-outer="onSearch()"
           ></v-text-field>
         </v-col>
@@ -25,21 +26,17 @@
       <!-- 밴드리스트 -->
       <v-row justify="center">
         <v-col cols="6">
-          <v-tooltip
-            right
-            v-for="band in bandlist"
-            :key="band.bandId"
-          >
+          <v-tooltip right v-for="band in bandlist" :key="band.bandId">
             <template v-slot:activator="{ on, attrs }">
-              <v-card class="mb-15" v-bind="attrs" v-on="on">
+              <v-card class="mb-15 rounded-tl-xl rounded-br-xl" v-bind="attrs" v-on="on" color="rgba(255, 255, 255, 0.9)">
                 <v-row class="px-10" align="center">
                   <v-col cols="3">
                     <!-- 밴드이미지가 없을 때 -->
                     <v-img
-                      v-if="band.img == ''"
-                      src="../../assets/image/pepe.jpg"
-                      max-height="100"
-                      max-width="100"
+                      v-if="band.img == '' || band.img == null"
+                      src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
+                      height="100"
+                      width="100"
                       style="border-radius: 50%"
                     >
                     </v-img>
@@ -47,160 +44,123 @@
                     <v-img
                       v-else
                       :src="band.img"
-                      max-height="100"
-                      max-width="100"
+                      height="100"
+                      width="100"
                       style="border-radius: 50%"
                     ></v-img>
                   </v-col>
-                  <v-col cols="9" align-self="center">
+                  <v-col cols="auto" >
                     <v-row>
                       <v-col>
                         <v-btn x-large text @click="BandDetail(band.bandId)"
-                          ><strong> {{ band.name }} </strong></v-btn
+                          ><h2>{{ band.name }}</h2></v-btn
                         ></v-col
                       >
                     </v-row>
                     <v-row>
-                      <v-col>
-                        <v-btn>{{band.follow}}</v-btn>
-                      </v-col>
+                      <v-col
+                        ><h3 style="color: black">
+                          팔로워 수 : {{ band.follownum }}
+                        </h3></v-col
+                      >
                     </v-row>
                   </v-col>
                 </v-row>
                 <v-card-actions>
                   <v-btn color="orange lighten-2" text> 밴드소개 </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn icon @click="show = !show">
+                  <v-btn icon @click="band.show = !band.show">
                     <v-icon>{{
-                      show ? "mdi-chevron-up" : "mdi-chevron-down"
+                      band.show ? "mdi-chevron-up" : "mdi-chevron-down"
                     }}</v-icon>
                   </v-btn>
                 </v-card-actions>
                 <v-expand-transition>
-                  <div v-show="show">
+                  <div v-show="band.show">
                     <v-divider></v-divider>
-                    <v-card-text> {{band.intro}} </v-card-text>
+                    <v-card-text> {{ band.intro }} </v-card-text>
                   </div>
                 </v-expand-transition>
               </v-card>
             </template>
-            <span >
-                <div>밴드명 클릭 시</div>
-                <div>해당밴드로 이동합니다</div>
-                </span>
+            <span>
+              <div>밴드명 클릭 시</div>
+              <div>해당밴드로 이동합니다</div>
+            </span>
           </v-tooltip>
         </v-col>
       </v-row>
       <!-- 검색초기화, 돌아가기 버튼 -->
       <v-row justify="center">
-        <v-col cols="4">
-          <v-btn class="mx-6" color="primary" @click="getSuggetBandList()"
+        <v-col cols="auto">
+          <v-btn
+            class="mx-6"
+            color="primary"
+            @click="getSuggestBand()"
             >검색초기화</v-btn
           >
-          <v-btn class="mx-6" color="primary" @click="ToBandList()"
+          <v-btn class="mx-6" @click="ToBandList()"
             >돌아가기</v-btn
           >
         </v-col>
       </v-row>
+      </v-card>
     </v-container>
   </v-main>
 </template>
 
 <script>
-import axios from "../../axios/axios-common"
-export default {
+import axios from "../../axios/axios-common";
+import { mapGetters } from "vuex";
+const MemberStore = "MemberStore";
 
-  async created() {
-    await this.getFollowBand(); //팔로우중인 밴드
-    await this.getbandlist();   //내가 소속된 밴드
-     this.getSuggestBand();//추천밴드리스트 가져오기
-    //this.getFollownum();
+
+export default {
+  created() {
+    this.getSuggestBand(); //추천밴드리스트 가져오기
   },
-  watch:{//route이동시에도 created함수를 호출할 수 있도록 함
-    '$route' : 'created'
+  computed: {
+    ...mapGetters(MemberStore,["getMemberId"]),
   },
   methods: {
     getSuggestBand() {
-        //추천밴드목록 만들기
-        //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
-        //그중에서 이미 팔로우 중인 밴드는 제외하기
-        axios
-        .get("/followlist/1")
-        .then((response)=>{
-          if(response.data.status){
-            this.tmplist = response.data.object;
-            this.makeSuggestBand();
+      //추천밴드목록 만들기
+      //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
+      //그중에서 이미 팔로우 중인 밴드는 제외하기
+      axios
+        .get("/follow/"+this.getMemberId)
+        .then((response) => {
+          if (response.data.status) {
+            this.bandlist = response.data.object;
           }
         })
         .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
     },
-    makeSuggestBand(){
-      here : for(let i = 0; i < this.tmplist.length; i++){
-        //추천밴드목록까지 반복
-
-        for(let j=0; j< this.Bandin.length; j++){
-          //소속밴드목록만큼 반복
-          if(this.tmplist[i].bandId == this.Bandin[j].bandId){
-            continue here;
-          }
-        }
-
-        for(let j=0; j< this.followBand.length; j++){
-          //팔로우중인 밴드목록만큼 반복
-          if(this.tmplist[i].bandId == this.followBand[j].bandId){
-            continue here;
-          }
-        }
-        //해당하는게 없으면 추천밴드에 입력
-        this.bandlist.push(this.tmplist[i]);
-      }
-    },
-    getFollowBand() {
-      //팔로우 중인 밴드리스트 가져오기
-      axios
-        .get("/followlist/" + this.$route.params.memberno)
-        .then((response) => {
-          if (response.data.data == "success")
-            this.followBand = response.data.object;
-        })
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
-    },
-    getbandlist() {
-      //소속된 밴드리스트 조회
-      axios
-        .get("/band-list/" + this.$route.params.memberno)
-        .then((response) => (this.Bandin = response.data.object))
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
-    },
-    getFollownum(){
-        //밴드별 팔로우 수 조회
-        this.bandlist.follow = "1";
-    },
     onSearch() {
-        //밴드명으로 검색
-
       //만약 빈칸이면 초기 밴드정보 호출
       if (this.msg == "") {
-        this.getSuggetBandList();
+        this.getSuggestBand();
         return;
       }
-       axios
-       .post("/band/find",{msg : this.msg})
-       .then((response)=>{
-           if(response.data.status){
-               this.bandlist = response.data.object;
-           }else{
-               alert("해당하는 검색 결과가 없습니다.");
-           }
-       })
-       .catch((exp)=>alert(exp+"조회에 실패하였습니다."));
+      axios
+        .get("/band/find/" + this.msg)
+        .then((response) => {
+          if (response.data.status) {
+            this.bandlist = response.data.object;
+          } else {
+            alert("해당하는 검색 결과가 없습니다.");
+          }
+        })
+        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+
+        this.msg= "";
     },
     BandDetail(val) {
       //밴드상세페이지로 이동
-      this.$router.push("/band/detail/" + val);
+      this.$router.push("/band/introduce/" + val);
     },
     ToBandList() {
-        //밴드리스트 페이지로 이동
+      //밴드리스트 페이지로 이동
       this.$router.push("/band/list/" + this.$route.params.memberno);
     },
   },
@@ -208,24 +168,7 @@ export default {
   data() {
     return {
       msg: "",
-      show: false,
-      followBand:[],
-      Bandin:[],
-      tmplist:[],
-      bandlist: [
-        {
-          bandId: 1,
-          name: "잘한다밴드",
-          img: "",
-          intro : "저희는 홍대에 터를두고 생활하는 밴드입니다."
-        },
-        {
-          bandId: 2,
-          name: "더잘한다밴드",
-          img: require("../../assets/image/pepe.jpg"),
-          intro : "궁금하면 들어와서 영상부터 만나봐"
-        },
-      ],
+      bandlist: [],
     };
   },
 };

@@ -1,41 +1,48 @@
 <template>
-  <v-row
-    ><v-spacer /><v-col class="my-10" align="center">
-      <video id="localVideo" autoplay playsinline></video>
-      <video id="remoteVideo" autoplay playsinline></video>
-      <div>
-        <v-btn class="mx-3" id="testButton" @click="onClickTest"
-          >broadcast</v-btn
-        >
-        <v-btn class="mx-3" id="viewButton" @click="onClickOffer">offer</v-btn>
-        <v-btn class="mx-3" id="watchButton" @click="onClickWatch">watch</v-btn>
-      </div> </v-col
-    ><v-spacer />
-  </v-row>
+  <v-container class="my-20">
+    <v-card
+      height="798px"
+      elevation="5"
+      class="pa-7"
+      color="rgba(255, 255, 255, 0.5)"
+    >
+      <v-row>
+        <v-col cols="4">
+          <v-banner single-line class="mb-5" style="font-size : 20px">
+            <v-icon size="45">mdi-video-wireless</v-icon>
+            <strong class="ml-10">실시간 스트리밍</strong>
+          </v-banner>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="my-10" align="center">
+          <video id="remoteVideo" autoplay playsinline></video>
+        </v-col>
+      </v-row>
+
+      <v-row align="end" justify="center">
+        <v-col cols="auto">
+          <v-btn
+            class="mx-3"
+            id="watchButton"
+            style="font-size : 22px;"
+            @click="onClickWatch"
+            >시청하기</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
-import * as client from "@/js/client.js";
+import * as client from '@/js/newclient.js';
 
 export default {
-  data() {
-    return {
-      localStream: null,
-    };
-  },
-  mounted() {},
   methods: {
-    onClickOffer() {
-      client.createOffer();
-    },
-    onClickTest() {
-      client.broadcast2().then(function (result) {
-        const localVideo = document.getElementById("localVideo");
-        localVideo.srcObject = result;
-      });
-    },
     onClickWatch() {
-      const remoteVideo = document.getElementById("remoteVideo");
+      const remoteVideo = document.getElementById('remoteVideo');
       remoteVideo.srcObject = client.watch();
     },
   },

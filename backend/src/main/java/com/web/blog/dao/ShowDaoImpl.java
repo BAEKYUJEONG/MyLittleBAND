@@ -5,6 +5,7 @@ package com.web.blog.dao;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,6 +48,21 @@ public class ShowDaoImpl implements ShowDao {
 	@Override
 	public void updateshow(String showId, String title, String showContent) {
 		mapper.updateshow(showId, title, showContent);
+	}
+
+	@Override
+	public List<BandShow> showTermList(String start, String end) {
+		List<BandShow> list = mapper.showTermList(start, end);
+
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i).getTitle() + ":" + String.valueOf(list.get(i).getTime()));
+		}
+		return list;
+	}
+
+	@Override
+	public BandShow showdetail(String showId) {
+		return mapper.showDetail(showId);
 	}
 
 //	@Override

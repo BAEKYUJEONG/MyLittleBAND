@@ -1,44 +1,54 @@
 <template>
   <v-main>
+     <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row class="ma-auto" justify="center">
       <v-col cols="4">
         <v-text-field
           v-model="member.email"
           label="E-mail"
-          outlined
+           prepend-inner-icon="mdi-email"
+          solo
           readonly
         ></v-text-field>
 
         <v-text-field
           v-model="member.name"
           label="이름"
-          outlined
+          prepend-inner-icon="mdi-account-circle"
+              solo
           clearable
         ></v-text-field>
 
         <v-text-field
           v-model="member.phone"
           label="휴대폰"
-          outlined
+          prepend-inner-icon="mdi-phone"
+              solo
           clearable
         ></v-text-field>
 
         <v-textarea
           v-model="member.profile"
           label="소개"
-          outlined
+          prepend-inner-icon="mdi-message-reply-text"
+              solo
           clearable
         ></v-textarea>
       </v-col>
     </v-row>
-    <v-row class="ma-auto">
-      <v-col cols="4" class="ma-auto">
+    </v-card>
+     </v-container>
+
+    <v-row class="ma-auto" justify="center">
+      <v-col cols="auto">
         <v-btn color="primary" class="mx-6" @click="modify()"
           >수정완료</v-btn
         >
-        <v-btn color="error" class="mx-6" @click="detail()">돌아가기</v-btn>
+        <v-btn class="mx-6" @click="detail()">돌아가기</v-btn>
       </v-col>
     </v-row>
+      
   </v-main>
 </template>
 
@@ -64,7 +74,7 @@ export default {
     modify(){//회원정보 수정
       axios
       .put('/member/'+this.$route.params.memberno,{
-        member : this.member.name,
+        name : this.member.name,
         phone : this.member.phone,
         profile : this.member.profile
         })
@@ -86,13 +96,7 @@ export default {
   },
   data() {
     return {
-      member: {//백엔드 연동 후 아래 내용 삭제 및 변수명 확인
-        email: "mylittle@band.com",
-        name: "홍길동",
-        phone: "010-1234-5678",
-        profile:
-          "제 소개로 말할 것 같으면 \n99년 LA에 있었을 당시였습니다. \n당시 저는 메이저리그에서",
-      }
+      member: {}
     };
   },
 };

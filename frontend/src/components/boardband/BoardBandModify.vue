@@ -87,7 +87,7 @@ export default {
     onModify() {
       this.reqModifyBoard({ boardno: this.$route.params.boardno, title: this.title, content: this.content,memberId : this.getMemberId })
       .then((response) => {
-        if(response.result)   alert(response.msg);
+        if(response.result){   alert(response.msg); this.$router.push("/band/board/detail/"+this.$route.params.boardno)}
         else                  alert(response.msg);
       })
       .catch((error) => {

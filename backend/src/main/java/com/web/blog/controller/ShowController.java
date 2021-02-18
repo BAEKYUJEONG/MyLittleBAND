@@ -1,9 +1,8 @@
 package com.web.blog.controller;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,21 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.dto.BandShow;
-import com.web.blog.dto.Follow;
-import com.web.blog.dto.FollowReq;
 import com.web.blog.dto.ShowListRes;
-import com.web.blog.dto.ShowReq;
 import com.web.blog.model.BasicResponse;
-import com.web.blog.service.FollowService;
 import com.web.blog.service.ShowService;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 //@ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 //        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -150,5 +142,40 @@ public class ShowController {
 //		
 //	}
 	
+	/**
+	 * 기간 내의 공연 정보 Request
+	 * @param start
+	 * @param end
+	 * @return ResponseEntity
+	 */
+	@GetMapping(value = "/show/term/{start}/{end}")
+	@ApiOperation(value = "기간 내의 공연 정보 얻기", notes = "start - end 기간의 공연 정보를 얻어서 반환합니다")
+	public Object showTermList(@PathVariable String start, @PathVariable String end) {
+		List<BandShow> list = service.showTermList(start, end);
+		
+		final BasicResponse result = new BasicResponse();
+		result.status = true;
+		result.data = "success";
+		result.object = list;
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 	
+	@GetMapping(value = "/show/detail/{showId}")
+	@ApiOperation(value = "공연정보보기", notes = "공연의 정보를 보여줍니다")
+	public Object showDetail(@PathVariable String showId) {
+		BandShow target = service.showDetail(showId);
+		if(target != null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object = target;
+	        
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+	}
 }

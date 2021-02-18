@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout col-8 offset-2 column>
         <!-- title -->
         <v-flex text-center class="ma-10">
@@ -10,13 +11,13 @@
         <!-- icons - modify, delete -->
         <v-flex text-right>
           <v-btn
+          class="mx-7"
             icon
             color="blue"
             large
-            router-link
-            :to="'/notice/modify/' + this.$route.params.noticeno"
+            @click="onModify()"
           >
-            <v-icon>mdi-check</v-icon>
+            <v-icon size="50">mdi-check</v-icon>
           </v-btn>
 
           <v-btn
@@ -39,7 +40,7 @@
             <v-flex col-2 text-right><h2>제목</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-text-field solo style="margin: 20px auto" v-model="title">
+              <v-text-field solo v-model="title">
             </v-text-field>
             </v-flex>
           </v-layout>
@@ -57,6 +58,7 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      </v-card>
     </v-container>
   </v-main>
 </template>
@@ -77,8 +79,8 @@ export default {
   created(){
     if(this.getManager === false)  this.$router.go("/*");
     console.log()
-    this.title = this.getNotice.title;
-    this.content = this.getNotice.content;
+    this.title = this.getNotice.noticeTitle;
+    this.content = this.getNotice.noticeContent;
   },
   computed: {
     ...mapGetters(NoticeStore, ["getNotice"]),
@@ -88,9 +90,12 @@ export default {
     ...mapActions(NoticeStore, ["reqModifyNotice"]),
     //공지사항 내용 수정
     onModify() {
-      this.reqModifyNotice({ no: this.$route.params.noticeno, title: this.getNotice.title, content: this.getNotice.content })
+      this.reqModifyNotice({ no: this.$route.params.noticeno, title: this.title, content: this.content })
       .then((response) => {
-        if(response.result)   alert(response.msg);
+        if(response.result){  
+          alert(response.msg);
+          this.$router.push("/notice/"+this.$route.params.noticeno)
+          } 
         else                  alert(response.msg);
       })
       .catch((error) => {

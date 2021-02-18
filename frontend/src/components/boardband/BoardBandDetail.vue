@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout col-8 offset-2 column>
         <!-- title -->
         <v-flex text-center class="ma-10">
@@ -42,42 +43,44 @@
         </v-dialog>
 
         <!-- content -->
-        <v-flex>
+        <v-flex >
           <v-layout>
             <v-flex col-2 text-right><h2>작성자</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-4>
-              <v-sheet>
-                {{ getBoard.writer }}
-              </v-sheet>
+              <v-text-field solo readonly :value="writer">
+              </v-text-field>
             </v-flex>
-            <v-flex col-2>
-              <h2>조회수 :</h2>
+            <v-flex col-2 >
+              <h2 >조회수 : </h2>
             </v-flex>
-            <v-flex col-1>
-              <v-sheet>{{ getBoard.views }}</v-sheet>
+            <v-flex col-1 >
+              <v-text-field solo readonly :value="getBoard.view"></v-text-field>
             </v-flex>
           </v-layout>
           <v-layout>
             <v-flex col-2 text-right><h2>내용</h2></v-flex>
             <v-flex col-1><v-spacer /></v-flex>
             <v-flex col-7>
-              <v-textarea auto-grow readonly :value="getBoard.content" />
+              <v-textarea solo auto-grow readonly :value="getBoard.content" />
             </v-flex>
           </v-layout>
         </v-flex>
+      </v-layout>
+      </v-card>
+    </v-container>
+    
         <BoardBandComments></BoardBandComments>
+    
+    <v-container>
+      <v-layout>
         <!-- icon - return -->
         <v-flex text-right>
           <v-btn
             icon
             color="primary"
             large
-            @click="
-              () => {
-                this.$router.go(-1);
-              }
-            "
+            @click="moveList()"
           >
             <v-icon size="40">mdi-undo-variant</v-icon>
           </v-btn>
@@ -89,6 +92,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import axiosCommon from '../../axios/axios-common';
 import BoardBandComments from "../boardband/BoardBandComments";
 const BandBoardStore = "BandBoardStore";
 const MemberStore = "MemberStore";
@@ -97,7 +101,12 @@ export default {
     return {
       no: this.$route.params.boardno,
       dialog: false,
+      writer : '',
     };
+  },
+  created(){
+    this.reqBoard(this.no);
+    this.getWriter();
   },
   computed: {
     ...mapGetters(BandBoardStore, ["getBoard"]),
@@ -108,13 +117,21 @@ export default {
     // 글 삭제
     onRemove(no) {
       this.reqDeleteBoard(no).then((response) => {
-        if (response.result) alert(response.msg);
-
+        if (response.result) {
         alert(response.msg);
+        this.$router.push("/band/board/"+this.getBoard.bandId);
+        }
       });
       this.dialog = false;
     },
-    
+    moveList(){
+      this.$router.push("/band/board/"+this.getBoard.bandId);
+    },
+    //글쓴이 이름 가져오기
+    getWriter(){
+      axiosCommon.get("/member/"+this.getBoard.memberId)
+      .then((res) => this.writer = res.data.object.name );
+    },
   },
   components:{
       BoardBandComments

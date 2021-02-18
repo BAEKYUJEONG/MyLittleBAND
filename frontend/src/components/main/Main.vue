@@ -3,10 +3,14 @@
     <v-container>
       <!-- <Streaming />
       <v-divider></v-divider> -->
+      <v-row>
+        <v-col cols="8">
       <StreamingCustomTest/>
-      <v-divider></v-divider>
+      </v-col>
+      <v-col cols="4">
       <Timeline />
-      <v-divider></v-divider>
+</v-col >
+      </v-row>
       <Ranking />
     </v-container>
   </v-main>

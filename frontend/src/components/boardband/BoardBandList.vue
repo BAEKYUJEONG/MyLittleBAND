@@ -4,12 +4,13 @@
       <v-layout column>
         <!-- title -->
         <v-flex text-center class="ma-10">
-          <h1>{{ getBandInfo.name }}</h1>
+          <h1>{{ getBandInfo.name }} 게시판</h1>
         </v-flex>
 
         <!-- icon - notice create --> 
         <v-flex text-right >
           <v-btn
+          class="mx-10"
             icon
             color="primary"
             large
@@ -40,25 +41,26 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="board in getBoards" :key="board.no" @click="onBoard(board.no)">
+                    <tr v-for="board in getBoards" :key="board.bandboardId" @click="onBoard(board.bandboardId)">
                       <td>{{ board.title }}</td>
-                      <td>{{ board.writer }}</td>
+                      <td>{{ board.name }}</td>
                       <td>{{ board.date }}</td>
                     </tr>
                   </tbody>
                 </template>
               </v-simple-table>
             </v-flex>
-            <!-- pagination -->
-            <v-flex>
-              <v-pagination
-                v-model="page"
-                :length="4"
-                color="grey"
-                prev-icon="mdi-menu-left"
-                next-icon="mdi-menu-right"
-              ></v-pagination>
-            </v-flex>
+            <v-flex text-right>
+          <v-btn
+          class="ma-10"
+            icon
+            color="primary"
+            large
+            @click="tobandDetail()"
+          >
+            <v-icon size="40">mdi-undo-variant</v-icon>
+          </v-btn>
+        </v-flex>
           </v-layout>
           </v-responsive>
         </v-flex>
@@ -75,7 +77,6 @@ const BandBoardStore = "BandBoardStore";
 export default {
   data(){
     return{
-      page : 1,
     }
   },
   computed: {
@@ -84,19 +85,24 @@ export default {
   },
   methods:{
     ...mapActions(BandStore,["reqBandInfo"]),
-    ...mapActions(BandBoardStore,["reqBoards","reqBoard"]),
+    ...mapActions(BandBoardStore,["reqBoards","reqBoard","reqCommentInit"]),
 
     onBoard(no){
+      this.reqCommentInit();
+
       this.reqBoard(no)
       .then((response) => {
         if(!response) this.$router.push("/band/board/detail/"+no);
         else                alert(response.msg);
       })
     },
+    tobandDetail(){
+      this.$router.push("/band/detail/"+this.$route.params.bandno);
+    }
   },
   created(){
     this.reqBandInfo(this.$route.params.bandno);
-    this.reqBoards({ bandId : this.$route.params.bandno, page : this.page});
+    this.reqBoards(this.$route.params.bandno);
   }
 };
 </script>

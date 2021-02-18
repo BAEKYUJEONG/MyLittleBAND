@@ -1,33 +1,71 @@
 <template>
   <v-main>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row class="px-10" justify="center">
       <v-col cols="6">
-        <v-banner class="my-10">
+        <v-banner class="mb-10">
           <strong>밴드정보수정</strong>
         </v-banner>
       </v-col>
     </v-row>
     <v-row class="px-10" justify="center">
       <v-col cols="6">
-        <v-text-field v-model="band.name" label="밴드명" outlined clearable>
+        <v-text-field 
+        v-model="band.name" 
+        label="밴드명"  
+        solo
+        prepend-inner-icon="mdi-account-circle"
+        clearable>
         </v-text-field>
 
         <v-file-input
-          class="mb-10"
+          class="mb-5"
           @change="onChangeImage()"
           v-model="band.imgdata"
+          accept="image/*"
           type="file"
-          id="file"
+          solo
           label="밴드 이미지 변경"
         />
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="auto">
         <v-btn class="mb-10" v-if="dialog.imgbtn" @click="submit()"
-          >변경된 이미지 저장</v-btn
+        color="error"
+          >프로필 이미지 변경하기</v-btn
         >
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="3">
+        <v-select
+          :items="genre"
+          label="밴드장르"
+          v-model="band.genre"
+          required
+          solo
+        ></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-select
+          :items="color"
+          v-model="band.color"
+          label="밴드색깔"
+          required
+          solo
 
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row class="px-10" justify="center">
+      <v-col cols="6">
         <v-textarea
           v-model="band.intro"
           label="밴드소개"
-          outlined
+          solo
+          prepend-inner-icon="mdi-message-reply-text"
           height="200px"
         ></v-textarea>
       </v-col>
@@ -48,13 +86,13 @@
       class="px-10"
     >
       <v-col cols="2">
-        <v-text-field outlined v-model="member.name" readonly> </v-text-field>
+        <v-text-field solo v-model="member.name" readonly> </v-text-field>
       </v-col>
       <v-col cols="4">
         <v-select
-          outlined
+          solo
           :items="sessions"
-          v-model="member.session"
+          v-model="member.codeSession"
           :disabled="member.memberId != memberId && isChief == '0'"
         ></v-select>
       </v-col>
@@ -120,10 +158,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+      </v-card>
+    </v-container>
     <!-- 버튼들 -->
     <v-row class="ma-auto">
-      <v-col cols="12" class="ma-auto">
+      <v-col cols="auto" class="ma-auto">
         <v-btn color="primary" class="mx-6" @click="modify()">수정하기</v-btn>
 
         <v-btn class="mx-6" @click="banddetail()">돌아가기</v-btn>
@@ -186,7 +225,17 @@ export default {
         imgdata: null, //null로 설정해줘야함
         imgurl: "",
       },
-      sessions: ["보컬", "키보드", "드럼", "일렉기타", "베이스"],
+      sessions: ["보컬", "키보드", "드럼", "기타", "베이스"],
+      color: [
+        "하양",
+        "빨강",
+        "주황",
+        "노랑",
+        "초록",
+        "파랑",
+        "검정",
+      ],
+      genre: ["팝", "락", "재즈"],
       members: [],
     };
   },
@@ -200,7 +249,6 @@ export default {
     //밴드정보가져오기
     this.getBandinfo();
     this.getMemberinfo(); //밴드소속 멤버정보 가져오기
-    
   },
   methods: {
     onChangeImage() {
@@ -213,7 +261,7 @@ export default {
       await formData.append("file", this.band.imgdata); //이미지 정보전달
 
       axiosCommon
-        .post("/upload/video/"+this.$route.params.bandno, formData, {
+        .post("/upload/band/" + this.$route.params.bandno, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((rec) => {
@@ -222,6 +270,11 @@ export default {
           alert("프로필 이미지가 변경되었습니다!");
         })
         .catch((e) => console.log(e));
+
+      const st2 = "https://i4a408.p.ssafy.io/band/" + this.band.imgdata.name; //주소를 넣어줌.
+      let formData2 = new FormData();
+      formData2.append("img", st2);
+      axiosCommon.put("/band/img/" + this.$route.params.bandno, formData2);
     },
 
     getBandinfo() {
@@ -260,9 +313,20 @@ export default {
         alert("빈칸이 존재합니다!");
         return;
       }
+      for (let i = 0; i < this.members.length; i++) {
+        let codes = new FormData();
+        codes.append("session", this.members[i].codeSession);
+        axiosCommon
+          .put("/band/member/" + this.members[i].crewId, codes)
+          .then((res) => console.log(res))
+          .catch((exp) => alert(exp + "멤버 세션 수정에 실패하였습니다."));
+      }
+
       let frm = new FormData();
       frm.append("name", this.band.name);
       frm.append("profile", this.band.intro);
+      frm.append("genre",this.band.genre);
+      frm.append("color",this.band.color);
       //밴드 정보 수정
       axiosCommon
         .put("/band/" + this.$route.params.bandno, frm)
@@ -278,6 +342,7 @@ export default {
       //밴드상세 페이지로 이동
       this.$router.push("/band/detail/" + this.$route.params.bandno);
     },
+
     OpenRemoveMember(val) {
       this.dialog.Member = true;
       this.tempId = val;
@@ -308,7 +373,7 @@ export default {
         .then((response) => {
           if (response.data.status) {
             alert("밴드장이 변경되었습니다!");
-            this.$router.push("/band/detail/"+this.$route.params.bandno);
+            this.$router.push("/band/detail/" + this.$route.params.bandno);
           }
         })
         .catch((exp) => alert(exp + "밴드장 변경에 실패하였습니다."));
@@ -321,7 +386,7 @@ export default {
         .then((response) => {
           if (response.data.data == "success") {
             alert("해체성공!");
-            this.$router.push("/band/list/"+this.$route.params.bandno);
+            this.$router.push("/band/list/" + this.memberId);
           }
           //console.log(response.data.object.name)
         })
@@ -332,4 +397,5 @@ export default {
 </script>
 
 <style>
+
 </style>
