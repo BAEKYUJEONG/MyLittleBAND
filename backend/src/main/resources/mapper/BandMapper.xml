@@ -10,7 +10,7 @@
 	</select>
 	
 	<insert id="opened" parameterType="BandOpened">
-		insert into band values(null, null, #{img}, #{name}, #{intro}, null, curdate(),#{genre}, #{color}, null,0)
+		insert into band values(null, null, "https://i4a408.p.ssafy.io/bandprofile/LogoMini.png", #{name}, #{intro}, null, curdate(),#{genre}, #{color}, null,0)
 	</insert>
 	
 	<insert id="addcrew" parameterType="String">

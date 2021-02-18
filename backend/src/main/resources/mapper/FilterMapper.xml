@@ -5,11 +5,12 @@
 
 <mapper namespace="com.web.blog.mapper.FilterMapper">
 	<select id="search" resultType="VideoBoard">
-		select * from videoboard where boardSubject like CONCAT('%',#{keyword},'%')
+		select * from videoboard where boardSubject like CONCAT('%',#{keyword},'%') order by boardId desc
 	</select>
 	
 	<select id="filter" parameterType="String" resultType="VideoBoard">
 		select * from videoboard where bandId in
-		(select bandId from band where genre=#{genre} and color=#{color});
+		(select bandId from band where genre=#{genre} and color=#{color})
+		order by boardId desc;
 	</select>
 </mapper>
