@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container>
+    <v-container class="mb-10">
+       <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-layout column>
         <!-- title -->
         <v-flex text-center class="ma-10">
@@ -12,17 +13,17 @@
           <v-btn
             icon
             color="primary"
-            large
+            x-large
             router-link
             :to="{ name: 'noticecreate' }"
           >
-            <v-icon size="50">mdi-plus</v-icon>
+            <v-icon size="80">mdi-plus</v-icon>
           </v-btn>
         </v-flex>
 
         <!-- table -->
         <v-flex class="ma-7" xs-10 sm-10 col-18>
-          <v-responsive :aspect-ratio="16 / 9">
+          <v-responsive >
             <v-layout column>
               <v-flex text-center>
                 <v-simple-table>
@@ -60,6 +61,7 @@
           </v-responsive>
         </v-flex>
       </v-layout>
+       </v-card>
     </v-container>
   </v-main>
 </template>
@@ -77,10 +79,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(NoticeStore, ["getNotices", "getListnum"]),
+    ...mapGetters(NoticeStore, ["getNotices", "getListnum","getPage"]),
     ...mapGetters(MemberStore, { manager: "getManager" }),
   },
-  created() {
+   created() {
+    this.page = this.getPage;
     this.reqNotices(this.page);
     this.reqListnum().then((res) => {
       if (res.result) this.setLength();
@@ -94,9 +97,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(NoticeStore, ["reqNotices", "reqNotice", "reqListnum"]),
+    ...mapActions(NoticeStore, ["reqNotices", "reqNotice", "reqListnum","reqPage"]),
     // 공지사항 글 불러오기
     onNotice(no) {
+      this.reqPage(this.page);
       this.reqNotice(no).then((response) => {
         if (!response) this.$router.push("/notice/" + no);
         else alert(response.msg);

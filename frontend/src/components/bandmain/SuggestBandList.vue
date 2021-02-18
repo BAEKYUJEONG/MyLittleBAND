@@ -64,6 +64,7 @@ import axiosCommon from "../../axios/axios-common";
 import { mapGetters } from "vuex";
 const FollowStore = "FollowStore";
 const BandStore = "BandStore";
+const MemberStore = "MemberStore";
 
 export default {
   async created() {
@@ -72,6 +73,7 @@ export default {
   },
   computed: {
     ...mapGetters(BandStore, [ "getBandList" ]),
+    ...mapGetters(MemberStore,["getMemberId"]),
     ...mapGetters(FollowStore, [ "getFollowList" ]),
   },
 
@@ -89,36 +91,15 @@ export default {
       //관리자계정의 팔로우 목록을 가져와 추천 목록으로 만들면 편할듯
       //그중에서 이미 팔로우 중인 밴드는 제외하기
       axiosCommon
-        .get("/followlist/1")
+        .get("/follow/"+this.getMemberId)
         .then((response) => {
           if (response.data.status) {
-            this.tmplist = response.data.object;
-            this.makeSuggestBand();
+            this.suggestBand = response.data.object;
           }
         })
         .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
     },
-    makeSuggestBand() {
-      here: for (let i = 0; i < this.tmplist.length; i++) {
-        //추천밴드목록까지 반복
-
-        for (let j = 0; j < this.getBandList.length; j++) {
-          //소속밴드목록만큼 반복
-          if (this.tmplist[i].bandId == this.getBandList[j].bandId) {
-            continue here;
-          }
-        }
-
-        for (let j = 0; j < this.getFollowList.length; j++) {
-          //팔로우중인 밴드목록만큼 반복
-          if (this.tmplist[i].bandId == this.getFollowList[j].bandId) {
-            continue here;
-          }
-        }
-        //해당하는게 없으면 추천밴드에 입력
-        this.suggestBand.push(this.tmplist[i]);
-      }
-    },
+    
   },
   data() {
     return {

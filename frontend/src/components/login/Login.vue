@@ -6,7 +6,7 @@
     style="background-color: #feeeb0"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn text v-bind="attrs" v-on="on" :class="clr">로그인</v-btn>
+      <v-btn text style="font-size : 20px;" v-bind="attrs" v-on="on" :class="clr">로그인</v-btn>
     </template>
     <v-card>
       <v-card-title>

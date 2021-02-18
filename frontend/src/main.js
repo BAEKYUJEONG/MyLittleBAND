@@ -4,7 +4,7 @@ import router from './router';
 import store from './store/store';
 import vuetify from './plugins/vuetify';
 import VueMoment from 'vue-moment';
-
+import font4size from './assets/font/4size/font.css';
 Vue.config.productionTip = false;
 
 // 카카오 링크 사용
@@ -19,4 +19,5 @@ new Vue({
   vuetify,
   router,
   store,
+  font4size,
 }).$mount('#app');

@@ -1,14 +1,14 @@
 <template>
   <span v-if="mode == 'wide'">
     <Login clr="white--text"/>
-    <v-btn text @click="signup()" class="white--text mx-3">
+    <v-btn text @click="signup()" style="font-size : 20px;" class="white--text mx-3">
       회원가입
     </v-btn>
   </span>
   <v-list v-else>
     <v-list-item><Login clr="black--text" /></v-list-item>
     <v-list-item>
-      <v-btn text @click="signup()"
+      <v-btn text style="font-size : 20px;" @click="signup()"
         >회원가입</v-btn
       ></v-list-item
     >
@@ -33,4 +33,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+
+
+</style>

@@ -121,7 +121,7 @@
     <!-- 소속밴드 -->
     <v-row justify="center">
       <v-col cols="6" class="card-carousel-wrapper">
-        <v-banner class="my-10">
+        <v-banner class="mb-10">
           <strong>소속밴드</strong>
         </v-banner>
 
@@ -146,9 +146,9 @@
     </v-container>
 
     <!-- 회원정보 수정 버튼 -->
-    <v-row class="ma-auto" justify="center">
+    <v-row class="ma-auto mb-10" justify="center">
       <v-col cols="auto" class="ma-auto">
-        <v-btn color="primary" class="mx-6" @click="modify()"
+        <v-btn color="primary" class="mx-6 " @click="modify()"
           >회원정보수정</v-btn
         >
         <!-- 회원탈퇴 모달창 -->
@@ -306,17 +306,14 @@ export default {
 </script>
 
 <style scoped>
-.v-card {
-  transition: opacity 0.4s ease-in-out;
-}
-
-.v-card:not(.on-hover) {
-  opacity: 0.8;
-}
-
 #rounded-card {
+  transition: opacity 0.4s ease-in-out;
   border-radius: 50%;
   min-height: 300px;
   min-width: 300px;
+}
+
+#rounded-card:not(.on-hover){
+  opacity: 0.8;
 }
 </style>

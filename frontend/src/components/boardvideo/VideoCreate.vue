@@ -1,63 +1,86 @@
 <template>
   <v-main>
-    <v-container>
-      <h1 style="margin: 10px auto">영상 업로드</h1>
+    <v-container class="mb-10" >
+    <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <v-row>
-        <v-col
+          <v-col cols="3"></v-col>
+          <v-col cols="2">
+            <v-banner class="mb-10">
+              <strong>영상 업로드</strong>
+            </v-banner>
+          </v-col>
+        </v-row>
+
+      <v-row justify="center">
+        <v-col cols="4"></v-col>
+        <v-col cols="2"
           ><h2 style="margin: 20px auto" class="black--text">제목</h2></v-col
         >
-        <v-col>
-          <v-text-field solo style="margin: 20px auto" v-model="board.title">
+        <v-col cols="4">
+          <v-text-field solo 
+          label="영상제목"
+          style="margin: 20px auto" v-model="board.title">
           </v-text-field>
         </v-col>
+        <v-col cols="2"></v-col>
       </v-row>
-      <v-row>
-        <v-col
-          ><h2 style="margin: 20px auto" class="black--text">내용</h2></v-col
+      <v-row justify="center">
+        <v-col cols="4"></v-col>
+        <v-col cols="2"
+          ><h2 style="margin: 20px auto"  class="black--text">내용</h2></v-col
         >
-        <v-col>
+        <v-col cols="4">
           <v-textarea
             solo
+            label="영상 설명"
             full-width
             height="200"
             style="margin: 20px auto"
             v-model="board.content"
           ></v-textarea>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col
+        <v-col cols="2"></v-col>
+      </v-row >
+      <v-row justify="center">
+        <v-col cols="4"></v-col>
+        <v-col cols="2"
           ><h2 style="margin: 20px auto" class="black--text">썸네일</h2></v-col
         >
-        <v-col>
+        <v-col cols="4">
           <v-file-input
             accept="image/*"
             v-model="imgfiles"
             show-size
+            solo
             label="이미지 파일"
           ></v-file-input>
           <p>File Name : {{ imgfiles.name }}</p>
         </v-col>
+        <v-col cols="2"></v-col>
       </v-row>
-      <v-row>
-        <v-col
+      <v-row justify="center">
+        <v-col cols="4"></v-col>
+        <v-col cols="2"
           ><h2 style="margin: 20px auto" class="black--text">영상</h2></v-col
         >
-        <v-col>
+        <v-col cols="4">
           <v-file-input
             accept="video/mp4"
             v-model="videofiles"
             show-size
+            solo
             label="비디오 파일(mp4)"
           ></v-file-input>
           <p>File Name : {{ videofiles.name }}</p>
         </v-col>
+        <v-col cols="2"></v-col>
       </v-row>
-      <v-row>
-        <v-col
+      <v-row justify="center">
+        <v-col cols="4"></v-col>
+        <v-col cols="2"
           ><h2 style="margin: 20px auto" class="black--text">밴드</h2></v-col
         >
-        <v-col class="d-flex" cols="12" sm="6">
+        <v-col class="d-flex" cols="4" >
           <v-select
             v-model="select"
             :items="bandlist"
@@ -68,19 +91,21 @@
             dense
           ></v-select>
         </v-col>
+        <v-col cols="2"></v-col>
       </v-row>
+    </v-card>
+    </v-container>
 
-      <v-row>
-        <v-col>
-          <v-btn color="blue" style="margin: 10px" @click="create()"
+      <v-row justify="center">
+        <v-col cols="auto">
+          <v-btn style="font-size:large" large color="info" class="ma-7" @click="create()"
             >작성완료</v-btn
           >
-          <v-btn color="blue" style="margin: 10px" @click="list()"
+          <v-btn style="font-size:large" large class="ma-7" @click="list()"
             >돌아가기</v-btn
           >
         </v-col>
       </v-row>
-    </v-container>
   </v-main>
 </template>
 <script>

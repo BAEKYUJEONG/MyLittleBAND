@@ -25,15 +25,12 @@ export default {
 };
 </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
-body {
-  font-family: 'Noto Sans', sans-serif;
-}
+<style>
 
 #app {
     position:relative;
     z-index:1;
+    font-family: 'S-CoreDream-4Regular';
 }
 
 #app:after {
