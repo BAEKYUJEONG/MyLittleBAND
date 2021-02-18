@@ -2,82 +2,84 @@
   <v-main>
     <v-container grid-list-xs>
       <v-card class="pa-10" color="rgba(255, 255, 255, 0.8)">
-      <v-row justify="space-around">
-        <!-- 필터 영역 -->
-        <v-col cols="6" align="center">
-          <v-autocomplete
-            v-model="selectOption"
-            :disabled="isUpdating"
-            :items="people"
-            chips
-            filled
-            color="blue lighten-2"
-            label="필터"
-            item-text="name"
-            item-value="name"
-            multiple
-          >
-            <!-- 버튼 -->
-            <template v-slot:append-outer>
-              <v-slide-x-reverse-transition mode="out-in">
-                <v-icon
-                  :key="`icon-${isEditing}`"
-                  :color="isEditing ? 'success' : 'info'"
-                  @click="onEditing"
-                  v-text="
-                    isEditing ? 'mdi-check-outline' : 'mdi-filter-variant'
-                  "
-                ></v-icon>
-              </v-slide-x-reverse-transition>
-            </template>
-
-            <template v-slot:selection="data">
-              <!-- close 옵션을 없애고 하나씩 선택하는 것으로 변 경-->
-              <v-chip
-                v-bind="data.attrs"
-                :input-value="data.selected"
-                @click="data.select"
-              >
-                {{ data.item.name }}
-              </v-chip>
-            </template>
-            <template :disabled="isButton" v-slot:item="data">
-              <template v-if="typeof data.item !== 'object'">
-                <v-list-item-content v-text="data.item"></v-list-item-content>
+        <v-row justify="space-around">
+          <!-- 필터 영역 -->
+          <v-col cols="6" align="center">
+            <v-autocomplete
+              v-model="selectOption"
+              :disabled="isUpdating"
+              :items="people"
+              chips
+              filled
+              color="blue lighten-2"
+              label="필터"
+              item-text="name"
+              item-value="name"
+              multiple
+            >
+              <!-- 버튼 -->
+              <template v-slot:append-outer>
+                <v-slide-x-reverse-transition mode="out-in">
+                  <v-icon
+                    :key="`icon-${isEditing}`"
+                    :color="isEditing ? 'success' : 'info'"
+                    @click="onEditing"
+                    v-text="
+                      isEditing ? 'mdi-check-outline' : 'mdi-filter-variant'
+                    "
+                  ></v-icon>
+                </v-slide-x-reverse-transition>
               </template>
-              <template v-else>
-                <v-list-item-content @click="onItemClick(data.item.idx)">
-                  <v-list-item-title
-                    v-html="data.item.name"
-                  ></v-list-item-title>
-                </v-list-item-content>
+
+              <template v-slot:selection="data">
+                <!-- close 옵션을 없애고 하나씩 선택하는 것으로 변 경-->
+                <v-chip
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  @click="data.select"
+                >
+                  {{ data.item.name }}
+                </v-chip>
               </template>
-            </template>
-          </v-autocomplete>
-        </v-col>
-      </v-row>
+              <template :disabled="isButton" v-slot:item="data">
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-item-content v-text="data.item"></v-list-item-content>
+                </template>
+                <template v-else>
+                  <v-list-item-content @click="onItemClick(data.item.idx)">
+                    <v-list-item-title
+                      v-html="data.item.name"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </template>
+            </v-autocomplete>
+          </v-col>
+        </v-row>
 
-      <!-- 검색 영역 -->
+        <!-- 검색 영역 -->
 
-      <v-row justify="space-around">
-        <v-col cols="6" align="center">
-          <v-text-field
-            v-model="msg"
-            label="검색어"
-            placeholder="원하는 검색어를 입력하세요."
-            append-outer-icon="mdi-magnify"
-            @keypress.enter="onSearch"
-            @click:append-outer="onSearch"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row justify="end">
-        <v-col cols="6" align="center">
-          <v-btn color="info" style="font-weight:bold;" @click="reqVideos()" >검색초기화</v-btn>
-        </v-col>
-      </v-row>
+        <v-row justify="space-around">
+          <v-col cols="6" align="center">
+            <v-text-field
+              v-model="msg"
+              label="검색어"
+              placeholder="원하는 검색어를 입력하세요."
+              append-outer-icon="mdi-magnify"
+              @keypress.enter="onSearch"
+              @click:append-outer="onSearch"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row justify="end">
+          <v-col cols="6" align="center">
+            <v-btn color="info" style="font-weight:bold;" @click="reqVideos()"
+              >검색초기화</v-btn
+            >
+          </v-col>
+        </v-row>
       </v-card>
-      
+
       <!-- 비디오 리스트 영역 -->
       <v-layout justify-center column wrap>
         <v-flex xs12 sm9>
@@ -107,7 +109,7 @@
                         <v-list-item-title
                           v-text="card.boardSubject"
                           class="text-truncate"
-                          style="width: 22rem"
+                          style="width: 11rem"
                         ></v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -115,7 +117,7 @@
                   <v-spacer></v-spacer>
                   <v-btn icon @click="card.shows = !card.shows">
                     <v-icon>{{
-                      card.shows ? "keyboard_arrow_up" : "keyboard_arrow_down"
+                      card.shows ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
                     }}</v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -139,12 +141,12 @@
 </template>
 
 <script>
-import axios from "@/axios/axios-common.js";
+import axios from '@/axios/axios-common.js';
 
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
-const VideoStore = "VideoStore"; //비디오 store
-const MemberStore = "MemberStore"; //로그인 체크 용.
+const VideoStore = 'VideoStore'; //비디오 store
+const MemberStore = 'MemberStore'; //로그인 체크 용.
 
 export default {
   created() {
@@ -159,38 +161,38 @@ export default {
       filter1: 1,
       filter2: 0,
       bandlist: [],
-      selectOption: ["빨강"],
-      msg: "",
+      selectOption: ['빨강'],
+      msg: '',
       isEditing: false,
       isUpdating: false,
-      name: "밴드 속성",
+      name: '밴드 속성',
       people: [
-        { header: "장르" },
-        { name: "락", group: "장르", flag: false, idx: 1 },
-        { name: "팝", group: "장르", flag: false, idx: 2 },
-        { name: "재즈", group: "장르", flag: false, idx: 3 },
+        { header: '장르' },
+        { name: '락', group: '장르', flag: false, idx: 1 },
+        { name: '팝', group: '장르', flag: false, idx: 2 },
+        { name: '재즈', group: '장르', flag: false, idx: 3 },
         { divider: true },
-        { header: "컬러" },
-        { name: "빨강", group: "색깔", flag: true, idx: 6 },
-        { name: "주황", group: "색깔", flag: false, idx: 7 },
-        { name: "노랑", group: "색깔", flag: false, idx: 8 },
-        { name: "초록", group: "색깔", flag: false, idx: 9 },
-        { name: "파랑", group: "색깔", flag: false, idx: 10 },
-        { name: "검정", group: "색깔", flag: false, idx: 11 },
-        { name: "하양", group: "색깔", flag: false, idx: 12 },
+        { header: '컬러' },
+        { name: '빨강', group: '색깔', flag: true, idx: 6 },
+        { name: '주황', group: '색깔', flag: false, idx: 7 },
+        { name: '노랑', group: '색깔', flag: false, idx: 8 },
+        { name: '초록', group: '색깔', flag: false, idx: 9 },
+        { name: '파랑', group: '색깔', flag: false, idx: 10 },
+        { name: '검정', group: '색깔', flag: false, idx: 11 },
+        { name: '하양', group: '색깔', flag: false, idx: 12 },
       ],
     };
   },
   computed: {
-    ...mapGetters(VideoStore, ["getVideos"]),
+    ...mapGetters(VideoStore, ['getVideos']),
     ...mapGetters(MemberStore, {
-      islogin: "getIsLogined", //islogin 변수에 getIsLogined 리턴값 저장
-      memberid: "getMemberId",
+      islogin: 'getIsLogined', //islogin 변수에 getIsLogined 리턴값 저장
+      memberid: 'getMemberId',
     }),
   },
   methods: {
-    ...mapActions(VideoStore, ["reqVideos", "reqVideo"]),
-    ...mapMutations(VideoStore, ["setVideos", "setVideo"]),
+    ...mapActions(VideoStore, ['reqVideos', 'reqVideo']),
+    ...mapMutations(VideoStore, ['setVideos', 'setVideo']),
     onEditing() {
       // 여긴 선택한 필터로 검색하는 곳.
 
@@ -217,44 +219,42 @@ export default {
 
         //formData를 통해 전송.
         let frm = new FormData();
-        frm.append("color", st1);
-        frm.append("genre", st2);
+        frm.append('color', st1);
+        frm.append('genre', st2);
 
         axios
-          .post("/filter", frm)
+          .post('/filter', frm)
           .then((response) => {
             this.setVideos(response.data.object);
           })
-          .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+          .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
         // 여기서 axios를 이용한 검색 처리.(필터는 select에 있음)
-      } else alert("속성을 각각 하나씩 선택해 주세요!");
+      } else alert('속성을 각각 하나씩 선택해 주세요!');
     },
 
     onSearch() {
       // 사용자가 원하는 검색어를 눌렀을 때, 검색이 되도록 처리.
       axios
-        .get("/filter/" + this.msg)
+        .get('/filter/' + this.msg)
         .then((response) => {
           this.setVideos(response.data.object);
         })
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+        .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
 
       //this.$router.go(0); //자동 새로고침. 쓰지는 않음.
-      this.msg = "";
+      this.msg = '';
     },
     onVideo(videonum) {
       // 비디오를 클릭했을 때, 비디오가 선택되도록 처리.
       if (this.islogin) {
-        
         // 로그인이 되었다면,
         this.reqVideo(videonum).then((response) => {
           // 선택한 비디오로 req 요청 보냄.
           if (!response) {
-            
-            this.$router.push("/video/" + videonum);
+            this.$router.push('/video/' + videonum);
           } else alert(response.msg);
         });
-      } else alert("로그인 해주세요!");
+      } else alert('로그인 해주세요!');
     },
     remove(item) {
       //chip뒤에 달리는 close 옵션인데, 현재는 사용하지 않음.
@@ -268,21 +268,21 @@ export default {
         console.log(this.bandlist.length);
         if (this.bandlist.length > 0) {
           //가입한 밴드 리스트가 1개 이상일 경우에만,
-          this.$router.push({ name: "videocreate" });
-        } else alert("밴드 가입 후 글쓰기 가능합니다!");
-      } else alert("로그인 해주세요!");
+          this.$router.push({ name: 'videocreate' });
+        } else alert('밴드 가입 후 글쓰기 가능합니다!');
+      } else alert('로그인 해주세요!');
     },
     getbandlist() {
       axios
-        .get("/band-list/" + this.memberid)
+        .get('/band-list/' + this.memberid)
         .then((response) => (this.bandlist = response.data.object))
-        .catch((exp) => alert(exp + "조회에 실패하였습니다."));
+        .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
     },
     onItemClick(idx) {
       //console.log(this.filter1);
 
       // 클릭시 속성에 맞게 boolean 값을 변경 하고. 카운팅 해줌.
-      if (this.people[idx].group == "색깔") {
+      if (this.people[idx].group == '색깔') {
         if (!this.people[idx].flag) {
           this.filter1++;
         } else this.filter1--;
