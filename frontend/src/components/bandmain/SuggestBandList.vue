@@ -1,15 +1,16 @@
 <template>
   <v-container class="mb-10">
+    <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row>
       <v-col cols="2">
-        <v-banner class="my-10">
+        <v-banner class="mb-10">
           <strong>추천 팔로우 밴드</strong>
         </v-banner>
       </v-col>
       <v-col cols="8"></v-col>
       <v-col cols="2" class="ma-auto">
         <v-btn @click="BandSuggestPage()" icon>
-          <v-icon x-large>mdi-plus-box-multiple</v-icon>
+          <v-icon color="info" x-large>mdi-plus-box-multiple</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -35,7 +36,7 @@
                 height="200"
                 width="200"
               >
-                <v-card-title v-text="band.name"></v-card-title>
+                <v-card-title class="justify-center" v-text="band.name"></v-card-title>
               </v-img>
               <!-- 밴드이미지가 있을 때 -->
               <v-img
@@ -46,7 +47,7 @@
                 height="200"
                 width="200"
               >
-                <v-card-title v-text="band.name"></v-card-title>
+                <v-card-title class="justify-center" v-text="band.name"></v-card-title>
               </v-img>
             </v-card>
           </template>
@@ -54,6 +55,7 @@
         </v-tooltip>
       </v-col>
     </v-row>
+    </v-card>
   </v-container>
 </template>
 

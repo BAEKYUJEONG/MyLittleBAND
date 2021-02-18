@@ -1,8 +1,9 @@
 <template>
   <v-container class="mb-10">
+    <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row>
       <v-col cols="2">
-        <v-banner class="my-10">
+        <v-banner class="mb-10">
           <strong>팔로우 중인 밴드</strong>
         </v-banner>
       </v-col>
@@ -41,18 +42,18 @@
                 height="200"
                 width="200"
               >
-                <v-card-title v-text="band.name"></v-card-title>
+                <v-card-title class="justify-center" v-text="band.name"></v-card-title>
               </v-img>
               <!-- 밴드이미지가 있을 때 -->
               <v-img
                 v-else
                 :src="band.img"
-                class="white--text align-end"
+                class="white--text align-end justify-center"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 width="200"
                 height="200"
               >
-                <v-card-title v-text="band.name"></v-card-title>
+                <v-card-title class="justify-center" v-text="band.name"></v-card-title>
               </v-img>
             </v-card>
           </template>
@@ -60,6 +61,7 @@
         </v-tooltip>
       </v-col>
     </v-row>
+    </v-card>
   </v-container>
 </template>
 
