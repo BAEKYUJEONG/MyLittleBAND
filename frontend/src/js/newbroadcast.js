@@ -6,6 +6,7 @@ let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
 //const localVideo = document.getElementById("localVideo");
 //const remoteVideo = document.getElementById("remoteVideo");
 let localStream;
+export let flag = false;
 const peerConnections = {};
 
 conn.onopen = async function() {
@@ -44,6 +45,8 @@ function send(message) {
 }
 
 async function handleWatcher(idx) {
+  if (!flag) return;
+
   const peerConnection = new RTCPeerConnection({
     configuration: {
       offerToReceiveAudio: true,
