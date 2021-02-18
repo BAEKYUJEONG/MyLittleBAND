@@ -20,11 +20,16 @@
           <video id="remoteVideo" autoplay playsinline></video>
         </v-col>
       </v-row>
+
       <v-row align="end" justify="center">
         <v-col cols="auto">
-          <v-btn class="mx-3" id="watchButton" style="font-size : 22px;" @click="onClickWatch">시청하기</v-btn
+          <v-btn
+            class="mx-3"
+            id="watchButton"
+            style="font-size: 22px"
+            @click="onClickWatch"
+            >시청하기</v-btn
           >
-          <v-btn class="mx-3" id="moveButton" style="font-size : 22px;" @click="onClickMove">방송하러가기</v-btn>
         </v-col>
       </v-row>
     </v-card>
