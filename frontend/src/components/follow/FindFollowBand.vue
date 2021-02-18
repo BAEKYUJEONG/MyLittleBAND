@@ -1,6 +1,7 @@
 <template>
   <v-main>
-    <v-container class="mb-10">
+    <v-container class="my-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
       <!-- 배너 -->
       <v-row justify="center">
         <v-col cols="6">
@@ -27,7 +28,7 @@
         <v-col cols="6">
           <v-tooltip right v-for="band in bandlist" :key="band.bandId">
             <template v-slot:activator="{ on, attrs }">
-              <v-card class="mb-15" v-bind="attrs" v-on="on">
+              <v-card class="mb-15 rounded-tl-xl rounded-br-xl" v-bind="attrs" v-on="on" color="rgba(255, 255, 255, 0.9)">
                 <v-row class="px-10" align="center">
                   <v-col cols="3">
                     <!-- 밴드이미지가 없을 때 -->
@@ -48,7 +49,7 @@
                       style="border-radius: 50%"
                     ></v-img>
                   </v-col>
-                  <v-col cols="9" align-self="center">
+                  <v-col cols="auto" >
                     <v-row>
                       <v-col>
                         <v-btn x-large text @click="BandDetail(band.bandId)"
@@ -102,11 +103,12 @@
             "
             >검색초기화</v-btn
           >
-          <v-btn class="mx-6" color="primary" @click="ToBandList()"
+          <v-btn class="mx-6" @click="ToBandList()"
             >돌아가기</v-btn
           >
         </v-col>
       </v-row>
+      </v-card>
     </v-container>
   </v-main>
 </template>

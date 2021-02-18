@@ -1,6 +1,8 @@
 <template>
   <v-main>
-    <v-row class="px-10" justify="center">
+     <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
+    <v-row justify="center">
       <v-col cols="6">
         <v-banner class="my-10">
           <strong>밴드개설</strong>
@@ -13,7 +15,8 @@
           v-model="band.name"
           :counter="20"
           label="밴드명"
-          outlined
+          prepend-inner-icon="mdi-account-circle"
+              solo
           clearable
           :rules="[(v) => v.length <= 20 || '밴드명이 너무 깁니다']"
           required
@@ -59,7 +62,8 @@
         <v-textarea
           v-model="band.intro"
           label="밴드소개"
-          outlined
+          prepend-inner-icon="mdi-message-reply-text"
+              solo
           clearable
           required
           :counter="200"
@@ -67,12 +71,15 @@
         ></v-textarea>
       </v-col>
     </v-row>
+      </v-card>
+     </v-container>
+
 
     <v-row class="ma-auto">
       <v-col cols="auto" class="ma-auto">
         <v-btn color="primary" class="mx-6" @click="create()">밴드개설</v-btn>
 
-        <v-btn color="error" class="mx-6" @click="bandlist()">돌아가기</v-btn>
+        <v-btn  class="mx-6" @click="bandlist()">돌아가기</v-btn>
       </v-col>
     </v-row>
   </v-main>

@@ -65,6 +65,7 @@
             label="검색어"
             placeholder="원하는 검색어를 입력하세요."
             append-outer-icon="mdi-magnify"
+            @keypress.enter="onSearch"
             @click:append-outer="onSearch"
           ></v-text-field>
         </v-col>
@@ -179,7 +180,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(VideoStore, ["reqVideos", "reqVideo", "reqCommentInit"]),
+    ...mapActions(VideoStore, ["reqVideos", "reqVideo"]),
     ...mapMutations(VideoStore, ["setVideos", "setVideo"]),
     onEditing() {
       // 여긴 선택한 필터로 검색하는 곳.
@@ -235,12 +236,12 @@ export default {
     onVideo(videonum) {
       // 비디오를 클릭했을 때, 비디오가 선택되도록 처리.
       if (this.islogin) {
+        
         // 로그인이 되었다면,
         this.reqVideo(videonum).then((response) => {
           // 선택한 비디오로 req 요청 보냄.
           if (!response) {
-            //댓글목록 초기화
-      this.reqCommentInit();
+            
             this.$router.push("/video/" + videonum);
           } else alert(response.msg);
         });

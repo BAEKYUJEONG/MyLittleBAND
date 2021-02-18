@@ -1,5 +1,7 @@
 <template>
   <v-main>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row class="ma-auto" justify="center">
       <!-- 유저 프로필 이미지 -->
       <v-col cols="4">
@@ -76,28 +78,32 @@
         <v-text-field
           v-model="member.email"
           label="E-mail"
-          outlined
+          prepend-inner-icon="mdi-email"
+          solo
           readonly
         ></v-text-field>
 
         <v-text-field
           v-model="member.name"
           label="이름"
-          outlined
+            prepend-inner-icon="mdi-account-circle"
+              solo
           readonly
         ></v-text-field>
 
         <v-text-field
           v-model="member.phone"
           label="휴대폰"
-          outlined
+           prepend-inner-icon="mdi-phone"
+              solo
           readonly
         ></v-text-field>
 
         <v-textarea
           v-model="member.profile"
           label="소개"
-          outlined
+           prepend-inner-icon="mdi-message-reply-text"
+              solo
           readonly
         ></v-textarea>
       </v-col>
@@ -105,10 +111,15 @@
         <v-spacer></v-spacer>
       </v-col>
     </v-row>
-    <hr />
-    <!-- 소속밴드 -->
+      </v-card>
+    </v-container>
+    <v-divider/>
 
-    <v-row class="ma-auto" justify="center">
+
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
+    <!-- 소속밴드 -->
+    <v-row justify="center">
       <v-col cols="6" class="card-carousel-wrapper">
         <v-banner class="my-10">
           <strong>소속밴드</strong>
@@ -131,6 +142,8 @@
         </v-sheet>
       </v-col>
     </v-row>
+      </v-card>
+    </v-container>
 
     <!-- 회원정보 수정 버튼 -->
     <v-row class="ma-auto" justify="center">
