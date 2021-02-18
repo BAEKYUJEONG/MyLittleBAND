@@ -44,14 +44,14 @@ const MemberStore = {
     },
 
     setMemberInfo(state, memberInfo) {
-      state.memberInfo = memberInfo
+      state.memberInfo = memberInfo;
     },
 
     logout(state) {
       //로그아웃 시 변수 초기화
       state.isLogin = false;
       state.memberId = null;
-      state.manager = '0';
+      state.manager = "0";
       state.memberInfo = {};
     },
   },
@@ -70,34 +70,29 @@ const MemberStore = {
         })
         .then((response) => {
           //성공 시 변수 재설정
-          if (response.data.data === "success") {
-            //emailcheck가 0이면 리턴
-            if (response.data.object.emailcheck == '0' || response.data.object.emailcheck == null) {
-              alert("이메일 인증 후 진행해주세요");
-              return;
-            }
-            else {
-              console.log("성공");
-              //토큰생성 및 저장
-              let token = response.data["access-token"];
-              localStorage.setItem("access-token", token); //로컬스토리지에 토큰저장
+          if (response.status === 200 && response.data.status === true) {
+            //토큰생성 및 저장
+            let token = response.data["access-token"];
+            sessionStorage.setItem("access-token", token); //로컬스토리지에 토큰저장
 
-              context.commit("setIsLogined", true); //로그인 상태 true로 변환
-              context.commit("setMemberId", response.data.object.memberId); //memberid 저장
-              context.commit("setManager", response.data.object.manager); //관리자 여부저장
-            }
-          } else {
-            console.log("실패");
+            context.commit("setIsLogined", true); //로그인 상태 true로 변환
+            context.commit("setMemberId", response.data.object.memberId); //memberid 저장
+            context.commit("setManager", response.data.object.manager); //관리자 여부저장
+
+            return { result: true, msg: member.email + "님 환영합니다", color: "success" };
           }
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status === 401) {
+            if(error.response.data.data==="email")      return { result: false, msg: "이메일 인증 후 진행해주세요", color: "warning" };
+            else if(error.response.data.data==="fail")  return { result: false, msg: "아이디나 비밀번호가 틀립니다", color: "warning" };
+          } else console.log(error);
         });
     },
     // 로그아웃
     Logout(context) {
       context.commit("logout");
-      localStorage.removeItem("access-token");
+      sessionStorage.removeItem("access-token");
     },
     /*
       Signup Component
@@ -112,15 +107,16 @@ const MemberStore = {
           pw: info.pw,
         })
         .then((response) => {
-          if (response.status === 200 && response.data.status==="success") {
+          console.log(response.data);
+          if (response.status === 200 && response.data.status === true) {
             return true;
           }
         })
         .catch((error) => {
           // 이메일 중복
-          if(error.response.status===409){
+          if (error.response.status === 409) {
             return false;
-          }
+          } else console.log(error);
         });
     },
     // 이메일 인증 요청
@@ -214,8 +210,7 @@ const MemberStore = {
         .catch((error) => {
           console.log(error);
         });
-
-    }
+    },
   },
 };
 

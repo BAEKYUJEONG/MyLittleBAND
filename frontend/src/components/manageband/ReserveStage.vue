@@ -1,141 +1,171 @@
 <template>
   <v-main>
-    <v-row class="ma-auto">
-      <v-col cols="3"></v-col>
-      <!-- 날짜 선택 달력 -->
-      <v-col cols="4">
-        <v-banner class="ma-10">
-          <strong>날짜선택하기</strong>
-        </v-banner>
-        <v-date-picker
-          mode="date"
-          v-model="date"
-          :min="new Date().toISOString().substr(0, 10)"
-          :model-config="modelConfig"
-          locale="ko-KR"
-          @change="onChange()"
-        />
-      </v-col>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
+        <v-row justify="center">
+          <v-col cols="3"></v-col>
+          <!-- 날짜 선택 달력 -->
+          <v-col cols="auto">
+            <v-banner class="ma-10">
+              <strong>날짜선택하기</strong>
+            </v-banner>
+            <v-date-picker
+              mode="date"
+              v-model="date"
+              :min="new Date().toISOString().substr(0, 10)"
+              :model-config="modelConfig"
+              locale="ko-KR"
+              @change="onChange()"
+            />
+          </v-col>
 
-      <!-- 공연시간신청 테이블 -->
-      <v-col cols="2">
-        <v-banner class="my-10">
-          <strong>{{ date }}</strong>
-        </v-banner>
-        <v-responsive class="overflow-y-auto" max-height="300">
-          <v-simple-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-center">시간</th>
-                  <th class="text-center">신청</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="time in timetable" :key="time.time">
-                  <td>{{ time.time }}</td>
-                  <td>
-                    <v-btn
-                      v-if="time.pos"
-                      color="primary"
-                      class="white--text mx-4"
-                      @click="OpenReserve(time)"
-                    >
-                      신청
-                    </v-btn>
-                    <v-btn v-else color="primary" disabled>신청</v-btn>
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </v-responsive>
-      </v-col>
+          <v-col cols="1"></v-col>
 
-      <v-col cols="3"></v-col>
-    </v-row>
-    <!-- 공연신청 모달창 -->
-    <v-dialog v-model="Dialog.reserve" persistent max-width="600">
-      <v-card style="opacity: 1">
-        <v-card-title class="headline"> 밴드공연신청 </v-card-title>
-        <v-card-subtitle>
-          {{ date + '  ' + TmpShow.time }}
-        </v-card-subtitle>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  label="공연명"
-                  v-model="title"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12">
-                <v-textarea
-                  label="공연설명"
-                  v-model="showContent"
-                  required
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="reserve()">
-            공연신청
-          </v-btn>
-          <v-btn color="green darken-1" text @click="Dialog.reserve = false">
-            닫기
-          </v-btn>
-        </v-card-actions>
+          <!-- 공연시간신청 테이블 -->
+          <v-col cols="auto">
+            <v-banner class="my-10">
+              <strong>{{ date }}</strong>
+            </v-banner>
+            <v-responsive class="overflow-y-auto" max-height="378" width="300">
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-center">시간</th>
+                      <th class="text-center">신청</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="time in timetable" :key="time.time">
+                      <td>{{ time.time }}</td>
+                      <td>
+                        <v-btn
+                          v-if="time.pos"
+                          color="primary"
+                          class="white--text mx-4"
+                          @click="OpenReserve(time)"
+                          :disabled="
+                            date == new Date().toISOString().substr(0, 10) &&
+                            time.time < new Date().toTimeString().substr(0, 8)
+                          "
+                        >
+                          신청
+                        </v-btn>
+                        <v-btn
+                          v-else
+                          class="white--text mx-4"
+                          color="primary"
+                          disabled
+                          >신청</v-btn
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-responsive>
+          </v-col>
+
+          <v-col cols="3"></v-col>
+        </v-row>
+
+        <!-- 공연신청 모달창 -->
+        <v-dialog v-model="Dialog.reserve" persistent max-width="600">
+          <v-card style="opacity: 1">
+            <v-card-title class="headline"> 밴드공연신청 </v-card-title>
+            <v-card-subtitle>
+              {{ date + "  " + TmpShow.time }}
+            </v-card-subtitle>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      label="공연명"
+                      v-model="title"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-textarea
+                      label="공연설명"
+                      v-model="showContent"
+                      required
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="reserve()">
+                공연신청
+              </v-btn>
+              <v-btn
+                color="green darken-1"
+                text
+                @click="Dialog.reserve = false"
+              >
+                닫기
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <!-- 신청중인 공연 목록 -->
+        <v-row justify="center" class="mb-10">
+          <v-col cols="6">
+            <v-banner class="ma-10">
+              <strong>신청중인 공연 목록</strong>
+            </v-banner>
+            <v-layout column>
+              <v-flex text-center>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-center">날짜</th>
+                        <th class="text-center">공연명</th>
+                        <th class="text-center">신청취소</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="show in bandreserve" :key="show.showId">
+                        <td>{{ show.date + " " + show.time }}</td>
+                        <td>
+                          <v-btn class="mx-4" text @click="OpenModify(show)">
+                            {{ show.title }}
+                          </v-btn>
+                        </td>
+                        <td>
+                          <v-btn
+                            color="error"
+                            class="white--text mx-4"
+                            @click="OpenCancle(show)"
+                            :disabled="
+                              show.date <
+                                new Date().toISOString().substr(0, 10) ||
+                              (show.date ==
+                                new Date().toISOString().substr(0, 10) &&
+                                show.time <
+                                  new Date().toTimeString().substr(0, 8))
+                            "
+                          >
+                            공연취소
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-flex>
+            </v-layout>
+          </v-col>
+        </v-row>
       </v-card>
-    </v-dialog>
-
-    <!-- 신청중인 공연 목록 -->
-    <v-row justify="center" class="mb-10">
-      <v-col cols="6">
-        <v-banner class="ma-10">
-          <strong>신청중인 공연 목록</strong>
-        </v-banner>
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-center">날짜</th>
-                <th class="text-center">공연명</th>
-                <th class="text-center">신청취소</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="show in bandreserve" :key="show.showId">
-                <td>{{ show.date + ' ' + show.time }}</td>
-                <td>
-                  <v-btn class="mx-4" text @click="OpenModify(show)">
-                    {{ show.title }}
-                  </v-btn>
-                </td>
-                <td>
-                  <v-btn
-                    color="error"
-                    class="white--text mx-4"
-                    @click="OpenCancle(show)"
-                    :disabled="
-                      show.date < new Date().toISOString().substr(0, 10)
-                    "
-                  >
-                    공연취소
-                  </v-btn>
-                </td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-col>
-    </v-row>
+    </v-container>
 
     <!-- 공연수정 모달창 -->
     <v-dialog v-model="Dialog.modify" persistent max-width="600">
@@ -170,7 +200,11 @@
           <v-spacer></v-spacer>
           <v-btn
             color="green darken-1"
-            :disabled="TmpShow.date < new Date().toISOString().substr(0, 10)"
+            :disabled="
+              TmpShow.date < new Date().toISOString().substr(0, 10) ||
+              (TmpShow.date == new Date().toISOString().substr(0, 10) &&
+                TmpShow.time < new Date().toTimeString().substr(0, 8))
+            "
             text
             @click="modify()"
           >
@@ -307,8 +341,8 @@ export default {
     },
     modify() {
       let frm = new FormData();
-      frm.append('title', this.TmpShow.title);
-      frm.append('showContent', this.TmpShow.showContent);
+      frm.append("title", this.TmpShow.title);
+      frm.append("showContent", this.TmpShow.showContent);
 
       axiosCommon
         .put('/show/' + this.TmpShow.showId, frm)

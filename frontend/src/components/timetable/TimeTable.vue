@@ -1,101 +1,107 @@
 <template>
   <v-main>
-    <!-- Title 부분 -->
-    <v-row class="ma-5">
-      <v-col>
-        <v-toolbar flat>
-          <v-toolbar-title v-if="$refs.timetable" class="mx-auto">
-            {{ focus.getFullYear() }}년 {{ focus.getMonth() + 1 }}월
-            {{ thisweek.weekNo }}주차 공연
-          </v-toolbar-title>
-        </v-toolbar>
-      </v-col>
-    </v-row>
+    <v-card class="ma-5" color="rgba(200, 200, 200, 0.5)">
+      <!-- Title 부분 -->
+      <v-row class="ma-5">
+        <v-col>
+          <v-toolbar flat color="rgba(200, 200, 200, 0)">
+            <v-toolbar-title v-if="$refs.timetable" class="mx-auto">
+              {{ focus.getFullYear() }}년 {{ focus.getMonth() + 1 }}월
+              {{ thisweek.weekNo }}주차 공연
+            </v-toolbar-title>
+          </v-toolbar>
+        </v-col>
+      </v-row>
 
-    <!-- TimeTable 부분 -->
-    <v-row class="ma-10">
-      <v-col v-if="getShows.length === 0">
-        <p>공연이 존재하지 않습니다</p>
-      </v-col>
-      <v-col v-else>
-        <v-sheet>
-          <v-calendar
-            v-model="focus"
-            ref="timetable"
-            :events="getShows"
-            color="primary"
-            type="week"
-            @click:event="showEvent"
-          ></v-calendar>
-
-          <!-- 선택시 나오는 상세일정 -->
-          <v-menu
-            v-model="selectedOpen"
-            :close-on-content-click="false"
-            :activator="selectedElement"
-            offset-x
-          >
-            <v-card
-              color="grey lighten-4"
-              min-width="600px"
-              max-width="700px"
-              flat
+      <!-- TimeTable 부분 -->
+      <v-row class="ma-10">
+        <v-col v-if="getShows.length === 0">
+          <p>공연이 존재하지 않습니다</p>
+        </v-col>
+        <v-col v-else>
+          <v-sheet>
+            <v-calendar 
+              v-model="focus"
+              ref="timetable"
+              :events="getShows"
+              color="gray"
+              type="week"
+              class="background"
+              @click:event="showEvent"
             >
-              <v-toolbar :color="getShow.color" dark>
-                <v-toolbar-title v-html="getShow.title"></v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn
-                  text
-                  router-link
-                  :to="'/band/introduce/'+getShow.bandId"
-                >
-                  <v-toolbar-title
-                    v-html="'<small>' + getShow.bandname + '</small>'"
-                  ></v-toolbar-title>
-                </v-btn>
-                <v-btn icon @click="selectedOpen = false">
-                  <v-icon>mdi-check</v-icon>
-                </v-btn>
-              </v-toolbar>
+            </v-calendar>
 
-              <v-layout row class="my-3 mx-1">
-                <v-spacer />
-                <v-flex col style="color: black"
-                  ><v-card-text>시작</v-card-text></v-flex
-                >
-                <v-flex col>
-                  <v-chip small>
-                    {{ getShow.start }}
-                  </v-chip>
-                </v-flex>
-                <v-flex col style="color: black"
-                  ><v-card-text>종료</v-card-text></v-flex
-                >
-                <v-flex col>
-                  <v-chip small>
-                    {{ getShow.end }}
-                  </v-chip>
-                </v-flex>
-              </v-layout>
+            <!-- 선택시 나오는 상세일정 -->
+            <v-menu
+              v-model="selectedOpen"
+              :close-on-content-click="false"
+              :activator="selectedElement"
+              offset-x
+            >
+              <v-card
+                color="grey lighten-4"
+                min-width="600px"
+                max-width="700px"
+                flat
+              >
+                <v-toolbar :color="getShow.color" dark>
+                  <v-toolbar-title v-html="getShow.title"></v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text
+                    router-link
+                    :to="'/band/introduce/' + getShow.bandId"
+                  >
+                    <v-toolbar-title
+                      v-html="'<small>' + getShow.bandname + '</small>'"
+                    ></v-toolbar-title>
+                  </v-btn>
+                  <v-btn icon @click="selectedOpen = false">
+                    <v-icon>mdi-check</v-icon>
+                  </v-btn>
+                </v-toolbar>
 
-              <v-divider class="mx-4" />
-              <v-layout
-                ><v-flex>
-                  <v-card-text>{{ getShow.content }}</v-card-text>
-                </v-flex>
-              </v-layout>
+                <v-layout row class="my-3 mx-1">
+                  <v-spacer />
+                  <v-flex col style="color: black"
+                    ><v-card-text>시작</v-card-text></v-flex
+                  >
+                  <v-flex col>
+                    <v-chip small>
+                      {{ getShow.start }}
+                    </v-chip>
+                  </v-flex>
+                  <v-flex col style="color: black"
+                    ><v-card-text>종료</v-card-text></v-flex
+                  >
+                  <v-flex col>
+                    <v-chip small>
+                      {{ getShow.end }}
+                    </v-chip>
+                  </v-flex>
+                </v-layout>
 
-              <v-divider class="mx-4" />
-              <v-layout
-                ><v-flex>
-                  <v-card-text><v-img :src="getShow.img" alt="이미지 없음"/></v-card-text>
-                </v-flex>
-              </v-layout>
-            </v-card>
-          </v-menu>
-        </v-sheet>
-      </v-col>
-    </v-row>
+                <v-divider class="mx-4" />
+                <v-layout
+                  ><v-flex>
+                    <v-card-text>{{ getShow.content }}</v-card-text>
+                  </v-flex>
+                </v-layout>
+
+                <v-divider class="mx-4" />
+                <v-layout
+                  ><v-flex>
+                    <v-card-text
+                      ><v-img :src="getShow.img" alt="이미지 없음"
+                    /></v-card-text>
+                  </v-flex>
+                </v-layout>
+              </v-card>
+            </v-menu>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-main>
 </template>
 
@@ -126,8 +132,7 @@ export default {
         .format("YYYY-MM-DD"),
     })
       .then((response) => {
-        if (response)
-          this.msg = response.msg;
+        if (response) this.msg = response.msg;
       })
       .catch((error) => {
         console.log(error);
@@ -242,8 +247,26 @@ export default {
 };
 </script>
 
-<style>
-.v-calendar .v-event-timed-container {
-  margin-right: 0;
+<style scoped>
+.background {
+  position: relative;
 }
+
+.v-calendar .v-event-timed-container {
+  margin-left: 0.75em;
+  margin-right: 0.75em;
+}
+
+.background::before {
+  background-image: url("~@/assets/image/background_timetable.jpg");
+  content: "";
+  position: absolute;
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+ 
+}
+
+
 </style>

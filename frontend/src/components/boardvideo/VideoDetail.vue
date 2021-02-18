@@ -2,7 +2,7 @@
   <!-- 동작에 따른 이벤트 처리가 가능한듯..? -->
   <v-main>
     <v-container>
-      <v-row justify="center" class="pt-4 pl-6"
+      <v-row justify="center" class="pt-4 mt-10"
         ><v-col cols="auto">
           <video-player 
             class="video-player-box"
@@ -33,12 +33,12 @@
               <v-btn icon :color="color" v-bind="attrs" v-on="on">
                 <v-icon
                   v-if="member.follow"
-                  size="80"
+                  size="60"
                   @click="unLike()"
                   color="red"
                   >mdi-heart</v-icon
                 >
-                <v-icon v-else size="60" @click="setLike()" color="gray"
+                <v-icon v-else size="40" @click="setLike()" color="gray"
                   >mdi-heart</v-icon
                 >
               </v-btn>
@@ -46,54 +46,56 @@
             <span v-if="!member.follow">좋아요 버튼</span>
             <span v-else>좋아요 취소</span>
           </v-tooltip>
+          <strong class="black--text mt-6 ml-3">{{ like }}</strong>
         </v-col>
-        <strong class="black--text mt-6">{{ getVideo.boardLike }}</strong>
       </v-row>
-      <v-row
+      <v-row class="mb-10"
         ><v-col
           ><p class="black--text text-left">
             {{ getVideo.boardContent }}
           </p></v-col
         ></v-row
       >
-      <v-divider inset></v-divider>
-      <h3 class="display-2 mt-8">댓글</h3>
 
-      <!-- 댓글 작성 -->
-      <v-row class="mt-4"
-        ><v-col cols="auto">
-          <v-avatar> <img :src="getMemberInfo.img" alt="John" /> </v-avatar
-        ></v-col>
-        <v-col>
-          <v-text-field
-            :counter="50"
-            label="내용"
-            name="usercomment"
-            required
-            v-model="usercomment"
-            maxlength="50"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="auto">
-          <v-btn block outlined color="blue" @click="onWrite"> 등록 </v-btn>
-        </v-col>
-      </v-row>
+      <v-card class="pa-10" color="rgba(200, 200, 200, 0.5)">
+        <v-card-title class="headline">댓글</v-card-title>
 
-      <!-- 작성된 댓글 목록-->
-      <v-row class="mt-2">
-        <v-list shaped>
-          <v-list-item v-for="(comment, i) in getComments" :key="i">
-            <v-list-item-icon>
-              <v-list-item-avatar>
-                <v-img :src="comment.img"></v-img>
-              </v-list-item-avatar>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="comment.content"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-row>
+        <!-- 댓글 작성 -->
+        <v-row class="mt-4"
+          ><v-col cols="auto">
+            <v-avatar> <img :src="getMemberInfo.img" alt="John" /> </v-avatar
+          ></v-col>
+          <v-col>
+            <v-text-field
+              :counter="200"
+              label="내용"
+              name="usercomment"
+              required
+              v-model="usercomment"
+              maxlength="50"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn block outlined dense color="secondary" @click="onWrite"> 등록 </v-btn>
+          </v-col>
+        </v-row>
+
+        <!-- 작성된 댓글 목록-->
+        <v-row class="mt-2">
+          <v-list shaped color="rgba(255, 255, 255, 0)">
+            <v-list-item v-for="(comment, i) in getComments" :key="i">
+              <v-list-item-icon>
+                <v-list-item-avatar>
+                  <v-img :src="comment.img"></v-img>
+                </v-list-item-avatar>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="comment.content"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-row>
+      </v-card>
     </v-container>
   </v-main>
 </template>
@@ -113,17 +115,21 @@ export default {
     videoPlayer,
   },
   created() {
-    this.playerOptions.sources[0].src = this.getVideo.boardVideoUrl;
-    //console.log(this.video.boardId);
-    
-    this.reqComments(this.getVideo.boardId);
-    this.getLike();
-    this.reqMemberInfo(this.getMemberId);
-
-    console.log(this.getMemberInfo);
+    this.reqVideo(this.$route.params.no)
+    .then((response)=> {
+      if(!response){
+        this.playerOptions.sources[0].src = this.getVideo.boardVideoUrl;
+        this.reqComments(this.getVideo.boardId);
+        this.getLike();
+        this.reqMemberInfo(this.getMemberId);
+        this.like = this.getVideo.boardLike;
+        console.log(this.getVideo)
+      }
+    })
   },
   data() {
     return {
+      like: 0,
       usercomment: '',
       color: '',
       member: {
@@ -162,7 +168,7 @@ export default {
   },
   methods: {
     // listen event
-    ...mapActions(VideoStore, ['reqComments']),
+    ...mapActions(VideoStore, ['reqVideo', 'reqComments']),
     ...mapActions(MemberStore, ['reqMemberInfo']),
     ...mapMutations(VideoStore, ['setComments']),
     onPlayerPlay(player) {
@@ -195,6 +201,7 @@ export default {
         )
         .then((response) => {
           if (response.data.status) {
+            this.like = this.getVideo.boardLike;
             this.member.follow = true;
             this.member.followId = response.data.object.boardId;
           }
@@ -216,6 +223,7 @@ export default {
         })
         .then((response) => {
           if (response.data.status) {
+            this.like++;
             this.member.follow = true;
             this.member.followId = response.data.object.likeId;
           }
@@ -229,6 +237,7 @@ export default {
         .delete('/like/likelist/' + this.member.followId)
         .then((response) => {
           if (response.data.status) {
+            this.like--;
             this.member.follow = false;
             this.member.followId = '';
           }

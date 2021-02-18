@@ -237,26 +237,32 @@ public class MemberController {
 	@ApiOperation(value = "로그인", notes = "성공 시 로그인 완료")
 	@ApiResponses({
 		@ApiResponse(code= 200, message="로그인 성공"),
-		@ApiResponse(code= 400, message="잘못된 접근"),
+		@ApiResponse(code= 401, message="로그인 실패"),
 	})
 	public Object login(@RequestBody loginReq req, HttpServletResponse response) {
 		Member member=service.login(req);
-		if(member!=null) {
-			System.out.println("login");
-			
+		final BasicResponse result = new BasicResponse();
+		HttpStatus code = null;
+		
+		if(member==null) {
+			result.status = false;
+	        result.data = "fail";
+			code = HttpStatus.UNAUTHORIZED;
+		} else if(member.getEmailcheck().equals("0")) {
+			result.status = false;
+			result.data = "email";
+			code = HttpStatus.UNAUTHORIZED;
+		} else {	
 			String token = jwtservice.create(member);
 			logger.trace("로그인 토큰정보 : {}", token);
-			final BasicResponse result = new BasicResponse();
 	        response.setHeader("auth-token", token);
 			result.status = true;
 	        result.data = "success";
 	        result.object=member;
-	        return new ResponseEntity<>(result, HttpStatus.OK);
-	        
+	        code = HttpStatus.OK;
 		}
-		else {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		
+		return new ResponseEntity<>(result, code);
 	}
 	
 	@GetMapping(value = "/member/{memberId}")
