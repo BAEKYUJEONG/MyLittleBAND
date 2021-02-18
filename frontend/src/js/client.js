@@ -1,12 +1,12 @@
 //connecting to our signaling server
 
-let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
-//let conn = new WebSocket('ws://localhost:8080/socket');
+//let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
+let conn = new WebSocket('ws://localhost:8080/socket');
 
 //const localVideo = document.getElementById("localVideo");
 //const remoteVideo = document.getElementById("remoteVideo");
 let remoteStream;
-
+let index;
 conn.onopen = async function() {
   console.log('Connected to the signaling server');
   initialize();
@@ -66,6 +66,7 @@ function initialize() {
       send({
         event: 'candidate',
         data: event.candidate,
+        idx: index,
       });
     }
   };
@@ -82,7 +83,7 @@ export function watch() {
 
 function handleOffer(offer, idx) {
   peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-
+  index = idx;
   // create and send an answer to an offer
   peerConnection.createAnswer(
     function(answer) {

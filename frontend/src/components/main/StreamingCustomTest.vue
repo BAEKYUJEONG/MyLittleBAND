@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import * as client from '@/js/client.js';
+import * as client from '@/js/newclient.js';
 
 export default {
   methods: {
