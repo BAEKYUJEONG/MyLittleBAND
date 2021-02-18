@@ -1,6 +1,6 @@
 <template>
   <v-container class="my-20">
-    <v-card elevation="5" class="my-10">
+    <v-card elevation="5" class="pa-7" color="rgba(255, 255, 255, 0.5)">
       <!-- 위쪽 banner -->
       <v-banner single-line class="ma-5"
         ><!--@click:icon="reqShow">-->
@@ -9,7 +9,7 @@
 
         <!-- 전체 보기 -->
         <template v-slot:actions>
-          <v-btn color="primary" text router-link :to="links[0].path">
+          <v-btn color="secondary" text router-link :to="links[0].path">
             {{ links[0].text }}
           </v-btn>
         </template>
@@ -26,8 +26,8 @@
       </template>
 
       <!-- 공연 일정 존재 시 -->
-      <v-timeline v-else class="my-5">
-        <v-timeline-item v-for="data in getTimeline" :key="data.time" large>
+      <v-timeline v-else class="ma-5">
+        <v-timeline-item v-for="data in getTimeline" :key="data.time" large color="black">
           <template v-slot:icon size="64">
             <v-avatar size="62">
               <v-img :src="data.img" />
@@ -70,6 +70,7 @@ export default {
   },
   created() {
     this.reqTimeline();
+    console.log(this.getTimeline);
   },
   computed: {
     ...mapGetters(timelineStore, ["getTimeline"]),

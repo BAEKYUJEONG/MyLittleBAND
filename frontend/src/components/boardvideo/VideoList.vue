@@ -98,6 +98,8 @@
                       <v-list-item-content>
                         <v-list-item-title
                           v-text="card.boardSubject"
+                          class="text-truncate"
+                          style="width: 11rem"
                         ></v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
