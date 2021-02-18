@@ -56,6 +56,9 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
     </v-container>
   </v-main>
 </template>
@@ -70,7 +73,10 @@ export default {
   data(){
     return {
       title: "",
-      content: ""
+      content: "",
+      snackbar : false,
+      msg : '',
+      color : '',
     };
   },
   created(){
@@ -87,8 +93,12 @@ export default {
     onModify() {
       this.reqModifyBoard({ boardno: this.$route.params.boardno, title: this.title, content: this.content,memberId : this.getMemberId })
       .then((response) => {
-        if(response.result){   alert(response.msg); this.$router.push("/band/board/detail/"+this.$route.params.boardno)}
-        else                  alert(response.msg);
+        if(response.result){   this.msg = response.msg;
+          this.color = "error";
+          this.snackbar = true; this.$router.push("/band/board/detail/"+this.$route.params.boardno)}
+        else                  {this.msg = response.msg;
+          this.color = "error";
+          this.snackbar = true;}
       })
       .catch((error) => {
         console.log(error);

@@ -51,6 +51,9 @@
           </v-layout>
         </v-flex>
       </v-layout>
+      <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
     </v-container>
   </v-main>
 </template>
@@ -67,6 +70,9 @@ export default {
     return {
       title: "",
       content: "",
+      snackbar : false,
+      msg : '',
+      color : '',
     };
   },
   computed: {
@@ -85,8 +91,15 @@ export default {
         content: this.content,
         memberId : this.memberid})
       .then((response) => {
-        if(response.result)  {alert(response.msg); this.$router.push("/band/board/"+this.$route.params.bandno)}
-        else                      alert(response.msg);  
+        if(response.result)  {this.msg =  response.msg;
+        this.color = "error";
+        this.snackbar = true; this.$router.push("/band/board/"+this.$route.params.bandno)}
+        else   {
+        this.msg =  response.msg;
+        this.color = "error";
+        this.snackbar = true;
+        
+      }                    
       })
       .catch((error) => {
         console.log(error);
