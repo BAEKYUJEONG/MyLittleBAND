@@ -6,9 +6,7 @@
     style="background-color: #feeeb0"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn text v-bind="attrs" v-on="on" :class="clr"
-        >로그인</v-btn
-      >
+      <v-btn text v-bind="attrs" v-on="on" :class="clr">로그인</v-btn>
     </template>
     <v-card>
       <v-card-title>
@@ -55,6 +53,9 @@
           아이디/비밀번호 찾기
         </v-btn>
       </v-card-actions>
+      <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
     </v-card>
   </v-dialog>
 </template>
@@ -71,6 +72,9 @@ export default {
         email: "",
         pw: "",
       },
+      snackbar: false,
+      msg: "",
+      color: "",
     };
   },
   props: ["clr"],
@@ -93,14 +97,24 @@ export default {
         alert("공백이 존재합니다!");
         return;
       }
-      this.Login(this.member); //Login action 사용 (member를 payload로 보냄)
-      if (localStorage.getItem("access-token") != "") {
-        console.log("회원번호: " + this.memberid);
-        this.$router.push("/");
-        this.dialog = false;
-      } else {
-        alert("아이디 혹은 비밀번호가 틀렸습니다!");
-      }
+      this.Login(this.member) //Login action 사용 (member를 payload로 보냄)
+        .then((response) => {
+          this.msg = response.msg;
+          this.color = response.color;
+          this.snackbar = true;
+
+          if (response.result && sessionStorage.getItem("access-token") != "") {
+            console.log("회원번호: " + this.memberid);
+            this.$router.push("/");
+            this.dialog = false;
+          } else {
+            this.email = "";
+            this.pw = "";
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     signup() {
       //모달창 끄기
