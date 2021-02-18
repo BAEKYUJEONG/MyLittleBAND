@@ -1,7 +1,7 @@
 //connecting to our signaling server
 
-//let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
-let conn = new WebSocket('ws://localhost:8080/socket');
+let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
+//let conn = new WebSocket('ws://localhost:8080/socket');
 
 //const localVideo = document.getElementById("localVideo");
 //const remoteVideo = document.getElementById("remoteVideo");
@@ -18,6 +18,8 @@ conn.onmessage = function(msg) {
   let content = JSON.parse(msg.data);
   let data = content.data;
   let idx = content.idx;
+  let type = content.type;
+  if (type == 'caller') return;
   switch (content.event) {
     case 'answer':
       handleAnswer(data, idx);
@@ -75,8 +77,22 @@ async function handleWatcher(idx) {
     localStream = stream;
     //console.log(stream);
   } catch (e) {
-    alert(`getUserMedia() error: ${e.name}`);
+    console.log(e);
+    //alert(`getUserMedia() error: ${e.name}`);
   }
+
+  // Setup ice handling
+  peerConnection.onicecandidate = function(event) {
+    if (event.candidate) {
+      send({
+        event: 'candidate',
+        data: event.candidate,
+        idx: '',
+        type: 'caller',
+      });
+    }
+  };
+
   peerConnection.addStream(localStream);
 
   peerConnection.createOffer(
@@ -85,6 +101,7 @@ async function handleWatcher(idx) {
         event: 'offer',
         data: offer,
         idx: idx,
+        type: 'caller',
       });
       peerConnection.setLocalDescription(offer);
     },
@@ -104,7 +121,8 @@ export async function broadcast2() {
     console.log('Received local stream');
     localStream = stream;
   } catch (e) {
-    alert(`getUserMedia() error: ${e.name}`);
+    console.log(e);
+    //alert(`getUserMedia() error: ${e.name}`);
   }
   return localStream;
 }
