@@ -97,7 +97,7 @@ export default {
             this.suggestBand = response.data.object;
           }
         })
-        .catch((exp) => alert(exp + "추천밴드목록 조회 실패"));
+        .catch((exp) => console.log(exp + "추천밴드목록 조회 실패"));
     },
     
   },

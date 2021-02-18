@@ -147,6 +147,9 @@
         </v-row>
       </v-layout>
     </v-container>
+    <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ snackmsg }}
+      </v-snackbar>
   </v-main>
 </template>
 
@@ -167,6 +170,9 @@ export default {
   },
   data() {
     return {
+      snackbar : false,
+      snackmsg : '',
+      color : '',
       isButton: false,
       filter1: 1,
       filter2: 0,
@@ -237,9 +243,13 @@ export default {
           .then((response) => {
             this.setVideos(response.data.object);
           })
-          .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
+          .catch((exp) => console.log(exp + "조회에 실패하였습니다."));
         // 여기서 axios를 이용한 검색 처리.(필터는 select에 있음)
-      } else alert('속성을 각각 하나씩 선택해 주세요!');
+      } else {
+      this.snackmsg = "속성을 각각 하나씩 선택해 주세요!";
+        this.color = "error";
+        this.snackbar = true;
+      }
     },
 
     onSearch() {
@@ -249,7 +259,7 @@ export default {
         .then((response) => {
           this.setVideos(response.data.object);
         })
-        .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
+        .catch((exp) => console.log(exp + "조회에 실패하였습니다."));
 
       //this.$router.go(0); //자동 새로고침. 쓰지는 않음.
       this.msg = '';
@@ -261,10 +271,15 @@ export default {
         this.reqVideo(videonum).then((response) => {
           // 선택한 비디오로 req 요청 보냄.
           if (!response) {
-            this.$router.push('/video/' + videonum);
-          } else alert(response.msg);
+            
+            this.$router.push("/video/" + videonum);
+          } else console.log(response.msg);
         });
-      } else alert('로그인 해주세요!');
+      } else {
+        this.snackmsg = "로그인 후 이용해주세요";
+        this.color = "error";
+        this.snackbar = true;
+      }
     },
     remove(item) {
       //chip뒤에 달리는 close 옵션인데, 현재는 사용하지 않음.
@@ -278,15 +293,23 @@ export default {
         console.log(this.bandlist.length);
         if (this.bandlist.length > 0) {
           //가입한 밴드 리스트가 1개 이상일 경우에만,
-          this.$router.push({ name: 'videocreate' });
-        } else alert('밴드 가입 후 글쓰기 가능합니다!');
-      } else alert('로그인 해주세요!');
+          this.$router.push({ name: "videocreate" });
+        } else {
+        this.snackmsg = "밴드 가입 후 글쓰기가 가능합니다.";
+        this.color = "error";
+        this.snackbar = true;
+      }
+      } else {
+        this.snackmsg = "로그인 후 이용해주세요";
+        this.color = "error";
+        this.snackbar = true;
+      }
     },
     getbandlist() {
       axios
         .get('/band-list/' + this.memberid)
         .then((response) => (this.bandlist = response.data.object))
-        .catch((exp) => alert(exp + '조회에 실패하였습니다.'));
+        .catch((exp) => console.log(exp + "조회에 실패하였습니다."));
     },
     onItemClick(idx) {
       //console.log(this.filter1);

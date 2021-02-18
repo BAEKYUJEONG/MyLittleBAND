@@ -94,7 +94,9 @@ export default {
     onSubmit: function() {
       //공백이면
       if (this.member.email == "" || this.member.pw == "") {
-        alert("공백이 존재합니다!");
+        this.msg = ("공백이 존재합니다!");
+        this.color = "warning";
+        this.snackbar = true;
         return;
       }
       this.Login(this.member) //Login action 사용 (member를 payload로 보냄)

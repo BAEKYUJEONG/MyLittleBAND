@@ -106,6 +106,9 @@
           >
         </v-col>
       </v-row>
+      <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
   </v-main>
 </template>
 <script>
@@ -133,6 +136,10 @@ export default {
   },
   data() {
     return {
+      snackbar : false,
+      msg : '',
+      color : '',
+      
       select: '',
       bandlist: [],
       imgfiles: [],
@@ -159,13 +166,17 @@ export default {
         this.imgfiles.name == '' ||
         this.select == ''
       ) {
-        alert('빈칸이 존재합니다.');
+        this.msg = "빈칸이 존재합니다.";
+        this.color = "warning";
+        this.snackbar = true;
         return;
       }
 
       if (this.videofiles.size > 1e8 + 1e7) {
         //byte 단위임.
-        alert('100MB 이하 영상만 가능합니다.');
+        this.msg = '100MB 이하 영상만 가능합니다.';
+        this.color = "error";
+        this.snackbar = true;
         return;
       }
 
@@ -201,7 +212,9 @@ export default {
                 })
                 .then((response) => {
                   console.log(response);
-                  alert('업로드 하였습니다!');
+                  this.msg = '업로드 하였습니다!';
+        this.color = "success";
+        this.snackbar = true;
                   this.$router.push('/video');
                 })
                 .catch(function() {

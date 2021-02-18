@@ -29,6 +29,9 @@
         </v-alert>
       </v-col>
     </v-row>
+    <v-snackbar centered v-model="snackbar" timeout="2000" :color="color">
+        {{ msg }}
+      </v-snackbar>
   </v-main>
 </template>
 
@@ -43,6 +46,9 @@ export default {
   data() {
     return {
       codeSession: '',
+      snackbar : false,
+      msg : '',
+      color : '',
       sessions: ['보컬', '키보드', '드럼', '기타', '베이스'],
       email: '',
       bandNo: '',
@@ -60,13 +66,18 @@ export default {
   },
   methods: {
     onInviteBand() {
-      if (this.codeSession == '') alert('세션을 선택해 주세요!');
+      if (this.codeSession == ''){ 
+      this.msg = '세션을 선택해 주세요!';
+        this.color = "error";
+        this.snackbar = true;}
       else {
         //console.log(this.bandlist);
         const size = this.bandlist.length;
         for (var i = 0; i < size; i++) {
           if (this.bandlist[i].memberId == this.getMemberId) {
-            alert('이미 가입되어있는 밴드입니다.');
+            this.msg = '이미 가입되어있는 밴드입니다.';
+        this.color = "error";
+        this.snackbar = true;
             this.$router.push("/band/list/"+this.getMemberId);
             return;
           }
@@ -79,11 +90,13 @@ export default {
           })
           .then((response) => {
             if (response.data.status){ 
-              alert("밴드에 가입되었습니다!");
+               this.msg = '밴드에 가입되었습니다.';
+        this.color = "success";
+        this.snackbar = true;
               this.$router.push("/band/list/"+this.getMemberId);
             }
           })
-          .catch((exp) => alert(exp + '멤버정보 조회에 실패하였습니다.'));
+          .catch((exp) => console.log(exp + '멤버정보 조회에 실패하였습니다.'));
       }
     },
     onBandList() {
@@ -93,7 +106,7 @@ export default {
           console.log(response);
           this.bandlist = response.data.object;
         })
-        .catch((err) => alert(err));
+        .catch((err) => console.log(err));
     },
   },
 };
