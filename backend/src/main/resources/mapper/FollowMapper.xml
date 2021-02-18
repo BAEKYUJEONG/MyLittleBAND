@@ -36,4 +36,8 @@
 	<update id="followdown">
 		update band set follownum=follownum-1 where bandId=(select bandId from follow where followId=#{followId});
 	</update>
+
+	<select id="followrecommend" parameterType="String" resultType="java.util.Map">
+		select bandId,img,name,intro,follownum from band where bandId not in(select bandId from follow where memberId=#{memberId}) order by rand() limit 5;
+	</select>
 </mapper>

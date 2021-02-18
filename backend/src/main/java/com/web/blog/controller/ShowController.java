@@ -41,6 +41,8 @@ public class ShowController {
 	
 	public Object show(@RequestBody BandShow req) {
 		BandShow check=service.getShowByTime(req.getDate(), req.getTime());
+		System.out.println(req.getDate());
+		System.out.println(req.getTime());
 		System.out.println(check);
 		if(check==null) {
 			service.addshow(req);

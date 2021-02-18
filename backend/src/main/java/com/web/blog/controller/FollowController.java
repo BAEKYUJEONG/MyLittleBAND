@@ -128,4 +128,21 @@ public class FollowController {
 		}
 	}
 	
+	@GetMapping(value = "/follow/{memberId}")
+	@ApiOperation(value = "팔로우밴드 추천", notes = "팔로우밴드 추천을 보여준다.")
+	public Object followrecommend(@PathVariable String memberId) {
+		List<HashMap<String, String>> follownum= service.followrecommend(memberId);
+		if(follownum!=null) {
+			final BasicResponse result = new BasicResponse();
+	        result.status = true;
+	        result.data = "success";
+	        result.object=follownum;
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+	      
+		}
+		else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

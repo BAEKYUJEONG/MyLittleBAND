@@ -28,7 +28,7 @@
 	</select>
 	
 	<insert id="addshow" parameterType="BandShow">
-		insert into bandshow values(null,#{date}, #{title},#{time},#{showContent},#{img},#{bandId});
+		insert into bandshow values(null,#{date}, #{title},#{time},#{showContent},#{bandId});
 	</insert>
 	
 	<delete id="delshow">
@@ -39,8 +39,9 @@
 		select showId,date,title,date_format(time,'%H:%i')as time,showContent from bandshow where bandId=#{bandId};
 	</select>
 	
-	<select id="dateshowlist" resultType="BandShow">
-		select * from bandshow where date=#{date};
+	<select id="dateshowlist" resultType="BandShowlist">
+		select bandshow.*,band.name,band.img as img, 0 as shows from bandshow,band where date=#{date} and bandshow.bandId=band.bandId
+		order by time;
 	</select>
 	
 	<update id="updateshow">
