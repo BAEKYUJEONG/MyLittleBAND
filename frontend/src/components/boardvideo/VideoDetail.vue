@@ -54,7 +54,11 @@
           ><p class="black--text text-left">
             {{ getVideo.boardContent }}
           </p></v-col
-        ></v-row
+        ><v-spacer></v-spacer>
+        <v-col><p class="black--text text-right">
+            조회수 : {{ getVideo.boardView }}
+          </p></v-col>
+        </v-row
       >
 
       <v-card class="pa-10" color="rgba(200, 200, 200, 0.5)">

@@ -58,6 +58,11 @@ public class FollowDaoImpl implements FollowDao {
 		
 	}
 
+	@Override
+	public List<HashMap<String, String>> followrecommend(String memberId) {
+		return mapper.followrecommend(memberId);
+	}
+
 	
 
 	

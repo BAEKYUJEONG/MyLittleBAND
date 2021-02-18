@@ -6,7 +6,7 @@
 <mapper namespace="com.web.blog.mapper.MemberMapper">
 
 	<insert id="signup" parameterType="signupReq">
-		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, null, null, 0, 0, null)
+		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, "https://i4a408.p.ssafy.io/profile/LogoMini.png", null, 0, 0, null)
   	</insert>
   	
   	<!-- 이메일 인증키 -->
