@@ -1,162 +1,173 @@
 <!-- 팔로우 할 멤버들에게 보여 줄 페이지 -->
 <template>
   <v-main>
-    <v-row class="px-10">
-      <v-col cols="12">
-        <v-banner class="my-10">
-          <strong>밴드소개</strong>
-        </v-banner>
-      </v-col>
-    </v-row>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
+        <v-row>
+          <v-col cols="2">
+            <v-banner class="mb-10">
+              <strong>밴드소개</strong>
+            </v-banner>
+          </v-col>
+        </v-row>
 
-    <v-row class="ma-auto pa-10" align="center" justify="center">
-      <!-- 밴드 프로필 이미지-->
-      <v-col cols="auto" class="ma-auto">
-        <v-spacer></v-spacer>
-        <v-card height="300" width="300" id="rounded-card" class="ma-auto">
-          <v-layout column align-center justify-center>
-            <v-img
-              v-if="band.img == '' || band.img == null"
-              class="ma-auto mp-4"
-              height="300"
-              width="300"
-              style="border-radius: 50%"
-              contain
-              src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
-            ></v-img>
-            <v-img
-              v-else
-              class="ma-auto mp-4"
-              height="300"
-              width="300"
-              style="border-radius: 50%"
-              contain
-              :src="band.img"
-            >
-            </v-img>
-          </v-layout>
-        </v-card>
-      </v-col>
+        <v-row class="ma-auto pa-10" align="center" justify="center">
+          <!-- 밴드 프로필 이미지-->
+          <v-col cols="auto" class="ma-auto">
+            <v-spacer></v-spacer>
+            <v-card height="300" width="300" id="rounded-card" class="ma-auto">
+              <v-layout column align-center justify-center>
+                <v-img
+                  v-if="band.img == '' || band.img == null"
+                  class="ma-auto mp-4"
+                  height="300"
+                  width="300"
+                  style="border-radius: 50%"
+                  contain
+                  src="https://i4a408.p.ssafy.io/profile/LogoMini.png"
+                ></v-img>
+                <v-img
+                  v-else
+                  class="ma-auto mp-4"
+                  height="300"
+                  width="300"
+                  style="border-radius: 50%"
+                  contain
+                  :src="band.img"
+                >
+                </v-img>
+              </v-layout>
+            </v-card>
+          </v-col>
 
-      <!-- 밴드 소개 -->
-      <v-col cols="4">
-        <v-text-field
-          v-model="band.name"
-          label="밴드명"
-          outlined
-          readonly
-        ></v-text-field>
+          <!-- 밴드 소개 -->
+          <v-col cols="4">
+            <v-text-field
+              v-model="band.name"
+              label="밴드명"
+              prepend-inner-icon="mdi-account-circle"
+              solo
+              readonly
+            ></v-text-field>
 
-        <v-textarea
-          v-model="band.intro"
-          label="소개"
-          outlined
-          readonly
-        ></v-textarea>
-      </v-col>
-      <!-- 좋아요 버튼 -->
-      <v-col cols="auto" class="ma-auto">
-        <v-tooltip bottom nudge-bottom="20">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn icon :color="color" v-bind="attrs" v-on="on">
-              <v-icon
-                v-if="member.follow"
-                size="120"
-                @click="unFollow()"
-                color="red"
-                >mdi-heart</v-icon
-              >
-              <v-icon v-else size="100" @click="setFollow()" color="gray"
-                >mdi-heart</v-icon
-              >
-            </v-btn>
-          </template>
-          <span v-if="!member.follow">밴드 팔로우하기</span>
-          <span v-else>밴드 팔로우취소</span>
-        </v-tooltip>
-      </v-col>
-    </v-row>
-    <v-divider></v-divider>
-    <!-- 멤버구성 -->
-    <v-row class="px-10">
-      <v-col cols="12">
-        <v-banner class="my-10">
-          <strong>멤버구성</strong>
-        </v-banner>
-      </v-col>
-    </v-row>
-    <v-row class="ma-auto pa-10">
-      <v-col v-for="member in members" :key="member.memberId" cols="2">
-        <v-card
-          height="200"
-          width="200"
-          id="rounded-card"
-          class="ma-auto"
-        >
-          <v-layout column align-center justify-center>
-            <v-img
-              class="ma-auto mp-4"
-              height="200"
-              width="200"
-              style="border-radius: 50%"
-              contain
-              :src="member.img"
-            >
-            </v-img>
-            <v-slide-y-transition>
-              <v-card-text
-                >{{ member.name }} /
-                {{ member.codeSession }}
-              </v-card-text>
-            </v-slide-y-transition>
-          </v-layout>
-        </v-card>
-      </v-col>
-    </v-row>
-
+            <v-textarea
+              v-model="band.intro"
+              label="소개"
+              prepend-inner-icon="mdi-message-reply-text"
+              solo
+              readonly
+            ></v-textarea>
+          </v-col>
+          <!-- 좋아요 버튼 -->
+          <v-col cols="auto" class="ma-auto">
+            <v-tooltip bottom nudge-bottom="20">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon :color="color" v-bind="attrs" v-on="on">
+                  <v-icon
+                    v-if="member.follow"
+                    size="120"
+                    @click="unFollow()"
+                    color="red"
+                    >mdi-heart</v-icon
+                  >
+                  <v-icon v-else size="100" @click="setFollow()" color="gray"
+                    >mdi-heart</v-icon
+                  >
+                </v-btn>
+              </template>
+              <span v-if="!member.follow">밴드 팔로우하기</span>
+              <span v-else>밴드 팔로우취소</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-container>
     <v-divider></v-divider>
 
-    <v-row class="ma-auto px-10">
-      <v-col>
-        <!-- 제목(배너) -->
-        <v-banner class="my-10">
-          <strong>공연영상</strong>
-        </v-banner>
-      </v-col>
-    </v-row>
-    <v-row class="ma-auto px-10" justify="center">
-      <!-- 랭킹 영상이 없을 때 -->
-      <v-col cols="4" v-if="videolist.length == 0">
-        <v-alert align="center" type="warning">
-          밴드영상 게시물이 존재하지 않습니다.
-        </v-alert>
-      </v-col>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
+        <!-- 멤버구성 -->
+        <v-row>
+          <v-col cols="2">
+            <v-banner class="mb-10">
+              <strong>멤버구성</strong>
+            </v-banner>
+          </v-col>
+        </v-row>
+        <v-row class="ma-auto pa-10">
+          <v-col v-for="member in members" :key="member.memberId" cols="2">
+            <v-card height="200" width="200" id="rounded-card" class="ma-auto">
+              <v-layout column align-center justify-center>
+                <v-img
+                  class="ma-auto mp-4"
+                  height="200"
+                  width="200"
+                  style="border-radius: 50%"
+                  contain
+                  :src="member.img"
+                >
+                </v-img>
+                <v-slide-y-transition>
+                  <v-card-text
+                    >{{ member.name }} /
+                    {{ member.codeSession }}
+                  </v-card-text>
+                </v-slide-y-transition>
+              </v-layout>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-container>
+    <v-divider></v-divider>
 
-      <v-col v-else>
-        <!-- 목록 -->
-        <v-sheet class="mx-auto" elevation="8">
-          <v-slide-group class="pa-4" show-arrows>
-            <v-slide-item
-              v-for="video in videolist"
-              :key="video.boardId"
-              v-slot="{ active }"
-            >
-              <v-card
-                :color="active ? 'grey lighten-1' : ''"
-                class="d-flex ma-4 flex-end flex-column"
-                height="300"
-                width="500"
-                @click="[active, videoDetail(video.boardId)]"
-              >
-                <v-card-text class="text-end mt-auto">
-                  <p>{{ video.boardSubject }}</p>
-                </v-card-text>
-              </v-card>
-            </v-slide-item>
-          </v-slide-group>
-        </v-sheet>
-      </v-col>
-    </v-row>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
+        <v-row>
+          <v-col cols="2">
+            <!-- 제목(배너) -->
+            <v-banner class="my-10">
+              <strong>공연영상</strong>
+            </v-banner>
+          </v-col>
+        </v-row>
+        <v-row class="ma-auto px-10" justify="center">
+          <!-- 랭킹 영상이 없을 때 -->
+          <v-col cols="4" v-if="videolist.length == 0">
+            <v-alert align="center" type="warning">
+              밴드영상 게시물이 존재하지 않습니다.
+            </v-alert>
+          </v-col>
+
+          <v-col v-else>
+            <!-- 목록 -->
+            <v-sheet class="mx-auto" elevation="8">
+              <v-slide-group class="pa-4" show-arrows>
+                <v-slide-item
+                  v-for="video in videolist"
+                  :key="video.boardId"
+                  v-slot="{ active }"
+                >
+                  <v-card
+                    :color="active ? 'grey lighten-1' : ''"
+                    class="d-flex ma-4 flex-end flex-column"
+                    height="300"
+                    width="500"
+                    @click="[active, videoDetail(video.boardId)]"
+                  >
+                    <v-img height="200" :src="video.boardThumbnail"> </v-img>
+                    <v-card-text class="text-end mt-auto text-truncate">
+                      <p>{{ video.boardSubject }}</p>
+                    </v-card-text>
+                  </v-card>
+                </v-slide-item>
+              </v-slide-group>
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-container>
+
     <v-row class="ma-auto" align="center" justify="center">
       <v-col cols="auto">
         <v-btn
@@ -168,8 +179,8 @@
         >
       </v-col>
       <v-col cols="auto">
-        <v-btn color="primary" class="mx-6" @click="list()">돌아가기</v-btn>
-        </v-col>
+        <v-btn class="mx-6" @click="list()">돌아가기</v-btn>
+      </v-col>
     </v-row>
   </v-main>
 </template>
@@ -298,4 +309,5 @@ export default {
   min-height: 200px;
   min-width: 200px;
 }
+
 </style>

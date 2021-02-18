@@ -1,16 +1,16 @@
 <!-- 밴드 목록 보여 줄 페이지 -->
 <template>
-  <v-container class="mb-10">
-    
+  <v-container class="mb-10" >
+    <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row>
       <v-col cols="2">
-        <v-banner class="my-10">
+        <v-banner class="mb-10">
           <strong>소속밴드</strong>
         </v-banner>
       </v-col>
        <v-col cols="8"></v-col>
       <v-col cols="2" class="ma-auto">
-        <v-btn @click="CreateBand()"> 밴드개설 </v-btn>
+        <v-btn  color="info"  @click="CreateBand()"> 밴드개설 </v-btn>
       </v-col>
     </v-row>
     
@@ -35,8 +35,8 @@
       <v-col cols="6" v-else>
         <v-tooltip bottom nudge-top="5"  v-for="band in getBandList" :key="band.bandId">
           <template v-slot:activator="{ on, attrs }">
-            <v-card class="mb-15"  v-bind="attrs" v-on="on">
-              <v-row class="px-10">
+            <v-card class="mb-15 rounded-tl-xl rounded-br-xl"  v-bind="attrs" v-on="on" color="rgba(255, 255, 255, 0.9)">
+              <v-row class="px-10" align="center">
                 <v-col cols="3">
                   <!-- 밴드이미지가 없을 때 -->
                   <v-img v-if="band.img == '' || band.img == null"
@@ -54,14 +54,14 @@
                     style="border-radius: 50%"
                   ></v-img>
                 </v-col>
-                <v-col cols="6" align-self="center">
+                <v-col cols="auto"  class="ma-auto justify-center">
                   <v-btn x-large text @click="BandDetail(band.bandId)"
                     ><strong> {{ band.name }} </strong></v-btn
                   >
                 </v-col>
-                <v-col cols="3" align-self="center">
+                <v-col cols="3">
                   <!-- 밴드장이면 버튼 생성 -->
-                  <v-btn v-if="band.isChief == 1" class="ma-2" color="indigo accent-1">
+                  <v-btn  v-if="band.isChief == 1" class="ma-2 " color="indigo accent-1">
                     <v-icon color="#FFD600" x-large>mdi-crown</v-icon>
                   </v-btn>
                 </v-col>
@@ -72,6 +72,7 @@
         </v-tooltip>
       </v-col>
     </v-row>
+    </v-card>
   </v-container>
 </template>
 

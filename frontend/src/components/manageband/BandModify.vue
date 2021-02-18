@@ -1,15 +1,22 @@
 <template>
   <v-main>
+    <v-container class="mb-10">
+      <v-card class="pa-10" color="rgba(255, 255, 255, 0.5)">
     <v-row class="px-10" justify="center">
       <v-col cols="6">
-        <v-banner class="my-10">
+        <v-banner class="mb-10">
           <strong>밴드정보수정</strong>
         </v-banner>
       </v-col>
     </v-row>
     <v-row class="px-10" justify="center">
       <v-col cols="6">
-        <v-text-field v-model="band.name" label="밴드명" outlined clearable>
+        <v-text-field 
+        v-model="band.name" 
+        label="밴드명"  
+        solo
+        prepend-inner-icon="mdi-account-circle"
+        clearable>
         </v-text-field>
 
         <v-file-input
@@ -18,6 +25,7 @@
           v-model="band.imgdata"
           accept="image/*"
           type="file"
+          solo
           label="밴드 이미지 변경"
         />
       </v-col>
@@ -56,7 +64,8 @@
         <v-textarea
           v-model="band.intro"
           label="밴드소개"
-          outlined
+          solo
+          prepend-inner-icon="mdi-message-reply-text"
           height="200px"
         ></v-textarea>
       </v-col>
@@ -77,11 +86,11 @@
       class="px-10"
     >
       <v-col cols="2">
-        <v-text-field outlined v-model="member.name" readonly> </v-text-field>
+        <v-text-field solo v-model="member.name" readonly> </v-text-field>
       </v-col>
       <v-col cols="4">
         <v-select
-          outlined
+          solo
           :items="sessions"
           v-model="member.codeSession"
           :disabled="member.memberId != memberId && isChief == '0'"
@@ -149,7 +158,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+      </v-card>
+    </v-container>
     <!-- 버튼들 -->
     <v-row class="ma-auto">
       <v-col cols="auto" class="ma-auto">
@@ -387,4 +397,5 @@ export default {
 </script>
 
 <style>
+
 </style>

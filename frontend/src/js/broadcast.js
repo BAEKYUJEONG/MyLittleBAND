@@ -1,7 +1,7 @@
 //connecting to our signaling server
 
-//let conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
-let conn = new WebSocket('ws://localhost:8080/socket');
+var conn = new WebSocket('wss://i4a408.p.ssafy.io/socket');
+// let conn = new WebSocket('ws://localhost:8080/socket');
 
 //const localVideo = document.getElementById("localVideo");
 //const remoteVideo = document.getElementById("remoteVideo");

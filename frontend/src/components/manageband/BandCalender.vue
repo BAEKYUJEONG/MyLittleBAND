@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout col-8 offset-2 fill-height>
-      <v-flex class="ma-10">
+      <v-flex >
         <v-sheet height="64">
           <!-- toolbar -->
           <v-toolbar flat>
