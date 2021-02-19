@@ -24,6 +24,8 @@
               v-model="focus"
               ref="timetable"
               :events="getShows"
+              :first-interval="8"
+              :interval-count="15"
               color="gray"
               type="week"
               class="background"
@@ -264,7 +266,7 @@ export default {
   background-size: 100% 100%;
   width: 100%;
   height: 100%;
-  opacity: 0.1;
+  opacity: 0.3;
  
 }
 
