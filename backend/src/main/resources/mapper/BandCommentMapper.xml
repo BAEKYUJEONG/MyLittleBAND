@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.BandCommentMapper">
+
+	<insert id="insert" parameterType="BandComment">
+		insert into bandcomment values (null, #{bandboardId}, #{memberId}, #{content},
+		NOW(), NULL)
+	</insert>
+
+	<select id="selectList" parameterType="String" resultType="BandCommentReq">
+		select c.commentId, c.content, m.img, m.memberId
+		from bandcomment c, member m where c.bandboardId = #{bandboardId} and m.memberId = c.memberId
+	</select>
+
+	<select id="count" parameterType="String" resultType="int">
+		select count(*) from bandcomment
+		where bandboardId = #{bandboardId}
+	</select>
+	
+	<update id="modify" parameterType = "String">
+		update bandcomment set content=#{content},update_time=curtime() where commentId=#{commentId}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from bandcomment where commentId=#{commentId} 
+	</delete>
+	
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.BandBoardMapper">
+	
+	<insert id="writebandboard" parameterType="BandBoardReq">
+		insert into bandboard values(null, #{title}, #{content}, now(), 0, #{memberId}, #{bandId})
+	</insert>
+	
+	<select id="bandboardlist" resultType="java.util.Map">
+	select distinct bandboard.*,member.name 
+		from bandboard, member,band 
+		where member.memberId=bandboard.memberId and bandboard.bandId=#{bandId} 
+		order by bandboardId desc;
+	</select>
+	
+	
+	<select id="readbandboard" resultType="BandBoard">
+		select distinct bandboard.*,member.name 
+		from bandboard, member 
+		where member.memberId=bandboard.memberId and bandboard.bandboardId=#{bandboardId};
+	</select>
+	
+	<update id="countup">
+		update bandboard set view=(select view from bandboard where bandboardId=#{bandboardId})+1 where bandboardId=#{bandboardId};
+	</update>
+	
+	<delete id="delbandboard">
+		delete from bandboard where bandboardId=#{bandboardId};
+	</delete>
+	
+	<update id="changebandboard">
+		update bandboard set title=#{title}, content=#{content} where bandboardId=#{bandboardId};
+	</update>
+	
+	<update id="settime">
+		set time_zone ='Asia/Seoul';
+	</update>
+	
+</mapper>

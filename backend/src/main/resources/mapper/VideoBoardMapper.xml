@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.VideoBoardMapper">
+	
+	<insert id="writevideo" parameterType="VideoBoardReq">
+		insert into videoboard values(null, #{boardSubject}, #{boardContent}, now(), #{boardVideoUrl}, #{boardThumbnail}, 0, 0, #{bandId},#{img})
+	</insert>
+	
+	<select id="videoboardlist" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardContent, 
+			   videoboard.boardDate, 
+			   videoboard.boardVideoUrl, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardView, 
+			   videoboard.boardLike, 
+			   videoboard.bandId,
+			   0 as shows, 
+			   band.img 
+			   from videoboard,band 
+			   where videoboard.bandId=band.bandId
+			   order by boardId desc;
+	</select>
+	
+	<select id="readvideo" resultType="java.util.Map">
+		select videoboard.*,band.img from videoboard,band where boardId=#{boardId} and videoboard.bandId=band.bandId;
+	</select>
+	
+	<update id="countup">
+		update videoboard set boardView=(select boardView from videoboard where boardId=#{boardId})+1 where boardId=#{boardId};
+	</update>
+	
+	<delete id="delvideo">
+		delete from videoboard where boardId=#{boardId};
+	</delete>
+	
+	<delete id="dellike">
+		delete from likeboard where boardId=#{boardId};
+	</delete>
+	
+	<update id="changevideo">
+		update videoboard set boardSubject=#{boardSubject}, boardContent=#{boardContent} where boardId=#{boardId};
+	</update>
+	
+	<update id="settime">
+		set time_zone ='Asia/Seoul';
+	</update>
+	
+	<select id="videoboardrankingview" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardView, 
+			   band.bandId,
+			   band.name 
+			   from videoboard,band
+			   where videoboard.bandId=band.bandId and (boardDate>curdate()-7)
+			   order by boardView desc
+			   limit 5;
+	</select>
+	
+	<select id="videoboardrankingpopular" resultType="java.util.Map">
+		select videoboard.boardId, 
+			   videoboard.boardSubject, 
+			   videoboard.boardThumbnail, 
+			   videoboard.boardLike, 
+			   band.bandId,
+			   band.name 
+			   from videoboard,band
+			   where videoboard.bandId=band.bandId and (boardDate>curdate()-7)
+			   order by (boardView+boardLike*10) desc
+			   limit 5;
+	</select>
+	
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.ShowMapper">
+	<resultMap type="BandShow" id="BandShowMap">
+		<id column="showId" property="showId" />
+		<result column="date" property="date" />
+		<result column="title" property="title" />
+		<result column="time" property="time" />
+		<result column="showContent" property="showContent" />
+		<result column="img" property="img" />
+		<!-- 1 : 다 관계의 경우 데이터 매핑시켜준다. 
+			association => 1 : 1 관계 
+			collection => 1 : 다 관계 (한명의 유저가 작성한 글 목록)
+			일반 컬럼과 pk 구분 가능 pk 칼럼에게는 result 아닌 id 사용
+		-->
+		<association javaType="Band" property="band">
+			<id column="bandId" property="bandId"/>
+			<result column="name" property="name"/>
+			<result column="img" property="img"/>
+		</association>
+	</resultMap>
+	
+	<select id="getShowByTime" resultType="BandShow">
+		select * from bandshow where date=#{date} and time=#{time};
+	</select>
+	
+	<insert id="addshow" parameterType="BandShow">
+		insert into bandshow values(null,#{date}, #{title},#{time},#{showContent},#{bandId});
+	</insert>
+	
+	<delete id="delshow">
+		delete from bandshow where showId=#{showId};
+	</delete>
+	
+	<select id="showlist" resultType="ShowListRes">
+		select showId,date,title,date_format(time,'%H:%i')as time,showContent from bandshow where bandId=#{bandId};
+	</select>
+	
+	<select id="dateshowlist" resultType="BandShowlist">
+		select bandshow.*,band.name,band.img as img, 0 as shows from bandshow,band where date=#{date} and bandshow.bandId=band.bandId
+		order by time;
+	</select>
+	
+	<update id="updateshow">
+		update bandshow set title=#{title},showContent=#{showContent} where showId=#{showId}
+	</update>
+	
+	<!-- 기간 동안의 공연 정보 -->
+	<select id="showTermList" resultMap="BandShowMap">
+		select s.showId, s.date, s.title, s.time, b.bandId, b.name 
+		from bandshow s join band b
+		on s.bandId = b.bandId
+		where date between #{start} and #{end};
+	</select>
+	
+	<!-- 공연 정보 상세 내용 -->
+	<select id="showDetail" resultMap="BandShowMap">
+		select s.showId, s.date, s.title, s.time, s.showContent, s.img, b.bandId, b.name
+		from bandshow s join band b
+		on s.bandId = b.bandId
+		where s.showId=#{showId}
+	</select>
+	<!-- <select id="getShowByTime1" resultType="BandShow">
+		select * from bandshow where time=#{time};
+	</select> -->
+	
+	
+</mapper>

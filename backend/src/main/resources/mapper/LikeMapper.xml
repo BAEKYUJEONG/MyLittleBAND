@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.LikeMapper">
+
+	<insert id="addlike" parameterType="LikeReq">
+		insert into likeboard values(null, #{memberId}, #{boardId})
+	</insert>
+	
+	<delete id="unlike" parameterType="String">
+		delete from likeboard where likeId=#{likeId}
+	</delete>
+	
+	<select id="getlikeById" parameterType="LikeReq" resultType="Like">
+		select * from likeboard where memberId=#{memberId} and boardId=#{boardId}
+	</select>
+	
+	<select id="likelist" parameterType="String" resultType="java.util.Map">
+		select * from videoboard where boardId in(select boardId from likeboard where memberId=#{memberId})
+	</select>
+	
+	<select id="likecheck" parameterType="String" resultType="java.util.Map">
+		select likeId from likeboard where boardId=#{boardId} and memberId=#{memberId}
+	</select>
+	
+	<update id="likeup">
+		update videoboard set boardLike=boardLike+1 where boardId=#{boardId}
+	</update>
+	
+	<update id="likedown">
+		update videoboard set boardLike=boardLike-1 where boardId=(select boardId from likeboard where likeId=#{likeId});
+	</update>
+</mapper>

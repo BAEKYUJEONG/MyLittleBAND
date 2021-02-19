@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.NoticeMapper">
+	<insert id="writenotice">
+		insert into notice values(null, #{noticeTitle}, #{noticeContent},curdate())
+	</insert>
+	
+	<select id="readnotice" resultType="Notice">
+		select * from notice where noticeId=#{noticeId}
+	</select>
+	
+	<update id="updatenotice">
+		update notice set noticeTitle=#{req.noticeTitle},noticeContent=#{req.noticeContent} where noticeId=#{noticeId}
+	</update>
+	
+	<delete id="deletenotice">
+		delete from notice where noticeId=#{noticeId}
+	</delete>
+	
+	<select id="noticelist" resultType="Integer">
+		select count(*) from notice
+	</select>
+	
+	<select id="noticelistpage" resultType="Notice">
+		select * from notice
+		order by noticeId desc
+		limit #{page} ,5;
+	</select>
+	
+	<!-- <select id="selectAll" resultType="Notice">
+		select A.*
+		from(
+		select (select
+		count(*) from notice ) + 1 - @rownum:=@rownum+1 as rownum, 
+		N.noticeId, N.noticeTitle, N.noticeContent, N.date, N.manager
+		from notice N, (select @rownum:=0)TMP
+		order by
+		rownum desc
+		)A
+		where A.rownum between #{start} and #{end};
+	</select>
+
+	<select id="selectId" parameterType="Integer"
+		resultType="Notice">
+		select noticeId, noticeTitle, noticeContent, date, manager
+		from notice
+		where noticeId =
+		#{noticeId}
+	</select>
+
+	<select id="selectTitle" resultType="Notice">
+		select
+		A.*
+		from(
+		select (select count(*) from notice where noticeTitle like CONCAT('%',#{noticeTitle},'%')) + 1 -
+		@rownum:=@rownum+1 as rownum, N.noticeId, N.noticeTitle, N.noticeContent, N.date, N.manager
+		from (select * from notice where noticeTitle like CONCAT('%',#{noticeTitle},'%'))N, (select @rownum:=0)TMP
+		order by rownum desc
+		)A
+		where A.rownum between #{start} and #{end};
+	</select>
+
+	<select id="selectContent" resultType="Notice">
+	select
+		A.*
+		from(
+		select (select count(*) from notice where noticeContent like CONCAT('%',#{word},'%')) + 1 -
+		@rownum:=@rownum+1 as rownum, N.noticeId, N.noticeTitle, N.noticeContent, N.date, N.manager
+		from (select * from notice where noticeContent like CONCAT('%',#{word},'%'))N, (select @rownum:=0)TMP
+		order by rownum desc
+		)A
+		where A.rownum between #{start} and #{end};
+	</select>
+
+	<select id="count" resultType="Integer">
+		select count(*)
+		from notice
+	</select>
+
+	<insert id="insert" parameterType="Member">
+		insert into notice (manager, noticeTitle, noticeContent)
+		values (#{manager}, #{noticeTitle},#{noticeContent})
+	</insert>
+
+	<update id="update" parameterType="Member">
+		update notice
+		set noticeTitle = #{noticeTitle}, noticeContent = #{noticeContent}
+		where noticeId = #{noticeId}
+	</update>
+
+	<delete id="delete" parameterType="Integer">
+		delete from notice
+		where noticeId = #{noticeId}
+	</delete> -->
+</mapper>

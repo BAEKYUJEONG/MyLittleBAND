@@ -207,6 +207,10 @@
 
 > 엄재웅
 
+* 디비 설계 마무리
+* 팀원들과 프론트, 백 구성 토의
+* 프론트 환경설정, vuex 설정
+
 
 
 > 김영현
@@ -215,7 +219,45 @@
 
 > 신인섭
 
+- 팀원들과 DB, Frontend, Backend 항목 구성 회의
+- Frontend Components 스켈레톤 코드 생성
 
+> 박성우
+
+
+
+> 백유정
+
+- Frontend 구성 및 DB, Backend 구성
+- Backend 환경설정 및 DTO, DAO, Service, Controller 구성
+
+
+
+
+*****
+
+
+
+###### 2021-01-25
+
+> 엄재웅
+
+* 타임라인 컴포넌트 부분 제작
+
+* css만으로 디자인 하다가 vuetify 로 제작하기로 결정...
+
+  
+
+> 김영현
+
+- Streaming 관련하여 개념 공부 및 사용할 API 공부
+
+> 신인섭
+
+- Frontend MainPage 중 Ranking 기능 구현
+  - 보드로 동영상 목록 표시
+  - 좌우로 페이지 이동 가능
+  - 태그를 활용한 추가 정보 기입 가능
 
 > 박성우
 
@@ -224,3 +266,150 @@
 > 백유정
 
 
+
+
+
+
+*****
+
+
+
+###### 2021-01-26
+
+> 엄재웅
+
+* AWS docker, mariadb설치 완료
+* Restful API 설계를 위한 문서 작성
+* 팀원들과 AWS mariaDB - workbench간 연결
+* Vuetify header 작업
+
+
+
+> 김영현
+
+
+
+
+
+> 신인섭
+- Frontend MainPage 중 FindId 기능 구현
+- 모달창으로 성공 및 에러 알림 표시
+- 비동기통신
+- 이메일 전송 시스템 구축 필요함
+
+
+
+
+> 박성우
+
+
+
+
+
+> 백유정
+
+
+
+
+
+*****
+
+
+
+###### 2021-01-27
+
+> 엄재웅
+
+* 팀원들과 Restful API 문서 작성
+
+
+
+> 김영현
+
+
+
+
+
+> 신인섭
+- FrontEnd 페이지 중 공지사항 페이지 구현
+- NoticeWrite, NoticeDetail, NoticeCreate, NoticeModify구현
+- router를 이용한 페이지 이동 가능
+- backend와의 연동테스트 필요함
+
+
+
+> 박성우
+
+
+
+
+
+> 백유정
+
+- NoticeController mapping 부분 수정 필요
+- VideoBoard dao, service 작성 및 controller 구상 중
+
+- PostMan 관련 공부
+
+
+
+
+*****
+
+
+
+###### 2021-01-28
+
+> 엄재웅
+
+
+
+
+
+> 김영현
+
+
+
+
+
+> 신인섭
+
+- Frontend component중 BoardBand 기능구현
+  - BoardBand List,Create,Modify,Detail 컴포넌트 구성
+- Frontend Notice 컴포넌트 수정
+  - axios 잘못된 함수 수정
+- Frontend Login 컴포넌트 기능구현
+  - 모달창 띄우는 작업완료
+  - Vuex는 아직 작업 중
+
+
+
+> 박성우
+
+
+
+
+
+> 백유정
+
+
+
+
+*****
+
+
+
+###### 2021-01-28
+
+> 백유정
+- boardId 등 id 부분 string 문제로 인해 
+    comment 기능들에 관한 모든 코드 약간 수정
+
+- db 연동 및 스웨거 연동 중
+
+- videoboard db 설정 및 foreign key 문제로 dto 재설정
+
+- 파일 업로드 부분 공부 및 작업 중
+  - MultipartFile or MultipartResolver 이용 or  commons-fileupload 를 이용하기 위해서는 dependencies를 반드시 추가해야함 
+  +bean파일도 필요
+  - 파일 업로드 참고링크.hwp 참고 : 본 사이트 중 그나마 괜찮은 것들 몇개 뽑아둠
