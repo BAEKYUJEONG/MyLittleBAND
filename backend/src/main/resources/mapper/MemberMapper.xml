@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.MemberMapper">
+
+	<insert id="signup" parameterType="signupReq">
+		insert into member values(null, #{email}, #{name}, #{pw}, #{phone}, "https://i4a408.p.ssafy.io/profile/LogoMini.png", null, 0, 0, null)
+  	</insert>
+  	
+  	<!-- 이메일 인증키 -->
+  	<update id="emailLink" parameterType="Member">
+  		update member set authkey=#{authkey} where memberId=#{memberId}
+  	</update> 
+  	
+  	<!-- 이메일 인증 업데이트 -->
+  	<update id="updateAuth" parameterType="string">
+  		update member set emailcheck=1 where memberId=#{memberId}
+  	</update> 
+  
+  	<!-- 이름과 전화번호로 ID 찾기 -->
+    <select id="getUserByNameAndPhone" resultType="String">
+    	select email from member where name=#{name} and phone=#{phone}
+    </select>
+  
+	<!-- 비밀번호 업데이트 -->
+    <update id="updatePassword" parameterType="Member">
+  		update member set pw=#{pw} where memberId=#{memberId}
+  	</update>
+  	
+  	<select id="getUserByEmail" resultType="Member">
+    select * from member where email=#{email}
+  </select>
+  
+  <select id="getUserById" resultType="Member">
+    select * from member where memberId=#{memberId}
+  </select>
+  
+   <update id="update">
+      update member set name=#{name}, phone=#{phone}, profile=#{profile} where memberId = #{memberId}
+  </update>
+  	
+  	<update id="imgupdate" parameterType="string">
+      update member set img=#{img} where memberId = #{memberId}
+  </update>
+  
+  <delete id="withdraw" parameterType="string">
+      delete from member where memberId = #{memberId}
+  </delete>
+  
+  <select id="login" resultType="Member">
+    select * from member where email=#{email} and pw=#{pw}
+  </select>
+  
+  <select id="findMemberById" resultType="java.util.Map">
+		select name, profile, phone, email,img, manager, emailcheck from member where memberId=#{memebrId}
+	</select>
+  
+	<!-- <insert id="signup" parameterType="Member">
+		insert into member values(#{id}, #{email}, #{name}, #{pw}, #{phone}, #{img}, #{profile})
+  	</insert>
+
+	<insert id="test">
+		insert into member values(null,#{id})
+  	</insert> -->
+  
+  <!-- <select id="selectAll" resultType="Customer">
+    select * from customer
+  </select>
+-->
+<!--   <select id="login" parameterType="java.lang.String" resultType="Integer">
+    select count(*) from member where userid = #{id} and userpass = #{pass}
+  </select>
+   
+  <insert id="signin" parameterType="Member">
+      insert into member values(null,#{id}, #{pass}, #{name}, #{phone}, #{area}, #{message})
+  </insert>
+  
+ <update id="change" parameterType="java.lang.String">
+      update member set userpass=#{pass}, tel = #{phone}, area = #{area}, comment = #{message} where userid = #{id}
+
+  </update>
+
+ 
+
+ <delete id="delete" parameterType="string">
+      delete from member where userid = #{id}
+  </delete> -->
+
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.BandMapper">
+
+	<select id="getBandByName" resultType="Band">
+		select * from band where name=#{name}
+	</select>
+	
+	<insert id="opened" parameterType="BandOpened">
+		insert into band values(null, null, "https://i4a408.p.ssafy.io/bandprofile/LogoMini.png", #{name}, #{intro}, null, curdate(),#{genre}, #{color}, null,0)
+	</insert>
+	
+	<insert id="addcrew" parameterType="String">
+		insert into crew values(null, #{memberId}, #{bandId}, 1, #{codeSession})
+	</insert>
+	
+	<select id="bandinfo" resultType="java.util.Map">
+		select img, name, intro, genre, color from band where bandId=#{bandId}
+	</select>
+	
+	<select id="bandmember" resultType="java.util.Map">
+		select member.name, member.img, crew.codeSession, crew.crewId,member.memberId, crew.codeSession, crew.isChief from member, crew where crew.memberId=member.memberId and bandId=#{bandId}
+	</select>
+	
+	<select id="getCrewById" resultType="Crew">
+		select * from crew where crewId=#{crewId}
+	</select>
+	
+	<select id="getCrewBymemberId" resultType="Crew">
+		select * from crew where memberId=#{memberId}
+	</select>
+	
+	<update id="mandatechief">
+		update crew set isChief=false where crewId=#{crewId}
+	</update>
+	
+	<update id="receivechief">
+		update crew set isChief=true where crewId=#{crewId}
+	</update>
+	
+	<delete id="withdrawband">
+		delete from crew where crewId=#{crewId} 
+	</delete>
+	
+	<update id="changesession">
+		update crew set codeSession=#{session} where crewId=#{crewId}
+	</update>
+	
+	<select id="memberofband" resultType="java.util.Map">
+		select band.bandId, band.name, band.img, crew.isChief from band, crew where crew.memberId=#{memberId} and crew.bandId=band.bandId;
+	</select>
+	
+	<update id="changeinfo">
+		update band set name=#{name}, intro=#{intro}, genre=#{genre}, color=#{color} where bandId=#{bandId}
+	</update>
+	
+	<delete id="delband">
+		delete from band where bandId=#{bandId} 
+	</delete>
+	
+	<delete id="delcrew">
+		delete from crew where bandId=#{bandId} 
+	</delete>
+	
+	<delete id="delfollow">
+		delete from follow where bandId=#{bandId} 
+	</delete>
+	<delete id="delcalendar">
+		delete from calendar where bandId=#{bandId} 
+	</delete>
+	
+	<update id="imgupdate" parameterType="string">
+      update band set img=#{img} where bandId = #{bandId}
+	</update>
+	
+	<select id="videoofband" resultType="VideoBoard">
+		select * from videoboard where bandId=#{bandId}
+	</select>
+  	
+  	<select id="searchband" parameterType="String" resultType="java.util.Map">
+		select bandId, name, intro, img, follownum from band where name like CONCAT('%',#{keyword},'%')
+	</select>
+	
+	<insert id="bandinvite" parameterType="BandInvite">
+		insert into crew values(null, #{memberId}, #{bandId}, 0, #{codeSession})
+	</insert>
+
+	
+</mapper>

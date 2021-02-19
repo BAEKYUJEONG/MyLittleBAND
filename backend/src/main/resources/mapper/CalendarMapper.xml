@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.CalendarMapper">
+	
+	<select id="month" resultType="Calendar">
+		select * from calendar where month(date)=#{month} and bandId=#{bandId}
+	</select>
+	
+	<select id="bandcalendar" resultType="java.util.Map">
+		select calendarId, title, start, end from calendar where bandId=#{bandId}
+	</select>
+	
+	<select id="bandcalendardetail" resultType="Calendar">
+		select calendarId, title, start, end, content from calendar where bandId=#{bandId} and calendarId=#{calendarId}
+	</select>
+	
+	<insert id="bandcalendaradd" parameterType="Calendar">
+		insert into calendar values(null, #{req.start}, #{req.end},null,#{bandId},null, #{req.title}, #{req.content})
+	</insert>
+	
+	<update id="bandcalendarupdate" parameterType="Calendar">
+		update calendar set start= #{req.start}, end= #{req.end}, title=#{req.title},content= #{req.content} where bandId=#{bandId} and calendarId=#{calendarId}
+	</update>
+	
+	<delete id="bandcalendardel">
+		delete from calendar where bandId=#{bandId} and calendarId=#{calendarId}
+	</delete>
+	
+</mapper>

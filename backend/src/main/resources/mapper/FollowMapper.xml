@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.blog.mapper.FollowMapper">
+
+	<insert id="addfollow" parameterType="FollowReq">
+		insert into follow values(null, #{memberId}, #{bandId})
+	</insert>
+	
+	<delete id="unfollow" parameterType="String">
+		delete from follow where followId=#{followId}
+	</delete>
+	
+	<select id="getFollowById" parameterType="FollowReq" resultType="Follow">
+		select * from follow where memberId=#{memberId} and bandId=#{bandId}
+	</select>
+	
+	<select id="followlist" parameterType="String" resultType="java.util.Map">
+		select bandId,img,name,intro,follownum from band where bandId in(select bandId from follow where memberId=#{memberId})
+	</select>
+	
+	<select id="followcheck" parameterType="String" resultType="java.util.Map">
+		select followId from follow where bandId=#{bandId} and memberId=#{memberId}
+	</select>
+	
+	<select id="follownum" parameterType="String" resultType="java.util.Map">
+		select bandId, count(bandId) as follownum from follow where bandId=#{bandId};
+	</select>
+	
+	<update id="followup">
+		update band set follownum=follownum+1 where bandId=#{bandId}
+	</update>
+	
+	<update id="followdown">
+		update band set follownum=follownum-1 where bandId=(select bandId from follow where followId=#{followId});
+	</update>
+
+	<select id="followrecommend" parameterType="String" resultType="java.util.Map">
+		select bandId,img,name,intro,follownum from band where bandId not in(select bandId from follow where memberId=#{memberId}) order by rand() limit 5;
+	</select>
+</mapper>
